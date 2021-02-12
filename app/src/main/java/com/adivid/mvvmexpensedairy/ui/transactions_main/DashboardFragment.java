@@ -1,6 +1,7 @@
 package com.adivid.mvvmexpensedairy.ui.transactions_main;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.adivid.mvvmexpensedairy.MainActivity;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
+import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
@@ -53,7 +55,7 @@ public class DashboardFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         expenseList = new ArrayList<>();
 
-        adapter = new MainListAdapter();
+        adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(adapter);
 
@@ -80,6 +82,18 @@ public class DashboardFragment extends Fragment {
             ((MainActivity) requireActivity()).openDrawer();
         });
     }
+
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            Timber.d("pos: %s", position);
+        }
+
+        @Override
+        public void onLongItemClick(View view, int position) {
+
+        }
+    };
 
     @Override
     public void onDestroyView() {

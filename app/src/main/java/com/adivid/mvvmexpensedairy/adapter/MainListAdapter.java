@@ -13,14 +13,17 @@ import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.adivid.mvvmexpensedairy.R;
+import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 
 
 public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainListViewHolder> {
 
+    private final OnItemClickListener onItemClickListener;
 
-    public MainListAdapter() {
+    public MainListAdapter(OnItemClickListener onItemClickListener) {
         super(DIFF_CALLBACK);
+        this.onItemClickListener = onItemClickListener;
     }
 
     @NonNull
@@ -28,7 +31,7 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
     public MainListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.main_item_list_one,parent,
                 false);
-        return new MainListViewHolder(view);
+        return new MainListViewHolder(view, onItemClickListener);
     }
 
     @Override
@@ -40,18 +43,27 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
 
     }
 
-    public static class MainListViewHolder extends RecyclerView.ViewHolder{
-        TextView textViewCategory, textViewDate, textViewMoney;
-        ImageView imageView;
+    public static class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private TextView textViewCategory, textViewDate, textViewMoney;
+        private ImageView imageView;
+        private final OnItemClickListener onItemClickListener;
 
-        public MainListViewHolder(@NonNull View itemView) {
+        public MainListViewHolder(@NonNull View itemView,
+                                  OnItemClickListener onItemClickListener) {
             super(itemView);
 
+            this.onItemClickListener = onItemClickListener;
             textViewCategory = itemView.findViewById(R.id.tv_category);
             textViewDate = itemView.findViewById(R.id.tv_date);
             textViewMoney = itemView.findViewById(R.id.tv_money);
             imageView = itemView.findViewById(R.id.iv_category_icon);
 
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            onItemClickListener.onItemClick(v, getAdapterPosition());
         }
     }
 
