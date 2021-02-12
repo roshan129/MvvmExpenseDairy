@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">Xpense Diary</string>
+    <string name="hello_guest_user">Hello, Guest User</string>
+    <string name="sign_in">Sign in</string>
+    <string name="expense">Expense</string>
+    <string name="income">Income</string>
+    <string name="note">Note</string>
+    <string name="date">Date</string>
+    <string name="amount">Amount</string>
+    <string name="add_transactions">Add Transactions</string>
+    <string name="cash">Cash</string>
+    <string name="card">Card</string>
+    <string name="category">Category:</string>
+    <string name="type">Type:</string>
+
+
+</resources>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="category_arr">
+        <item>Others</item>
+        <item>Food and Dining</item>
+        <item>Shopping</item>
+        <item>Travelling</item>
+        <item>Entertainment</item>
+        <item>Medical</item>
+        <item>Personal Care</item>
+        <item>Education</item>
+        <item>Bills and Utilities</item>
+        <item>Investments</item>
+        <item>Rent</item>
+        <item>Taxes</item>
+        <item>Insurance</item>
+        <item>Gifts and Donations</item>
+
+    </string-array>
+
+
+</resources>
