@@ -15,6 +15,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.domain.Expense;
+import com.adivid.mvvmexpensedairy.utils.Utils;
+
+import static com.adivid.mvvmexpensedairy.utils.Constants.*;
 
 
 public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainListViewHolder> {
@@ -29,7 +32,7 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
     @NonNull
     @Override
     public MainListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view =LayoutInflater.from(parent.getContext()).inflate(R.layout.main_item_list_one,parent,
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_item_list_two, parent,
                 false);
         return new MainListViewHolder(view, onItemClickListener);
     }
@@ -37,15 +40,18 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
     @Override
     public void onBindViewHolder(@NonNull MainListViewHolder holder, int position) {
         Expense expense = getItem(position);
-        holder.textViewCategory.setText(expense.getTransaction_category());
-        holder.textViewDate.setText(expense.getDate());
-        holder.textViewMoney.setText(expense.getAmount());
+        holder.textViewNote.setText(expense.getNote());
+        holder.textViewDate.setText(Utils.convertToDisplayDate(expense.getDate()));
+        holder.textViewMoney.setText("₹ " + expense.getAmount());
+
+        setCategoryIcon(holder, expense.getTransaction_category());
 
     }
 
+
     public static class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private TextView textViewCategory, textViewDate, textViewMoney;
-        private ImageView imageView;
+        private final TextView textViewNote, textViewDate, textViewMoney;
+        private final ImageView imageView;
         private final OnItemClickListener onItemClickListener;
 
         public MainListViewHolder(@NonNull View itemView,
@@ -53,7 +59,7 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
             super(itemView);
 
             this.onItemClickListener = onItemClickListener;
-            textViewCategory = itemView.findViewById(R.id.tv_category);
+            textViewNote = itemView.findViewById(R.id.tv_note);
             textViewDate = itemView.findViewById(R.id.tv_date);
             textViewMoney = itemView.findViewById(R.id.tv_money);
             imageView = itemView.findViewById(R.id.iv_category_icon);
@@ -80,5 +86,54 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
                 }
             };
 
+
+    private void setCategoryIcon(MainListViewHolder holder, String transaction_category) {
+        switch (transaction_category) {
+            case OTHERS:
+                holder.imageView.setImageResource(R.drawable.ic_others);
+                break;
+            case FOOD_N_DINING:
+                holder.imageView.setImageResource(R.drawable.ic_food_and_dining);
+                break;
+            case SHOPPING:
+                holder.imageView.setImageResource(R.drawable.ic_shopping_cart);
+                break;
+            case TRAVELLING:
+                holder.imageView.setImageResource(R.drawable.ic_travel);
+                break;
+            case ENTERTAINMENT:
+                holder.imageView.setImageResource(R.drawable.ic_entertainment);
+                break;
+            case MEDICAL:
+                holder.imageView.setImageResource(R.drawable.ic_medical);
+                break;
+            case PERSONAL_CARE:
+                holder.imageView.setImageResource(R.drawable.ic_personal_care);
+                break;
+            case EDUCATION:
+                holder.imageView.setImageResource(R.drawable.ic_education);
+                break;
+            case BILLS_AND_UTILITIES:
+                holder.imageView.setImageResource(R.drawable.ic_bills);
+                break;
+            case INVESTMENTS:
+                holder.imageView.setImageResource(R.drawable.ic_investment);
+                break;
+            case RENT:
+                holder.imageView.setImageResource(R.drawable.ic_rent);
+                break;
+            case TAXES:
+                holder.imageView.setImageResource(R.drawable.ic_taxes);
+                break;
+            case INSURANCE:
+                holder.imageView.setImageResource(R.drawable.ic_insurance);
+                break;
+            case GIFTS_AND_DONATIONS:
+                holder.imageView.setImageResource(R.drawable.ic_gifts);
+                break;
+
+
+        }
+    }
 
 }

@@ -12,6 +12,7 @@
     <string name="card">Card</string>
     <string name="category">Category:</string>
     <string name="type">Type:</string>
+    <string name="rupee">₹</string>
 
 
 </resources>

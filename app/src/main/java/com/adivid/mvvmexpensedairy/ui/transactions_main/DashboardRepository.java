@@ -23,9 +23,7 @@ public class DashboardRepository {
         this.expenseDao = expenseDao;
     }
 
-    public LiveData<List<ExpenseEntity>> getAllTransactions() {
-        return expenseDao.getAllTransactions();
-    }
+
 
     public Flowable<List<ExpenseEntity>> getAllMainTransactions() {
         return expenseDao.getAllMainTransactions();

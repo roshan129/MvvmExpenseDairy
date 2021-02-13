@@ -19,11 +19,11 @@ public interface ExpenseDao {
     @Insert
     Maybe<Long> insertTransaction(ExpenseEntity expense);
 
-    @Query("Select * from expenseentity")
-    LiveData<List<ExpenseEntity>> getAllTransactions();
+    @Query("Select * from expenseentity ORDER BY id DESC")
+    Flowable<List<ExpenseEntity>> getAllTransactions();
 
 
-    @Query("Select * from expenseentity")
+    @Query("Select * from expenseentity ORDER BY id DESC")
     Flowable<List<ExpenseEntity>> getAllMainTransactions();
 
 

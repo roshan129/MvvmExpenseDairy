@@ -1,5 +1,6 @@
 package com.adivid.mvvmexpensedairy.utils;
 
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -30,11 +31,27 @@ public class Utils {
             Date newDate = sdf.parse(date);
             sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             date = sdf.format(newDate);
-            Timber.d("convertToStoringDate: %s", date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return date;
+    }
+
+    public static String convertToDisplayDate(String date) {
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        try {
+            Date newDate = sdf.parse(date);
+            sdf = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+            date = sdf.format(newDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
+
+    public static String convertToDecimalFormat(String value) {
+        DecimalFormat df = new DecimalFormat("0.00");
+        return df.format(Double.valueOf(value));
     }
 
 }

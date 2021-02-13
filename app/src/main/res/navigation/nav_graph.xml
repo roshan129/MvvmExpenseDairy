@@ -18,5 +18,13 @@
         <action
             android:id="@+id/action_dashboardFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_allTransactionsFragment2"
+            app:destination="@id/allTransactionsFragment2" />
     </fragment>
+    <fragment
+        android:id="@+id/allTransactionsFragment2"
+        android:name="com.adivid.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment"
+        android:label="fragment_all_transactions"
+        tools:layout="@layout/fragment_all_transactions" />
 </navigation>

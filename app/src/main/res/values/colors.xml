@@ -17,6 +17,7 @@
     <color name="fab_src">@color/white</color>
     <color name="et_border_color">@color/black</color>
     <color name="card_item_bg">@color/white_other</color>
+    <color name="list_icon_color">@color/black</color>
 
 
     <color name="white_other">#FAFAFA</color>

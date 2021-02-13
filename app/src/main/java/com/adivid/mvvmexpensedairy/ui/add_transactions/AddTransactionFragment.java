@@ -1,8 +1,10 @@
 package com.adivid.mvvmexpensedairy.ui.add_transactions;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.DatePicker;
 
@@ -79,7 +81,7 @@ public class AddTransactionFragment extends Fragment {
 
     private void setUpOnClickListeners() {
         binding.ivBack.setOnClickListener(v -> {
-
+            requireActivity().onBackPressed();
         });
 
         binding.spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -104,7 +106,7 @@ public class AddTransactionFragment extends Fragment {
         });
 
         binding.chipGroupTransactionType.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId){
+            switch (checkedId) {
                 case R.id.chip_expense:
                     stringTransactionType = "Expense";
                     Timber.d("chip_expense");
@@ -117,7 +119,7 @@ public class AddTransactionFragment extends Fragment {
         });
 
         binding.chipGroupPaymentType.setOnCheckedChangeListener((group, checkedId) -> {
-            switch (checkedId){
+            switch (checkedId) {
                 case R.id.chip_cash:
                     stringTransactionType = "Cash";
                     Timber.d("chip_expense");
@@ -136,6 +138,9 @@ public class AddTransactionFragment extends Fragment {
                 stringCategoryType, stringNote, String.valueOf(System.currentTimeMillis())
         );
         viewModel.insertTransaction(expenseEntity);
+        hideKeyboard();
+        requireActivity().onBackPressed();
+
     }
 
     private void showDatePickerDialog() {
@@ -154,7 +159,7 @@ public class AddTransactionFragment extends Fragment {
                     mDay = newDate.get(Calendar.DAY_OF_MONTH);
                     mMonth = newDate.get(Calendar.MONTH);
                     mYear = newDate.get(Calendar.YEAR);
-                }, mYear, mMonth , mDay).show();
+                }, mYear, mMonth, mDay).show();
 
     }
 
@@ -173,6 +178,11 @@ public class AddTransactionFragment extends Fragment {
             binding.etNote.requestFocus();
             return false;
         }
+        stringAmount = Utils.convertToDecimalFormat(stringAmount);
+
+        /*if(!stringAmount.contains(".")){
+            stringAmount = stringAmount + ".0";
+        }*/
         return true;
     }
 
@@ -180,6 +190,15 @@ public class AddTransactionFragment extends Fragment {
         stringDate = Utils.getDisplayDate();
         stringTime = Utils.getCurrentTime();
         binding.etDate.setText(stringDate);
+    }
+
+    private void hideKeyboard() {
+        InputMethodManager imm =
+                (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+        if (imm != null) {
+            imm.hideSoftInputFromWindow(requireActivity().getCurrentFocus().getWindowToken(), 0);
+        }
+
     }
 
     @Override
