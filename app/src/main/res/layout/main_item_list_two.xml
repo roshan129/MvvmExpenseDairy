@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:layout_height="wrap_content"
     android:paddingStart="8dp"
-    android:paddingEnd="8dp"
 
-    android:layout_height="wrap_content">
+    android:paddingEnd="8dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
@@ -14,39 +14,45 @@
         android:layout_centerInParent="true"
 
         android:backgroundTint="@color/white"
-        app:cardUseCompatPadding="true"
-        app:cardCornerRadius="15dp">
+        app:cardCornerRadius="15dp"
+        app:cardUseCompatPadding="true">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingTop="4dp"
-            android:paddingBottom="4dp"
             android:paddingStart="8dp"
-            android:paddingEnd="8dp">
+            android:paddingTop="4dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="4dp">
 
             <androidx.cardview.widget.CardView
                 android:id="@+id/card_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="0dp"
-                app:cardCornerRadius="30dp"
+                android:backgroundTint="@color/white"
+                app:cardCornerRadius="18dp"
                 app:cardUseCompatPadding="true"
-                android:backgroundTint="@color/white_other"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:layout_width="56dp"
-                    android:layout_height="56dp"
-                    android:padding="14dp"
-                    android:layout_gravity="center"
-                    android:id="@+id/iv_category_icon"
-                    android:src="@drawable/ic_local_dining"
-                     />
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="4dp">
 
+                    <ImageView
+                        android:id="@+id/iv_category_icon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_local_dining"
+                        />
+
+                </LinearLayout>
             </androidx.cardview.widget.CardView>
 
 
@@ -56,8 +62,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="16dp"
                 android:text="₹ 20.0"
-                android:textStyle="bold"
                 android:textColor="@color/text_expense_color"
+                android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />

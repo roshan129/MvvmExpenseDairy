@@ -21,10 +21,34 @@
         <action
             android:id="@+id/action_dashboardFragment_to_allTransactionsFragment2"
             app:destination="@id/allTransactionsFragment2" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_dayTransactionsFragment"
+            app:destination="@id/dayTransactionsFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_monthTransactionFragment"
+            app:destination="@id/monthTransactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
         android:name="com.adivid.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment"
         android:label="fragment_all_transactions"
-        tools:layout="@layout/fragment_all_transactions" />
+        tools:layout="@layout/fragment_all_transactions" >
+        <action
+            android:id="@+id/action_allTransactionsFragment2_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/dayTransactionsFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.day_transactions.DayTransactionsFragment"
+        android:label="fragment_day_transactions"
+        tools:layout="@layout/fragment_day_transactions" >
+        <action
+            android:id="@+id/action_dayTransactionsFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/monthTransactionFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.month_transactions.MonthTransactionFragment"
+        android:label="fragment_month_transaction"
+        tools:layout="@layout/fragment_month_transaction" />
 </navigation>

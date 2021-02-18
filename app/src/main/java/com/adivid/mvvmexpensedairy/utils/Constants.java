@@ -21,5 +21,7 @@ public class Constants {
     public static final String INSURANCE = "Insurance";
     public static final String GIFTS_AND_DONATIONS = "Gifts and Donations";
 
+    public static final int TIME_INTERVAL = 2000;
+
 
 }

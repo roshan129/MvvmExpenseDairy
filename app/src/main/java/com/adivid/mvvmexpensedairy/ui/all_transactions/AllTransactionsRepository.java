@@ -1,5 +1,7 @@
 package com.adivid.mvvmexpensedairy.ui.all_transactions;
 
+import androidx.lifecycle.LiveData;
+
 import com.adivid.mvvmexpensedairy.data.local.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
 
@@ -20,7 +22,7 @@ public class AllTransactionsRepository {
         this.expenseDao = expenseDao;
     }
 
-    public Flowable<List<ExpenseEntity>> getAllTransactions() {
+    public LiveData<List<ExpenseEntity>> getAllTransactions() {
         return expenseDao.getAllTransactions();
     }
 

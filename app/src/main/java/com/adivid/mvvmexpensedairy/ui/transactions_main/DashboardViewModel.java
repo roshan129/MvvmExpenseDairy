@@ -23,7 +23,7 @@ public class DashboardViewModel extends ViewModel {
     private final DashboardRepository repository;
     private CompositeDisposable compositeDisposable;
 
-    //public LiveData<List<ExpenseEntity>> allTransactionsMain = getAllTransactions();
+    public LiveData<List<ExpenseEntity>> recentAllTransactions;
 
     public MutableLiveData<List<ExpenseEntity>> allTransactions;
 
@@ -32,15 +32,13 @@ public class DashboardViewModel extends ViewModel {
         this.repository = repository;
         compositeDisposable = new CompositeDisposable();
         allTransactions = new MutableLiveData<>();
-        getAllTransactions();
+        init();
     }
 
-   /* public LiveData<List<ExpenseEntity>> getAllTransactions() {
-        if (repository != null) {
-            return repository.getAllTransactions();
-        }else
-            return null;
-    }*/
+    private void init() {
+        //getAllTransactions();
+        recentAllTransactions = repository.getAllRecentTransactions();
+    }
 
     public void getAllTransactions() {
         if (repository != null) {

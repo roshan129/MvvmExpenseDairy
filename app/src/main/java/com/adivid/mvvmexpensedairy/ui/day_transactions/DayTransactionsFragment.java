@@ -1,4 +1,4 @@
-package com.adivid.mvvmexpensedairy.ui.all_transactions;
+package com.adivid.mvvmexpensedairy.ui.day_transactions;
 
 import android.os.Bundle;
 import android.view.View;
@@ -6,17 +6,14 @@ import android.view.View;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.NavController;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
-import com.adivid.mvvmexpensedairy.databinding.FragmentAllTransactionsBinding;
+import com.adivid.mvvmexpensedairy.databinding.FragmentDayTransactionsBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
 
@@ -27,42 +24,40 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class AllTransactionsFragment extends Fragment implements
-        FragmentManager.OnBackStackChangedListener {
+public class DayTransactionsFragment extends Fragment {
 
-    private FragmentAllTransactionsBinding binding;
-    private NavController navController;
-    private AllTransactionsViewModel viewModel;
+    private FragmentDayTransactionsBinding binding;
+    private DayTransactionViewModel viewModel;
     private MainListAdapter adapter;
     private List<Expense> expenseList;
 
-    public AllTransactionsFragment() {
-        super(R.layout.fragment_all_transactions);
+    public DayTransactionsFragment() {
+        super(R.layout.fragment_day_transactions);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentAllTransactionsBinding.bind(view);
+        binding = FragmentDayTransactionsBinding.bind(view);
 
         init();
         observers();
     }
 
     private void init() {
-        Timber.d("inside all transactions");
-        navController = NavHostFragment.findNavController(this);
-        viewModel = new ViewModelProvider(this).get(AllTransactionsViewModel.class);
-
+        setUpRecyclerView();
+        viewModel = new ViewModelProvider(this).get(DayTransactionViewModel.class);
         expenseList = new ArrayList<>();
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new MainListAdapter(recyclerViewClickListener);
-        binding.recyclerView.setAdapter(adapter);
+    }
 
+    private void setUpRecyclerView() {
+        adapter = new MainListAdapter(recyclerViewClickListener);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerView.setAdapter(adapter);
     }
 
     private void observers() {
-        viewModel.allTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
+        viewModel.dayTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
             expenseList.clear();
             for (int i = 0; i < expenseEntities.size(); i++) {
                 Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntities.get(i));
@@ -75,7 +70,7 @@ public class AllTransactionsFragment extends Fragment implements
     private final OnItemClickListener recyclerViewClickListener =  new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Timber.d("list clicked" + position);
+            Timber.d("month list clicked" + position);
         }
 
         @Override
@@ -83,9 +78,4 @@ public class AllTransactionsFragment extends Fragment implements
 
         }
     };
-
-    @Override
-    public void onBackStackChanged() {
-        navController.navigate(R.id.action_allTransactionsFragment2_to_dashboardFragment);
-    }
 }

@@ -3,14 +3,22 @@ package com.adivid.mvvmexpensedairy;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.os.Bundle;
 
+import com.adivid.locationhelperlibrary.LocationHelper;
 import com.adivid.mvvmexpensedairy.adapter.MenuAdapter;
 import com.adivid.mvvmexpensedairy.databinding.ActivityMainBinding;
 import com.adivid.mvvmexpensedairy.model.Menu;
+import com.adivid.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -22,7 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private DrawerLayout drawerLayout;
     private List<Menu> menuList;
-
+    private NavController navController;
+    private String lastFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,28 +42,41 @@ public class MainActivity extends AppCompatActivity {
         init();
         setUpOnClickListeners();
 
+        String s = LocationHelper.getCustomFormattedString("abcd");
+        Timber.d("string: %s", s);
 
     }
 
     private void init() {
-
+        NavHostFragment navFragment =(NavHostFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.nav_host);
+        navController = navFragment.getNavController();
         setUpMenuList();
     }
 
     private void setUpOnClickListeners() {
         setUpListViewClickListener();
 
-
     }
 
     private void setUpListViewClickListener() {
         binding.menuListView.setOnItemClickListener((parent, view, position, id) -> {
+            closeDrawer();
             switch (menuList.get(position).getMenu_name()){
                 case "All Transactions":
-                    Timber.d("All");
+                    if(navController.getCurrentDestination().getId() != R.id.allTransactionsFragment2){
+                        navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment2);
+                    }
                     break;
-                case "Day List":
-                    Timber.d("Day");
+                case "Day Report":
+                    if(navController.getCurrentDestination().getId() != R.id.dayTransactionsFragment){
+                        navController.navigate(R.id.action_dashboardFragment_to_dayTransactionsFragment);
+                    }
+                    break;
+                case "Monthly Report":
+                    if(navController.getCurrentDestination().getId() != R.id.monthTransactionFragment){
+                        navController.navigate(R.id.action_dashboardFragment_to_monthTransactionFragment);
+                    }
                     break;
                 case "Categories":
                     Timber.d("Categories");
@@ -73,7 +95,8 @@ public class MainActivity extends AppCompatActivity {
         menuList = new ArrayList<>();
 
         menuList.add(new Menu("All Transactions", R.drawable.ic_all_transaction_list));
-        menuList.add(new Menu("Day List", R.drawable.ic_day_calendar));
+        menuList.add(new Menu("Day Report", R.drawable.ic_day_calendar));
+        menuList.add(new Menu("Monthly Report", R.drawable.ic_month_calendar));
         menuList.add(new Menu("Categories", R.drawable.ic_category_add));
         menuList.add(new Menu("Settings", R.drawable.ic_settings));
         menuList.add(new Menu("Rate App", R.drawable.ic_star));
@@ -89,5 +112,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void openDrawer() {
         binding.drawerlayout.openDrawer(GravityCompat.START);
+    }
+
+    public void closeDrawer() {
+        if (binding.drawerlayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerlayout.closeDrawer(GravityCompat.START);
+        }
     }
 }

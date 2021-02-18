@@ -16,6 +16,9 @@ import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.utils.Utils;
+import com.mikhaellopez.circularimageview.CircularImageView;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.*;
 

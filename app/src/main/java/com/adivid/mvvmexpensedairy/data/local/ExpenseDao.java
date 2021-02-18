@@ -20,11 +20,18 @@ public interface ExpenseDao {
     Maybe<Long> insertTransaction(ExpenseEntity expense);
 
     @Query("Select * from expenseentity ORDER BY id DESC")
-    Flowable<List<ExpenseEntity>> getAllTransactions();
-
+    LiveData<List<ExpenseEntity>> getAllTransactions();
 
     @Query("Select * from expenseentity ORDER BY id DESC")
     Flowable<List<ExpenseEntity>> getAllMainTransactions();
 
+    @Query("Select * from expenseentity ORDER BY id DESC LIMIT 4")
+    LiveData<List<ExpenseEntity>> getAllRecentTransactions();
+
+    @Query("Select * from expenseentity WHERE date = date('now')")
+    LiveData<List<ExpenseEntity>> getDayWiseRecords();
+
+    @Query("Select * from expenseentity WHERE strftime('%Y', date) = :year AND strftime('%m', date) = :monthName")
+    Flowable<List<ExpenseEntity>> getMonthWiseRecords(String monthName, String year);
 
 }

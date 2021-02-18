@@ -17,15 +17,17 @@ public class DashboardRepository {
 
     private ExpenseDao expenseDao;
 
-
     @Inject
     public DashboardRepository(ExpenseDao expenseDao) {
         this.expenseDao = expenseDao;
     }
 
-
-
     public Flowable<List<ExpenseEntity>> getAllMainTransactions() {
         return expenseDao.getAllMainTransactions();
     }
+
+    public LiveData<List<ExpenseEntity>> getAllRecentTransactions() {
+        return expenseDao.getAllRecentTransactions();
+    }
+
 }

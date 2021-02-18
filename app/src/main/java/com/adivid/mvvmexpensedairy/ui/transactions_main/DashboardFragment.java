@@ -3,10 +3,13 @@ package com.adivid.mvvmexpensedairy.ui.transactions_main;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -26,14 +29,17 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.TIME_INTERVAL;
+
 @AndroidEntryPoint
-public class DashboardFragment extends Fragment {
+public class DashboardFragment extends Fragment implements FragmentManager.OnBackStackChangedListener {
 
     private FragmentDashboardBinding binding;
     private NavController navController;
     private DashboardViewModel viewModel;
     private List<Expense> expenseList;
     private MainListAdapter adapter;
+    private long backPressed = 0;
 
     public DashboardFragment() {
         super(R.layout.fragment_dashboard);
@@ -62,10 +68,10 @@ public class DashboardFragment extends Fragment {
     }
 
     private void observers() {
-        viewModel.allTransactions.observe(getViewLifecycleOwner(), expenseEntity -> {
+        viewModel.recentAllTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
             expenseList.clear();
-            for (int i = 0; i < expenseEntity.size(); i++) {
-                Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntity.get(i));
+            for (int i = 0; i < expenseEntities.size(); i++) {
+                Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntities.get(i));
                 expenseList.add(expense);
             }
             adapter.submitList(expenseList);
@@ -99,6 +105,16 @@ public class DashboardFragment extends Fragment {
     public void onDestroyView() {
         binding = null;
         super.onDestroyView();
+    }
 
+    @Override
+    public void onBackStackChanged() {
+        if(backPressed + TIME_INTERVAL > System.currentTimeMillis()){
+            requireActivity().finish();
+        }else{
+            Toast.makeText(requireContext(), "Press back again to exit!", Toast.LENGTH_SHORT)
+                    .show();
+        }
+        backPressed = System.currentTimeMillis();
     }
 }
