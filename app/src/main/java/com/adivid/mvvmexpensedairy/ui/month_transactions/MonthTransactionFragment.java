@@ -50,7 +50,7 @@ public class MonthTransactionFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(MonthTransactionViewModel.class);
         expenseList = new ArrayList<>();
 
-        viewModel.getMonthlyRecords("'2021'", "'2'");
+        viewModel.getMonthlyRecords("'2021'", "'02'");
     }
 
     private void setUpRecyclerView() {
