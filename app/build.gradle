@@ -86,7 +86,5 @@ dependencies {
     //circular image view two
     implementation 'com.mikhaellopez:circularimageview:4.2.0'
 
-    //test location helper
-    implementation 'com.github.roshan129:LocationHelper:1.0.0'
 
 }

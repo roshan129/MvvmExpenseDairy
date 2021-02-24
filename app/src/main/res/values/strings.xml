@@ -14,5 +14,7 @@
     <string name="type">Type:</string>
     <string name="rupee">₹</string>
 
+    <integer name="enter_from_right_dur">150</integer>
+
 
 </resources>

@@ -1,11 +1,9 @@
 package com.adivid.mvvmexpensedairy.ui.transactions_main;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseDao;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
-import com.adivid.mvvmexpensedairy.domain.Expense;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import java.util.List;
 

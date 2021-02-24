@@ -15,10 +15,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentAllTransactionsBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
-import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -63,12 +61,7 @@ public class AllTransactionsFragment extends Fragment implements
 
     private void observers() {
         viewModel.allTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseList.clear();
-            for (int i = 0; i < expenseEntities.size(); i++) {
-                Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntities.get(i));
-                expenseList.add(expense);
-            }
-            adapter.submitList(expenseList);
+            adapter.submitList(expenseEntities);
         });
     }
 

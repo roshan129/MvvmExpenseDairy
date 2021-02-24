@@ -1,21 +1,16 @@
 package com.adivid.mvvmexpensedairy.ui.all_transactions;
 
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Transformations;
 import androidx.lifecycle.ViewModel;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
-import io.reactivex.rxjava3.schedulers.Schedulers;
-import timber.log.Timber;
 
 @HiltViewModel
 public class AllTransactionsViewModel extends ViewModel {

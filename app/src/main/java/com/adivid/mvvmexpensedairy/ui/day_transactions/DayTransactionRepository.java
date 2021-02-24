@@ -2,12 +2,15 @@ package com.adivid.mvvmexpensedairy.ui.day_transactions;
 
 import androidx.lifecycle.LiveData;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseDao;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
+
+import io.reactivex.rxjava3.core.Flowable;
 
 public class DayTransactionRepository {
 
@@ -19,8 +22,8 @@ public class DayTransactionRepository {
 
     }
 
-    public LiveData<List<ExpenseEntity>> getDayWiseRecords() {
-        return expenseDao.getDayWiseRecords();
+    public Flowable<List<ExpenseEntity>> getDayWiseRecords(Date daySt) {
+        return expenseDao.getDayWiseRecords(daySt);
     }
 
 }

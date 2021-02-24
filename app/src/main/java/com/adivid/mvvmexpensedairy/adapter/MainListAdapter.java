@@ -3,7 +3,6 @@ package com.adivid.mvvmexpensedairy.adapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,16 +13,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
-import com.adivid.mvvmexpensedairy.domain.Expense;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.utils.Utils;
-import com.mikhaellopez.circularimageview.CircularImageView;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.*;
 
 
-public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainListViewHolder> {
+public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.MainListViewHolder> {
 
     private final OnItemClickListener onItemClickListener;
 
@@ -42,7 +38,7 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
 
     @Override
     public void onBindViewHolder(@NonNull MainListViewHolder holder, int position) {
-        Expense expense = getItem(position);
+        ExpenseEntity expense = getItem(position);
         holder.textViewNote.setText(expense.getNote());
         holder.textViewDate.setText(Utils.convertToDisplayDate(expense.getDate()));
         holder.textViewMoney.setText("₹ " + expense.getAmount());
@@ -76,18 +72,20 @@ public class MainListAdapter extends ListAdapter<Expense, MainListAdapter.MainLi
         }
     }
 
-    public static final DiffUtil.ItemCallback<Expense> DIFF_CALLBACK =
-            new DiffUtil.ItemCallback<Expense>() {
+    public static final DiffUtil.ItemCallback<ExpenseEntity> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<ExpenseEntity>() {
                 @Override
-                public boolean areItemsTheSame(@NonNull Expense oldItem, @NonNull Expense newItem) {
+                public boolean areItemsTheSame(@NonNull ExpenseEntity oldItem, @NonNull ExpenseEntity newItem) {
                     return oldItem.getId() == newItem.getId();
                 }
 
                 @Override
-                public boolean areContentsTheSame(@NonNull Expense oldItem, @NonNull Expense newItem) {
+                public boolean areContentsTheSame(@NonNull ExpenseEntity oldItem, @NonNull ExpenseEntity newItem) {
                     return oldItem.hashCode() == newItem.hashCode();
                 }
             };
+
+
 
 
     private void setCategoryIcon(MainListViewHolder holder, String transaction_category) {

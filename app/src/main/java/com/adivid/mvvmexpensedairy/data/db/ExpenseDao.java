@@ -1,13 +1,11 @@
-package com.adivid.mvvmexpensedairy.data.local;
+package com.adivid.mvvmexpensedairy.data.db;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Query;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
-import com.adivid.mvvmexpensedairy.domain.Expense;
-
+import java.util.Date;
 import java.util.List;
 
 import io.reactivex.rxjava3.core.Flowable;
@@ -28,10 +26,14 @@ public interface ExpenseDao {
     @Query("Select * from expenseentity ORDER BY id DESC LIMIT 4")
     LiveData<List<ExpenseEntity>> getAllRecentTransactions();
 
-    @Query("Select * from expenseentity WHERE date = date('now')")
-    LiveData<List<ExpenseEntity>> getDayWiseRecords();
+   /* @Query("Select * from expenseentity WHERE date between :daySt AND :dayEnd")
+    LiveData<List<ExpenseEntity>> getDayWiseRecords(Date daySt, Date dayEnd);*/
+
+    @Query("Select * from expenseentity WHERE date = :daySt")
+    Flowable<List<ExpenseEntity>> getDayWiseRecords(Date daySt);
 
     @Query("Select * from expenseentity WHERE strftime('%Y', date) = :year AND strftime('%m', date) = :monthName")
     Flowable<List<ExpenseEntity>> getMonthWiseRecords(String monthName, String year);
+
 
 }

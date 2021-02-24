@@ -1,8 +1,8 @@
 package com.adivid.mvvmexpensedairy.ui.add_transactions;
 
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseDao;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import javax.inject.Inject;
 

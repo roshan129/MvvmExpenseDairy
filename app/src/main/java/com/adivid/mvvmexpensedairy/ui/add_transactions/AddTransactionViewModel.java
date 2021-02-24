@@ -3,7 +3,7 @@ package com.adivid.mvvmexpensedairy.ui.add_transactions;
 
 import androidx.lifecycle.ViewModel;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import javax.inject.Inject;
 

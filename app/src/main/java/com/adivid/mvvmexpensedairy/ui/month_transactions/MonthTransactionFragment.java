@@ -18,6 +18,7 @@ import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -50,6 +51,7 @@ public class MonthTransactionFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(MonthTransactionViewModel.class);
         expenseList = new ArrayList<>();
 
+
         viewModel.getMonthlyRecords("'2021'", "'02'");
     }
 
@@ -61,12 +63,7 @@ public class MonthTransactionFragment extends Fragment {
 
     private void observers() {
         viewModel.monthlyExpenseEntities.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseList.clear();
-            for (int i = 0; i < expenseEntities.size(); i++) {
-                Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntities.get(i));
-                expenseList.add(expense);
-            }
-            adapter.submitList(expenseList);
+            adapter.submitList(expenseEntities);
         });
     }
 

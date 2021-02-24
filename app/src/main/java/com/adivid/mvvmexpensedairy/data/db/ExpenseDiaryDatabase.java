@@ -1,4 +1,4 @@
-package com.adivid.mvvmexpensedairy.data.local;
+package com.adivid.mvvmexpensedairy.data.db;
 
 
 import android.content.Context;
@@ -7,11 +7,13 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DB_NAME;
 
-@Database(entities = {ExpenseEntity.class}, version = 3, exportSchema = false)
+@Database(entities = {ExpenseEntity.class}, version = 4, exportSchema = false)
+@TypeConverters({Converters.class})
 public abstract class ExpenseDiaryDatabase extends RoomDatabase {
 
     private static ExpenseDiaryDatabase databaseInstance;

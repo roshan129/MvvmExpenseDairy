@@ -2,14 +2,13 @@ package com.adivid.mvvmexpensedairy.ui.all_transactions;
 
 import androidx.lifecycle.LiveData;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseDao;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
-import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class AllTransactionsRepository {

@@ -2,8 +2,8 @@ package com.adivid.mvvmexpensedairy.di;
 
 import android.content.Context;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseDao;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseDiaryDatabase;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDiaryDatabase;
 
 import javax.inject.Singleton;
 

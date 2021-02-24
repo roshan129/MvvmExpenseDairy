@@ -1,7 +1,9 @@
 package com.adivid.mvvmexpensedairy.domain.mapper;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.domain.Expense;
+
+import java.util.Date;
 
 public class ExpenseEntityMapper implements DomainMapper<ExpenseEntity, Expense> {
 
@@ -9,7 +11,7 @@ public class ExpenseEntityMapper implements DomainMapper<ExpenseEntity, Expense>
     public Expense mapToDomainModel(ExpenseEntity expenseEntity) {
         return new Expense(
                 expenseEntity.getId(),
-                expenseEntity.getDate(),
+                expenseEntity.getDate().toString(),
                 expenseEntity.getTime(),
                 expenseEntity.getAmount(),
                 expenseEntity.getTransaction_type(),
@@ -21,7 +23,7 @@ public class ExpenseEntityMapper implements DomainMapper<ExpenseEntity, Expense>
     @Override
     public ExpenseEntity mapFromDomainModel(Expense expense) {
         ExpenseEntity entity = new ExpenseEntity(
-                expense.getDate(),
+                new Date(),
                 expense.getTime(),
                 expense.getAmount(),
                 expense.getTransaction_type(),

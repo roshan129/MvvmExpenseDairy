@@ -4,8 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
-import com.adivid.mvvmexpensedairy.domain.Expense;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import java.util.List;
 

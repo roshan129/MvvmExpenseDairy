@@ -69,12 +69,7 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
 
     private void observers() {
         viewModel.recentAllTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseList.clear();
-            for (int i = 0; i < expenseEntities.size(); i++) {
-                Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntities.get(i));
-                expenseList.add(expense);
-            }
-            adapter.submitList(expenseList);
+            adapter.submitList(expenseEntities);
             adapter.notifyDataSetChanged();
         });
     }

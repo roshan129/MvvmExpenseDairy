@@ -17,7 +17,8 @@
         tools:layout="@layout/fragment_dashboard" >
         <action
             android:id="@+id/action_dashboardFragment_to_addTransactionFragment"
-            app:destination="@id/addTransactionFragment" />
+            app:destination="@id/addTransactionFragment"
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_allTransactionsFragment2"
             app:destination="@id/allTransactionsFragment2" />

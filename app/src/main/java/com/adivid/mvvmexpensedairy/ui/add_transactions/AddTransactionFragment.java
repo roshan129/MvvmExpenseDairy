@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,10 +13,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.adivid.mvvmexpensedairy.R;
-import com.adivid.mvvmexpensedairy.data.local.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentAddTransactionBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
-import com.google.android.material.chip.Chip;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -37,8 +35,9 @@ public class AddTransactionFragment extends Fragment {
 
     private FragmentAddTransactionBinding binding;
 
-    private String stringDate, stringTime, stringDbDate, stringAmount, stringTransactionType,
+    private String stringDate, stringTime, stringAmount, stringTransactionType,
             stringCategoryType, stringNote, stringPaymentType;
+    private Date storingDate;
     private Calendar calendar;
     private int mDay, mMonth, mYear;
     private List<String> listCategory;
@@ -134,7 +133,7 @@ public class AddTransactionFragment extends Fragment {
 
     private void saveInDb() {
         ExpenseEntity expenseEntity = new ExpenseEntity(
-                stringDbDate, stringTime, stringAmount, stringTransactionType,
+                storingDate, stringTime, stringAmount, stringTransactionType,
                 stringCategoryType, stringNote, String.valueOf(System.currentTimeMillis())
         );
         viewModel.insertTransaction(expenseEntity);
@@ -164,7 +163,7 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private boolean validateFields() {
-        stringDbDate = Utils.convertToStoringDate(binding.etDate.getText().toString());
+        storingDate = Utils.convertToStoringDate(binding.etDate.getText().toString());
         stringAmount = binding.etAmount.getText().toString().trim();
         stringNote = binding.etNote.getText().toString();
         stringPaymentType = "Cash";

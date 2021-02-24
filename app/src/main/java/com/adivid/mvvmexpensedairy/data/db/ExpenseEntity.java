@@ -1,7 +1,10 @@
-package com.adivid.mvvmexpensedairy.data.local;
+package com.adivid.mvvmexpensedairy.data.db;
 
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
+import androidx.room.TypeConverters;
+
+import java.util.Date;
 
 @Entity
 public class ExpenseEntity {
@@ -9,7 +12,7 @@ public class ExpenseEntity {
     @PrimaryKey(autoGenerate = true)
     private int id;
 
-    private String date;
+    private Date date;
 
     private String time;
 
@@ -23,7 +26,7 @@ public class ExpenseEntity {
 
     private String current_time_millis;
 
-    public ExpenseEntity(String date, String time, String amount,
+    public ExpenseEntity(Date date, String time, String amount,
                          String transaction_type, String transaction_category, String note,
                          String current_time_millis) {
         this.date = date;
@@ -43,11 +46,11 @@ public class ExpenseEntity {
         this.current_time_millis = current_time_millis;
     }
 
-    public String getDate() {
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(String date) {
+    public void setDate(Date date) {
         this.date = date;
     }
 
@@ -97,5 +100,10 @@ public class ExpenseEntity {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
     }
 }

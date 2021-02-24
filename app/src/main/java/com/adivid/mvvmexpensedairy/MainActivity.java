@@ -1,24 +1,18 @@
 package com.adivid.mvvmexpensedairy;
 
+import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
-import android.os.Bundle;
-
-import com.adivid.locationhelperlibrary.LocationHelper;
 import com.adivid.mvvmexpensedairy.adapter.MenuAdapter;
 import com.adivid.mvvmexpensedairy.databinding.ActivityMainBinding;
 import com.adivid.mvvmexpensedairy.model.Menu;
-import com.adivid.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -41,9 +35,6 @@ public class MainActivity extends AppCompatActivity {
 
         init();
         setUpOnClickListeners();
-
-        String s = LocationHelper.getCustomFormattedString("abcd");
-        Timber.d("string: %s", s);
 
     }
 

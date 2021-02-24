@@ -1,11 +1,15 @@
 package com.adivid.mvvmexpensedairy.ui.day_transactions;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -13,12 +17,17 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDayTransactionsBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
+import com.adivid.mvvmexpensedairy.utils.Utils;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
@@ -41,6 +50,7 @@ public class DayTransactionsFragment extends Fragment {
         binding = FragmentDayTransactionsBinding.bind(view);
 
         init();
+        setUpOnClickListeners();
         observers();
     }
 
@@ -48,7 +58,50 @@ public class DayTransactionsFragment extends Fragment {
         setUpRecyclerView();
         viewModel = new ViewModelProvider(this).get(DayTransactionViewModel.class);
         expenseList = new ArrayList<>();
+        String today = Utils.getDisplayDate();
+        binding.tvDate.setText(today);
+        viewModel.getDayWiseRecords(today);
     }
+
+    private void setUpOnClickListeners() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+
+        binding.buttonPrevious.setOnClickListener(v -> {
+            c.add(Calendar.DATE, -1);
+            String formattedDate1 = df.format(c.getTime());
+            Timber.d(formattedDate1);
+            binding.tvDate.setText(formattedDate1);
+        });
+
+        binding.buttonNext.setOnClickListener(v -> {
+            c.add(Calendar.DATE, 1);
+            String formattedDate1 = df.format(c.getTime());
+
+            Timber.d(formattedDate1);
+            binding.tvDate.setText(formattedDate1);
+        });
+
+        binding.tvDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                viewModel.getDayWiseRecords(s.toString());
+                Timber.d("afterTextChanged" + s.toString());
+            }
+        });
+
+    }
+
 
     private void setUpRecyclerView() {
         adapter = new MainListAdapter(recyclerViewClickListener);
@@ -58,16 +111,12 @@ public class DayTransactionsFragment extends Fragment {
 
     private void observers() {
         viewModel.dayTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseList.clear();
-            for (int i = 0; i < expenseEntities.size(); i++) {
-                Expense expense = new ExpenseEntityMapper().mapToDomainModel(expenseEntities.get(i));
-                expenseList.add(expense);
-            }
-            adapter.submitList(expenseList);
+            adapter.submitList(expenseEntities);
         });
+
     }
 
-    private final OnItemClickListener recyclerViewClickListener =  new OnItemClickListener() {
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
             Timber.d("month list clicked" + position);
