@@ -82,6 +82,18 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
         binding.ivMenu.setOnClickListener(v -> {
             ((MainActivity) requireActivity()).openDrawer();
         });
+
+        binding.cardWeekly.setOnClickListener(v -> {
+
+        });
+
+        binding.cardMonthly.setOnClickListener(v -> {
+            navController.navigate(R.id.action_dashboardFragment_to_monthTransactionFragment);
+        });
+
+        binding.cardYearly.setOnClickListener(v -> {
+
+        });
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {

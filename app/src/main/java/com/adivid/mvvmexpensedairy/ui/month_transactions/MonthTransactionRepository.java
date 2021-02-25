@@ -4,6 +4,7 @@ package com.adivid.mvvmexpensedairy.ui.month_transactions;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -20,8 +21,8 @@ public class MonthTransactionRepository {
 
     }
 
-    public Flowable<List<ExpenseEntity>> getMonthlyRecords(String month, String year){
-        return expenseDao.getMonthWiseRecords(month, year);
+    public Flowable<List<ExpenseEntity>> getMonthlyRecords(Date firstDay, Date lastDay){
+        return expenseDao.getMonthWiseRecords(firstDay, lastDay);
     }
 
 }

@@ -110,4 +110,12 @@ public class MainActivity extends AppCompatActivity {
             binding.drawerlayout.closeDrawer(GravityCompat.START);
         }
     }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        if (binding.drawerlayout.isDrawerOpen(GravityCompat.START)) {
+            binding.drawerlayout.closeDrawer(GravityCompat.START);
+        }
+    }
 }

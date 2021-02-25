@@ -3,24 +3,19 @@ package com.adivid.mvvmexpensedairy.ui.day_transactions;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
-import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDayTransactionsBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
-import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -85,12 +80,10 @@ public class DayTransactionsFragment extends Fragment {
         binding.tvDate.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
             }
 
             @Override
@@ -100,8 +93,11 @@ public class DayTransactionsFragment extends Fragment {
             }
         });
 
-    }
+        binding.ivClose.setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
 
+    }
 
     private void setUpRecyclerView() {
         adapter = new MainListAdapter(recyclerViewClickListener);
@@ -127,4 +123,5 @@ public class DayTransactionsFragment extends Fragment {
 
         }
     };
+
 }
