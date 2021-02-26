@@ -92,7 +92,7 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
         });
 
         binding.cardYearly.setOnClickListener(v -> {
-
+            navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
         });
     }
 

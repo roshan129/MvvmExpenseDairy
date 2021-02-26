@@ -28,6 +28,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_monthTransactionFragment"
             app:destination="@id/monthTransactionFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_yearTransactionFragment"
+            app:destination="@id/yearTransactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
@@ -52,4 +55,9 @@
         android:name="com.adivid.mvvmexpensedairy.ui.month_transactions.MonthTransactionFragment"
         android:label="fragment_month_transaction"
         tools:layout="@layout/fragment_month_transaction" />
+    <fragment
+        android:id="@+id/yearTransactionFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.yearly_transactions.YearTransactionFragment"
+        android:label="fragment_year_transaction"
+        tools:layout="@layout/fragment_year_transaction" />
 </navigation>

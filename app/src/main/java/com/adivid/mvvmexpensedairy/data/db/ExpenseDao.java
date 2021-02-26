@@ -35,5 +35,8 @@ public interface ExpenseDao {
     @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
     Flowable<List<ExpenseEntity>> getMonthWiseRecords(Date firstDay, Date lastDay);
 
+    @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
+    Flowable<List<ExpenseEntity>> getYearWiseRecords(Date firstDay, Date lastDay);
+
 
 }
