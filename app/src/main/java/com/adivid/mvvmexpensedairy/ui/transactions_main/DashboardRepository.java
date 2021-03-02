@@ -28,4 +28,13 @@ public class DashboardRepository {
         return expenseDao.getAllRecentTransactions();
     }
 
+    public LiveData<Double> getExpenseCount() {
+        return expenseDao.getExpenseCount();
+    }
+
+    public LiveData<Double> getIncomeCount() {
+        return expenseDao.getIncomeCount();
+    }
+
+
 }

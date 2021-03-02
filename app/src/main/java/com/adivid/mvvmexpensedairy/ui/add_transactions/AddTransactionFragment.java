@@ -63,6 +63,7 @@ public class AddTransactionFragment extends Fragment {
                 getResources().getStringArray(R.array.category_arr)));
         stringTransactionType = "Expense";
         stringCategoryType = "Others";
+        stringPaymentType = "Cash";
         calendar = Calendar.getInstance();
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         mMonth = calendar.get(Calendar.MONTH);
@@ -120,11 +121,11 @@ public class AddTransactionFragment extends Fragment {
         binding.chipGroupPaymentType.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
                 case R.id.chip_cash:
-                    stringTransactionType = "Cash";
+                    stringPaymentType = "Cash";
                     Timber.d("chip_expense");
                     break;
                 case R.id.chip_card:
-                    stringTransactionType = "Income";
+                    stringPaymentType = "Card";
                     Timber.d("chip_income");
                     break;
             }
@@ -134,7 +135,7 @@ public class AddTransactionFragment extends Fragment {
     private void saveInDb() {
         ExpenseEntity expenseEntity = new ExpenseEntity(
                 storingDate, stringTime, stringAmount, stringTransactionType,
-                stringCategoryType, stringNote, String.valueOf(System.currentTimeMillis())
+                stringCategoryType, stringNote,stringPaymentType, String.valueOf(System.currentTimeMillis())
         );
         viewModel.insertTransaction(expenseEntity);
         hideKeyboard();
@@ -166,7 +167,6 @@ public class AddTransactionFragment extends Fragment {
         storingDate = Utils.convertToStoringDate(binding.etDate.getText().toString());
         stringAmount = binding.etAmount.getText().toString().trim();
         stringNote = binding.etNote.getText().toString();
-        stringPaymentType = "Cash";
 
         if (stringAmount.isEmpty()) {
             binding.etAmount.setError("Please Enter Amount");

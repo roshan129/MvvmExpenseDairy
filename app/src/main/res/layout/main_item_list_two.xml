@@ -60,11 +60,11 @@
                 android:id="@+id/tv_money"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
                 android:text="₹ 20.0"
                 android:textColor="@color/text_expense_color"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
@@ -95,6 +95,16 @@
                 android:textColor="@color/text_color"
                 app:layout_constraintStart_toEndOf="@+id/card_circle"
                 app:layout_constraintTop_toBottomOf="@+id/tv_note" />
+
+            <ImageView
+                android:id="@+id/imageViewPaymentMode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                app:layout_constraintEnd_toEndOf="@+id/tv_money"
+                app:layout_constraintStart_toStartOf="@+id/tv_money"
+                app:layout_constraintTop_toBottomOf="@+id/tv_money"
+                android:src="@drawable/ic_cash" />
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

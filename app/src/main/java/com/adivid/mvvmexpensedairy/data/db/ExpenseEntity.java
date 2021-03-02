@@ -24,18 +24,29 @@ public class ExpenseEntity {
 
     private String note;
 
+    private String payment_type;
+
     private String current_time_millis;
 
     public ExpenseEntity(Date date, String time, String amount,
                          String transaction_type, String transaction_category, String note,
-                         String current_time_millis) {
+                         String payment_type, String current_time_millis) {
         this.date = date;
         this.time = time;
         this.amount = amount;
         this.transaction_type = transaction_type;
         this.transaction_category = transaction_category;
         this.note = note;
+        this.payment_type = payment_type;
         this.current_time_millis = current_time_millis;
+    }
+
+    public String getPayment_type() {
+        return payment_type;
+    }
+
+    public void setPayment_type(String payment_type) {
+        this.payment_type = payment_type;
     }
 
     public String getCurrent_time_millis() {

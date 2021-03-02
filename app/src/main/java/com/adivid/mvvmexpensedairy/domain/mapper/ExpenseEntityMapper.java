@@ -16,7 +16,8 @@ public class ExpenseEntityMapper implements DomainMapper<ExpenseEntity, Expense>
                 expenseEntity.getAmount(),
                 expenseEntity.getTransaction_type(),
                 expenseEntity.getTransaction_category(),
-                expenseEntity.getNote()
+                expenseEntity.getNote(),
+                expenseEntity.getPayment_type()
         );
     }
 
@@ -29,6 +30,7 @@ public class ExpenseEntityMapper implements DomainMapper<ExpenseEntity, Expense>
                 expense.getTransaction_type(),
                 expense.getTransaction_category(),
                 expense.getNote(),
+                expense.getPayment_type(),
                 ""
         );
         return entity;

@@ -45,12 +45,17 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
 
         setCategoryIcon(holder, expense.getTransaction_category());
 
-    }
+        if(expense.getPayment_type().equals("Cash")){
+            holder.imageViewPayment.setImageResource(R.drawable.ic_cash);
+        }else {
+            holder.imageViewPayment.setImageResource(R.drawable.ic_credit_card);
+        }
 
+    }
 
     public static class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView textViewNote, textViewDate, textViewMoney;
-        private final ImageView imageView;
+        private final ImageView imageView, imageViewPayment;
         private final OnItemClickListener onItemClickListener;
 
         public MainListViewHolder(@NonNull View itemView,
@@ -62,6 +67,7 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
             textViewDate = itemView.findViewById(R.id.tv_date);
             textViewMoney = itemView.findViewById(R.id.tv_money);
             imageView = itemView.findViewById(R.id.iv_category_icon);
+            imageViewPayment = itemView.findViewById(R.id.imageViewPaymentMode);
 
             itemView.setOnClickListener(this);
         }

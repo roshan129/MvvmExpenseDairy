@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import java.util.List;
@@ -23,20 +24,24 @@ public class DashboardViewModel extends ViewModel {
     private CompositeDisposable compositeDisposable;
 
     public LiveData<List<ExpenseEntity>> recentAllTransactions;
+    public LiveData<Double> expenseCount;
+    public LiveData<Double> incomeCount;
 
     public MutableLiveData<List<ExpenseEntity>> allTransactions;
 
     @Inject
     public DashboardViewModel(DashboardRepository repository) {
         this.repository = repository;
-        compositeDisposable = new CompositeDisposable();
-        allTransactions = new MutableLiveData<>();
+
         init();
     }
 
     private void init() {
-        //getAllTransactions();
+        compositeDisposable = new CompositeDisposable();
+        allTransactions = new MutableLiveData<>();
         recentAllTransactions = repository.getAllRecentTransactions();
+        expenseCount = repository.getExpenseCount();
+        incomeCount = repository.getIncomeCount();
     }
 
     public void getAllTransactions() {

@@ -12,7 +12,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DB_NAME;
 
-@Database(entities = {ExpenseEntity.class}, version = 4, exportSchema = false)
+@Database(entities = {ExpenseEntity.class}, version = 5, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class ExpenseDiaryDatabase extends RoomDatabase {
 

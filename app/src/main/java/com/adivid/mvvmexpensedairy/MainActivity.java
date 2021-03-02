@@ -12,7 +12,11 @@ import com.adivid.mvvmexpensedairy.adapter.MenuAdapter;
 import com.adivid.mvvmexpensedairy.databinding.ActivityMainBinding;
 import com.adivid.mvvmexpensedairy.model.Menu;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -36,10 +40,35 @@ public class MainActivity extends AppCompatActivity {
         init();
         setUpOnClickListeners();
 
+        firstDayOfWeek();
+    }
+
+    private void firstDayOfWeek() {
+        String str = "26" + " " + "Feb," + " " + "2021";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy");
+        Date myDate = new Date();
+        try {
+            myDate = sdf.parse(str);
+        } catch (ParseException pe) {
+            // Do Something
+        }
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(myDate);
+        cal.set(Calendar.DAY_OF_WEEK, 1);
+        int s = cal.get(Calendar.DATE);
+        String date= String.valueOf(cal.getTime());
+        Timber.d("date: " + date);
+        Timber.d("s: " + s);
+        cal.set(Calendar.DAY_OF_WEEK, 7);
+        s = cal.get(Calendar.DATE);
+        Timber.d("s2: " + s);
+
+        cal.set(Calendar.DAY_OF_WEEK, -1);
+        Timber.d("minus: " + cal.getTime());
     }
 
     private void init() {
-        NavHostFragment navFragment =(NavHostFragment) getSupportFragmentManager()
+        NavHostFragment navFragment = (NavHostFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.nav_host);
         navController = navFragment.getNavController();
         setUpMenuList();
@@ -53,19 +82,19 @@ public class MainActivity extends AppCompatActivity {
     private void setUpListViewClickListener() {
         binding.menuListView.setOnItemClickListener((parent, view, position, id) -> {
             closeDrawer();
-            switch (menuList.get(position).getMenu_name()){
+            switch (menuList.get(position).getMenu_name()) {
                 case "All Transactions":
-                    if(navController.getCurrentDestination().getId() != R.id.allTransactionsFragment2){
-                        navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment2);
+                    if (navController.getCurrentDestination().getId() != R.id.allTransactionsFragment2) {
+                        navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment);
                     }
                     break;
                 case "Day Report":
-                    if(navController.getCurrentDestination().getId() != R.id.dayTransactionsFragment){
+                    if (navController.getCurrentDestination().getId() != R.id.dayTransactionsFragment) {
                         navController.navigate(R.id.action_dashboardFragment_to_dayTransactionsFragment);
                     }
                     break;
                 case "Monthly Report":
-                    if(navController.getCurrentDestination().getId() != R.id.monthTransactionFragment){
+                    if (navController.getCurrentDestination().getId() != R.id.monthTransactionFragment) {
                         navController.navigate(R.id.action_dashboardFragment_to_monthTransactionFragment);
                     }
                     break;

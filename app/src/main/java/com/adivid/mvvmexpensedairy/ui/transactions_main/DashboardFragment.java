@@ -1,11 +1,9 @@
 package com.adivid.mvvmexpensedairy.ui.transactions_main;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -21,7 +19,6 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
-import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,6 +69,17 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
             adapter.submitList(expenseEntities);
             adapter.notifyDataSetChanged();
         });
+
+        viewModel.expenseCount.observe(getViewLifecycleOwner(), aDouble -> {
+            if(aDouble == null) binding.tvExpMoney.setText("0");
+            else binding.tvExpMoney.setText(String.valueOf(aDouble));
+        });
+
+        viewModel.incomeCount.observe(getViewLifecycleOwner(), aDouble -> {
+            if(aDouble == null) binding.tvIncomeMoney.setText("0");
+            else binding.tvIncomeMoney.setText(String.valueOf(aDouble));
+        });
+
     }
 
     private void setUpOnClickListeners() {
@@ -84,7 +92,7 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
         });
 
         binding.cardWeekly.setOnClickListener(v -> {
-
+            navController.navigate(R.id.action_dashboardFragment_to_weekTransactionFragment);
         });
 
         binding.cardMonthly.setOnClickListener(v -> {
@@ -94,6 +102,11 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
         binding.cardYearly.setOnClickListener(v -> {
             navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
         });
+
+        binding.tvSeeAll.setOnClickListener(v -> {
+            navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment);
+        });
+
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
@@ -124,4 +137,7 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
         }
         backPressed = System.currentTimeMillis();
     }
+
+
+
 }

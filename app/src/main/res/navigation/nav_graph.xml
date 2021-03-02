@@ -20,7 +20,7 @@
             app:destination="@id/addTransactionFragment"
             app:enterAnim="@anim/enter_from_right" />
         <action
-            android:id="@+id/action_dashboardFragment_to_allTransactionsFragment2"
+            android:id="@+id/action_dashboardFragment_to_allTransactionsFragment"
             app:destination="@id/allTransactionsFragment2" />
         <action
             android:id="@+id/action_dashboardFragment_to_dayTransactionsFragment"
@@ -31,6 +31,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_yearTransactionFragment"
             app:destination="@id/yearTransactionFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_weekTransactionFragment"
+            app:destination="@id/weekTransactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
@@ -60,4 +63,9 @@
         android:name="com.adivid.mvvmexpensedairy.ui.yearly_transactions.YearTransactionFragment"
         android:label="fragment_year_transaction"
         tools:layout="@layout/fragment_year_transaction" />
+    <fragment
+        android:id="@+id/weekTransactionFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.weekly_transactions.WeekTransactionFragment"
+        android:label="fragment_week_transactions"
+        tools:layout="@layout/fragment_week_transactions" />
 </navigation>

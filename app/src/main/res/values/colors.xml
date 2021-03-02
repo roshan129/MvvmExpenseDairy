@@ -8,16 +8,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#878787</color>
+    <color name="royal_blue">#5D48DD</color>
+    <color name="bittersweet">#FF6969</color>
 
     <color name="bg_color">@color/white</color>
     <color name="text_color">@color/black</color>
     <color name="text_expense_color">@color/green_primary</color>
     <color name="text_income_color">@color/alertRed</color>
-    <color name="fab_bg">@color/purple_200</color>
+    <color name="fab_bg">@color/bittersweet</color>
     <color name="fab_src">@color/white</color>
     <color name="et_border_color">@color/black</color>
     <color name="card_item_bg">@color/white_other</color>
-    <color name="list_icon_color">@color/black</color>
+    <color name="list_icon_color">@color/royal_blue</color>
 
 
     <color name="white_other">#FAFAFA</color>
