@@ -2,6 +2,7 @@ package com.adivid.mvvmexpensedairy.ui.all_transactions;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,12 +12,13 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentAllTransactionsBinding;
-import com.adivid.mvvmexpensedairy.domain.Expense;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +35,12 @@ public class AllTransactionsFragment extends Fragment implements
     private AllTransactionsViewModel viewModel;
     private MainListAdapter adapter;
 
+    private LinearLayoutManager linearLayoutManager;
+    private boolean isScrolling;
+    private int currentItems, scrolledOutItems, totalItems;
+    private int counter = 0;
+    private List<ExpenseEntity> expenseEntityList;
+
     public AllTransactionsFragment() {
         super(R.layout.fragment_all_transactions);
     }
@@ -43,8 +51,9 @@ public class AllTransactionsFragment extends Fragment implements
         binding = FragmentAllTransactionsBinding.bind(view);
 
         init();
-        setOnItemClickListener();
         observers();
+        setOnItemClickListener();
+        viewModel.getAllTransactions(counter);
     }
 
     private void init() {
@@ -52,9 +61,12 @@ public class AllTransactionsFragment extends Fragment implements
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(AllTransactionsViewModel.class);
 
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        linearLayoutManager = new LinearLayoutManager(requireContext());
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setAdapter(adapter);
+
+        expenseEntityList = new ArrayList<>();
 
     }
 
@@ -62,12 +74,43 @@ public class AllTransactionsFragment extends Fragment implements
         binding.ivBack.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
+
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+
+                if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                    //binding.pro.setVisibility(View.VISIBLE);
+                    isScrolling = false;
+                    counter++;
+                    String offset = counter + "0";
+                    Timber.d("counter: " + counter);
+                    Timber.d("offse: " + offset);
+                    viewModel.getAllTransactions(Integer.parseInt(offset));
+                }
+            }
+        });
     }
 
     private void observers() {
         viewModel.allTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            adapter.submitList(expenseEntities);
+            expenseEntityList.addAll(expenseEntities);
+            adapter.submitList(expenseEntityList);
         });
+
     }
 
     private final OnItemClickListener recyclerViewClickListener =  new OnItemClickListener() {

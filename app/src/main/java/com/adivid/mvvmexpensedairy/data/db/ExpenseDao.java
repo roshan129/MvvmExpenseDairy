@@ -46,4 +46,7 @@ public interface ExpenseDao {
 
     @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income'")
     LiveData<Double> getIncomeCount();
+
+    @Query("Select * from expenseentity ORDER BY id DESC LIMIT 10 OFFSET :offset")
+    Flowable<List<ExpenseEntity>> getAllMainTransactionsOffset(int offset);
 }

@@ -49,9 +49,9 @@ public class YearTransactionFragment extends Fragment {
 
     private void init() {
         setUpRecyclerView();
+        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         viewModel = new ViewModelProvider(this).get(YearTransactionViewModel.class);
-        viewModel.getYearlyRecords(Utils.convertToStoringDate("01 Jan, 2021"),
-                Utils.convertToStoringDate("31 Dec, 2021"));
+        viewModel.getYearlyRecords(getFirstDayOfYear(currentYear), getLastDayOfYear(currentYear));
     }
 
     private void setUpOnClickListeners() {

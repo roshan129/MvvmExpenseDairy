@@ -9,11 +9,12 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class AllTransactionsRepository {
 
-    private ExpenseDao expenseDao;
+    private final ExpenseDao expenseDao;
     private CompositeDisposable disposable;
 
     @Inject
@@ -25,4 +26,7 @@ public class AllTransactionsRepository {
         return expenseDao.getAllTransactions();
     }
 
+    public Flowable<List<ExpenseEntity>> getAllTransactionsOffset(int offset) {
+        return expenseDao.getAllMainTransactionsOffset(offset);
+    }
 }
