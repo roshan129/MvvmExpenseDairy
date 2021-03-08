@@ -32,7 +32,6 @@ public class AllTransactionsFragment extends Fragment implements
     private NavController navController;
     private AllTransactionsViewModel viewModel;
     private MainListAdapter adapter;
-    private List<Expense> expenseList;
 
     public AllTransactionsFragment() {
         super(R.layout.fragment_all_transactions);
@@ -44,6 +43,7 @@ public class AllTransactionsFragment extends Fragment implements
         binding = FragmentAllTransactionsBinding.bind(view);
 
         init();
+        setOnItemClickListener();
         observers();
     }
 
@@ -52,11 +52,16 @@ public class AllTransactionsFragment extends Fragment implements
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(AllTransactionsViewModel.class);
 
-        expenseList = new ArrayList<>();
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setAdapter(adapter);
 
+    }
+
+    private void setOnItemClickListener() {
+        binding.ivBack.setOnClickListener(v -> {
+            requireActivity().onBackPressed();
+        });
     }
 
     private void observers() {
