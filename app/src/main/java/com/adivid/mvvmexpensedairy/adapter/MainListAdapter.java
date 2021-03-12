@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -15,6 +16,8 @@ import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.utils.Utils;
+
+import java.util.List;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.*;
 
@@ -92,7 +95,15 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
             };
 
 
+    @Override
+    public void submitList(@Nullable List<ExpenseEntity> list) {
+        if(list == null){
 
+        }else{
+
+        }
+        super.submitList(list);
+    }
 
     private void setCategoryIcon(MainListViewHolder holder, String transaction_category) {
         switch (transaction_category) {

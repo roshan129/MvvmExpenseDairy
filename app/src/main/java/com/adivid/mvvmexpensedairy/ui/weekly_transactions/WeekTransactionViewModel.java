@@ -44,6 +44,19 @@ public class WeekTransactionViewModel extends ViewModel {
         );
     }
 
+    public void getWeeklyReportsOffset(Date firstWeekDay, Date lastWeekDay, int offset) {
+        compositeDisposable.add(
+                repository.getWeeklyReportsOffset(firstWeekDay, lastWeekDay, offset)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(expenseEntities -> {
+                            weeklyTransactions.postValue(expenseEntities);
+                        },throwable -> {
+                            Timber.d("exception: %s", throwable.toString());
+                        })
+        );
+    }
+
     @Override
     protected void onCleared() {
         compositeDisposable.clear();

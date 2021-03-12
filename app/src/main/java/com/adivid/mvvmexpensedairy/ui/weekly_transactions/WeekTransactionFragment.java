@@ -2,23 +2,28 @@ package com.adivid.mvvmexpensedairy.ui.weekly_transactions;
 
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AbsListView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentWeekTransactionsBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
@@ -30,6 +35,13 @@ public class WeekTransactionFragment extends Fragment {
     private WeekTransactionViewModel viewModel;
     private Calendar calendarFirst, calendarLast;
     private MainListAdapter adapter;
+
+    private LinearLayoutManager linearLayoutManager;
+    private boolean isScrolling;
+    private int currentItems, scrolledOutItems, totalItems;
+    private int counter = 0;
+    private List<ExpenseEntity> expenseEntityList;
+    private Date weekFirstDate, weekLastDate;
 
     public WeekTransactionFragment() {
         super(R.layout.fragment_week_transactions);
@@ -47,46 +59,94 @@ public class WeekTransactionFragment extends Fragment {
     }
 
     private void init() {
-        setUpRecyclerView();
         viewModel = new ViewModelProvider(this).get(WeekTransactionViewModel.class);
+        expenseEntityList = new ArrayList<>();
+
+        setUpRecyclerView();
 
         binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(getFirstDayOfWeek()));
         binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(getLastDayOfWeek()));
-        viewModel.getWeeklyReports(calendarFirst.getTime(), calendarLast.getTime());
+        weekFirstDate = calendarFirst.getTime();
+        weekLastDate = calendarLast.getTime();
+        viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
 
     }
 
     private void observers() {
         viewModel.weeklyTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            adapter.submitList(expenseEntities);
+            expenseEntityList.addAll(expenseEntities);
+            adapter.submitList(expenseEntityList);
+            adapter.notifyDataSetChanged();
         });
     }
 
     private void setUpRecyclerView() {
+        linearLayoutManager = new LinearLayoutManager(requireContext());
         adapter = new MainListAdapter(recyclerViewClickListener);
-        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerView.setLayoutManager(linearLayoutManager);
         binding.recyclerView.setAdapter(adapter);
+
+        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Timber.d("onScrollStateChanged");
+                if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
+                    isScrolling = true;
+                    adapter.notifyDataSetChanged();
+                }
+            }
+
+            @Override
+            public void onScrolled(@NonNull RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                currentItems = linearLayoutManager.getChildCount();
+                totalItems = linearLayoutManager.getItemCount();
+                scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
+
+                if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                    //binding.pro.setVisibility(View.VISIBLE);
+                    isScrolling = false;
+                    counter++;
+                    String offset = counter + "0";
+                    viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate,
+                            Integer.parseInt(offset));
+                }
+            }
+        });
     }
 
     private void setUpOnClickListeners() {
         binding.buttonPrevious.setOnClickListener(v -> {
-            Timber.d("clickes");
+            counter = 0;
+            expenseEntityList.clear();
+            adapter.submitList(expenseEntityList);
+            //adapter.notifyDataSetChanged();
             calendarFirst.add(Calendar.DATE, -7);
             binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
 
             calendarLast.add(Calendar.DATE, -7);
             binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
-            viewModel.getWeeklyReports(calendarFirst.getTime(), calendarLast.getTime());
+            weekFirstDate = calendarFirst.getTime();
+            weekLastDate = calendarLast.getTime();
+            viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+
         });
 
         binding.buttonNext.setOnClickListener(v -> {
-            Timber.d("clicked next");
+            counter = 0;
+            expenseEntityList.clear();
+            adapter.submitList(expenseEntityList);
+            //adapter.notifyDataSetChanged();
             calendarFirst.add(Calendar.DATE, +7);
             binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
 
             calendarLast.add(Calendar.DATE, +7);
             binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
-            viewModel.getWeeklyReports(calendarFirst.getTime(), calendarLast.getTime());
+            weekFirstDate = calendarFirst.getTime();
+            weekLastDate = calendarLast.getTime();
+            viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+
         });
 
         binding.ivBack.setOnClickListener(v -> {
@@ -106,7 +166,7 @@ public class WeekTransactionFragment extends Fragment {
         return calendarLast.getTime();
     }
 
-    private OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
 

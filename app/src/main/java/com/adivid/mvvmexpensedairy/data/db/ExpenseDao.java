@@ -47,6 +47,13 @@ public interface ExpenseDao {
     @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income'")
     LiveData<Double> getIncomeCount();
 
+    /////  offset change /////////////////////////////////////////////////
+
     @Query("Select * from expenseentity ORDER BY id DESC LIMIT 10 OFFSET :offset")
     Flowable<List<ExpenseEntity>> getAllMainTransactionsOffset(int offset);
+
+    @Query("Select * from expenseentity WHERE date BETWEEN :firstWeekDay AND :lastWeekDay LIMIT 10 OFFSET :offset")
+    Flowable<List<ExpenseEntity>> getWeeklyWiseRecordsOffset(
+            Date firstWeekDay, Date lastWeekDay, int offset);
+
 }
