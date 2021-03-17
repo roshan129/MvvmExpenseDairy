@@ -10,6 +10,10 @@
         android:icon="@drawable/ic_day_calendar"
         android:title="@string/day_report" />
     <item
+        android:id="@+id/weekTransactionFragment"
+        android:icon="@drawable/ic_day_calendar"
+        android:title="@string/weekly_report" />
+    <item
         android:id="@+id/monthTransactionFragment"
         android:icon="@drawable/ic_month_calendar"
         android:title="@string/monthly_report" />
@@ -25,5 +29,8 @@
         android:id="@+id/item_rate_app"
         android:icon="@drawable/ic_star"
         android:title="@string/rate_app" />
-
+    <item
+        android:id="@+id/item_about"
+        android:icon="@drawable/ic_info"
+        android:title="@string/about" />
 </menu>

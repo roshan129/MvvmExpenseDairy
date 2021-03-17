@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -43,6 +44,8 @@ public class AddTransactionFragment extends Fragment {
     private List<String> listCategory;
     private AddTransactionViewModel viewModel;
 
+    private ArrayAdapter<CharSequence> arrayAdapter;
+
     public AddTransactionFragment() {
         super(R.layout.fragment_add_transaction);
     }
@@ -53,6 +56,7 @@ public class AddTransactionFragment extends Fragment {
         binding = FragmentAddTransactionBinding.bind(view);
 
         init();
+        setUpAdapters();
         setUpOnClickListeners();
     }
 
@@ -60,7 +64,7 @@ public class AddTransactionFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(AddTransactionViewModel.class);
         setUpDateAndTime();
         listCategory = new ArrayList<>(Arrays.asList(
-                getResources().getStringArray(R.array.category_arr)));
+                getResources().getStringArray(R.array.category_arr_exp)));
         stringTransactionType = "Expense";
         stringCategoryType = "Others";
         stringPaymentType = "Cash";
@@ -71,6 +75,12 @@ public class AddTransactionFragment extends Fragment {
 
         addDynamicChips();
 
+    }
+
+    private void setUpAdapters() {
+        arrayAdapter = ArrayAdapter.createFromResource(requireContext(),
+                R.array.category_arr_exp, android.R.layout.simple_spinner_item);
+        
     }
 
     private void addDynamicChips() {
@@ -113,6 +123,7 @@ public class AddTransactionFragment extends Fragment {
                     break;
                 case R.id.chip_income:
                     stringTransactionType = "Income";
+                    //binding.spinnerCategory.
                     Timber.d("chip_income");
                     break;
             }

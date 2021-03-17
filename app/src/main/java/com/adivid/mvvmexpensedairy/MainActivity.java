@@ -1,9 +1,11 @@
 package com.adivid.mvvmexpensedairy;
 
 import android.os.Bundle;
+import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -61,7 +63,25 @@ public class MainActivity extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
 
         });
+        binding.navigationView.setNavigationItemSelectedListener(item -> {
+            Timber.d("clicked");
+            if(item.getItemId() == R.id.item_about){
+                showAboutAlertDialog();
+            }
+            NavigationUI.onNavDestinationSelected(item,navController);
+            closeDrawer();
+            return true;
+        });
 
+    }
+
+    private void showAboutAlertDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Xpense Dairy")
+                .setMessage("Version: 1.0\n Version Code: 1")
+                .setPositiveButton("Ok", (dialog, which) -> {
+                   dialog.dismiss();
+                });
     }
 
     public void openDrawer() {
