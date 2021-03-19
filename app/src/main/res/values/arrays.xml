@@ -22,6 +22,7 @@
     <string-array name="category_arr_inc">
         <item>Others</item>
         <item>Salary</item>
+        <item>Bonus</item>
         <item>Savings</item>
         <item>Deposits</item>
     </string-array>

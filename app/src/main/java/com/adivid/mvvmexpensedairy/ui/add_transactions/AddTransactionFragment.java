@@ -44,7 +44,7 @@ public class AddTransactionFragment extends Fragment {
     private List<String> listCategory;
     private AddTransactionViewModel viewModel;
 
-    private ArrayAdapter<CharSequence> arrayAdapter;
+    private ArrayAdapter<String> arrayAdapterCategory;
 
     public AddTransactionFragment() {
         super(R.layout.fragment_add_transaction);
@@ -78,9 +78,11 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void setUpAdapters() {
-        arrayAdapter = ArrayAdapter.createFromResource(requireContext(),
-                R.array.category_arr_exp, android.R.layout.simple_spinner_item);
-        
+        arrayAdapterCategory = new ArrayAdapter<>(requireContext(),
+                android.R.layout.simple_spinner_dropdown_item,
+                listCategory);
+        binding.spinnerCategory.setAdapter(arrayAdapterCategory);
+
     }
 
     private void addDynamicChips() {
@@ -119,12 +121,22 @@ public class AddTransactionFragment extends Fragment {
             switch (checkedId) {
                 case R.id.chip_expense:
                     stringTransactionType = "Expense";
-                    Timber.d("chip_expense");
+                    List<String> list = new ArrayList<>(Arrays.asList(
+                            getResources().getStringArray(R.array.category_arr_exp)));
+                    listCategory.clear();
+                    listCategory.addAll(list);
+                    binding.spinnerCategory.setSelection(0);
+                    arrayAdapterCategory.notifyDataSetChanged();
                     break;
                 case R.id.chip_income:
+                    Timber.d("income");
                     stringTransactionType = "Income";
-                    //binding.spinnerCategory.
-                    Timber.d("chip_income");
+                    List<String> list1 = new ArrayList<>(Arrays.asList(
+                            getResources().getStringArray(R.array.category_arr_inc)));
+                    listCategory.clear();
+                    listCategory.addAll(list1);
+                    binding.spinnerCategory.setSelection(0);
+                    arrayAdapterCategory.notifyDataSetChanged();
                     break;
             }
         });
@@ -184,9 +196,7 @@ public class AddTransactionFragment extends Fragment {
             binding.etAmount.requestFocus();
             return false;
         } else if (stringNote.isEmpty()) {
-            binding.etNote.setError("Please Enter Note");
-            binding.etNote.requestFocus();
-            return false;
+            stringNote = "Not Specified";
         }
         stringAmount = Utils.convertToDecimalFormat(stringAmount);
 
