@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Xpense Diary</string>
+    <string name="rupee">₹</string>
+
     <string name="hello_guest_user">Hello, Guest User</string>
     <string name="sign_in">Sign in</string>
     <string name="expense">Expense</string>
@@ -12,7 +14,6 @@
     <string name="card">Card</string>
     <string name="category">Category:</string>
     <string name="type">Type:</string>
-    <string name="rupee">₹</string>
     <string name="all_transactions">All Transactions</string>
     <string name="day_report">Day Report</string>
     <string name="monthly_report">Monthly Report</string>
@@ -21,6 +22,9 @@
     <string name="rate_app">Rate App</string>
     <string name="about">About</string>
     <string name="weekly_report">Weekly Report</string>
+    <string name="custom_view">Custom View</string>
+    <string name="add_filter">Add Filter</string>
+    <string name="payment_type">Payment Type</string>
 
     <integer name="enter_from_right_dur">150</integer>
 

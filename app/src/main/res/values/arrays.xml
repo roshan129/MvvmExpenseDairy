@@ -27,4 +27,10 @@
         <item>Deposits</item>
     </string-array>
 
+    <string-array name="filter_arr">
+        <item>Year/Month</item>
+        <item>Date Range</item>
+
+    </string-array>
+
 </resources>

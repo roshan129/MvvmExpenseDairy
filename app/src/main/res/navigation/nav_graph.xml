@@ -34,6 +34,9 @@
         <action
             android:id="@+id/action_dashboardFragment_to_weekTransactionFragment"
             app:destination="@id/weekTransactionFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_customViewFragment2"
+            app:destination="@id/customViewFragment" />
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
@@ -68,4 +71,9 @@
         android:name="com.adivid.mvvmexpensedairy.ui.weekly_transactions.WeekTransactionFragment"
         android:label="fragment_week_transactions"
         tools:layout="@layout/fragment_week_transactions" />
+    <fragment
+        android:id="@+id/customViewFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.custom_view.CustomViewFragment"
+        android:label="fragment_custom_view"
+        tools:layout="@layout/fragment_custom_view" />
 </navigation>

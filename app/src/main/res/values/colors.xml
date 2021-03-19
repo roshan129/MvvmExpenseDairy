@@ -20,7 +20,8 @@
     <color name="et_border_color">@color/black</color>
     <color name="card_item_bg">@color/white_other</color>
     <color name="list_icon_color">@color/royal_blue</color>
-
+    <color name="chip_bg_color">@color/light_blue_primary</color>
+    <color name="chip_text_color">@color/white</color>
 
     <color name="white_other">#FAFAFA</color>
 
@@ -82,5 +83,7 @@
     <color name="brown_primary_dark">#5D4037</color>
     <color name="blue_grey_primary">#607D8B</color>
     <color name="blue_grey_primary_dark">#455A64</color>
+    <color name="blue_smoke">#f3f7f9</color>
+
 
 </resources>

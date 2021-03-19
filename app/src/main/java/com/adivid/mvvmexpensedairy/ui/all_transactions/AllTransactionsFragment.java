@@ -27,7 +27,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class AllTransactionsFragment extends Fragment implements
+public class    AllTransactionsFragment extends Fragment implements
         FragmentManager.OnBackStackChangedListener {
 
     private FragmentAllTransactionsBinding binding;
