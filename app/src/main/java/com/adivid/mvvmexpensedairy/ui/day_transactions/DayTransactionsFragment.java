@@ -119,7 +119,7 @@ public class DayTransactionsFragment extends Fragment {
 
         viewModel.dayIncomeCount.observe(getViewLifecycleOwner(), s -> {
             String inc = getString(R.string.rupee) + s;
-            binding.tvMoneySpent.setText(inc);
+            binding.tvMoneyIncome.setText(inc);
         });
     }
 
