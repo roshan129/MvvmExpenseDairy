@@ -69,6 +69,7 @@ public class WeekTransactionFragment extends Fragment {
         weekFirstDate = calendarFirst.getTime();
         weekLastDate = calendarLast.getTime();
         viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+        viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
 
     }
 
@@ -77,6 +78,16 @@ public class WeekTransactionFragment extends Fragment {
             expenseEntityList.addAll(expenseEntities);
             adapter.submitList(expenseEntityList);
             adapter.notifyDataSetChanged();
+        });
+
+        viewModel.weeklyExpense.observe(getViewLifecycleOwner(), s -> {
+            String exp = getString(R.string.rupee)  + s;
+            binding.tvMoneySpent.setText(exp);
+        });
+
+        viewModel.weeklyIncome.observe(getViewLifecycleOwner(), s -> {
+            String inc = getString(R.string.rupee)  + s;
+            binding.tvMoneyIncome.setText(inc);
         });
     }
 
@@ -90,7 +101,6 @@ public class WeekTransactionFragment extends Fragment {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Timber.d("onScrollStateChanged");
                 if (newState == AbsListView.OnScrollListener.SCROLL_STATE_TOUCH_SCROLL) {
                     isScrolling = true;
                     adapter.notifyDataSetChanged();
@@ -130,6 +140,8 @@ public class WeekTransactionFragment extends Fragment {
             weekFirstDate = calendarFirst.getTime();
             weekLastDate = calendarLast.getTime();
             viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+            viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
+
 
         });
 
@@ -146,6 +158,7 @@ public class WeekTransactionFragment extends Fragment {
             weekFirstDate = calendarFirst.getTime();
             weekLastDate = calendarLast.getTime();
             viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+            viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
 
         });
 

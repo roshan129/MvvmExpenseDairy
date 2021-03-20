@@ -33,5 +33,13 @@ public class WeekTransactionRepository {
         return expenseDao.getWeeklyWiseRecordsOffset(firstWeekDay, lastWeekDay, offset);
     }
 
+    public Flowable<Double> getWeekExpense(Date firstWeekDay, Date lastWeekDay) {
+        return expenseDao.getTotalWeekExpense(firstWeekDay, lastWeekDay);
+    }
+
+    public Flowable<Double> getWeekIncome(Date firstWeekDay, Date lastWeekDay) {
+        return expenseDao.getTotalWeekIncome(firstWeekDay, lastWeekDay);
+    }
+
 
 }

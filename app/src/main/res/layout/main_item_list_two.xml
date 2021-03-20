@@ -17,11 +17,12 @@
         app:cardCornerRadius="15dp"
         app:cardUseCompatPadding="true">
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="horizontal"
-            android:paddingStart="8dp"
+
             android:paddingTop="4dp"
             android:paddingEnd="8dp"
             android:paddingBottom="4dp">
@@ -30,7 +31,7 @@
                 android:id="@+id/card_circle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
+                android:layout_marginStart="8dp"
                 android:backgroundTint="@color/white"
                 app:cardCornerRadius="18dp"
                 app:cardUseCompatPadding="true"
@@ -47,10 +48,9 @@
                         android:id="@+id/iv_category_icon"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:padding="8dp"
                         android:layout_gravity="center"
-                        android:src="@drawable/ic_local_dining"
-                        />
+                        android:padding="8dp"
+                        android:src="@drawable/ic_local_dining" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
@@ -101,11 +101,20 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
+                android:src="@drawable/ic_cash"
                 app:layout_constraintEnd_toEndOf="@+id/tv_money"
                 app:layout_constraintStart_toStartOf="@+id/tv_money"
-                app:layout_constraintTop_toBottomOf="@+id/tv_money"
-                android:src="@drawable/ic_cash" />
+                app:layout_constraintTop_toBottomOf="@+id/tv_money" />
 
+            <View
+                android:id="@+id/view_exp_inc"
+                android:layout_width="2dp"
+                android:layout_height="0dp"
+                android:background="@color/green_primary"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

@@ -1,5 +1,6 @@
 package com.adivid.mvvmexpensedairy.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,6 +9,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,6 +27,7 @@ import static com.adivid.mvvmexpensedairy.utils.Constants.*;
 public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.MainListViewHolder> {
 
     private final OnItemClickListener onItemClickListener;
+    private Context context;
 
     public MainListAdapter(OnItemClickListener onItemClickListener) {
         super(DIFF_CALLBACK);
@@ -34,6 +37,7 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
     @NonNull
     @Override
     public MainListViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        context = parent.getContext();
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.main_item_list_two, parent,
                 false);
         return new MainListViewHolder(view, onItemClickListener);
@@ -54,12 +58,19 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
             holder.imageViewPayment.setImageResource(R.drawable.ic_credit_card);
         }
 
+        if(expense.getTransaction_type().equals("Income")){
+            holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.green_primary));
+        }else{
+            holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.red_primary));
+        }
+
     }
 
     public static class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView textViewNote, textViewDate, textViewMoney;
         private final ImageView imageView, imageViewPayment;
         private final OnItemClickListener onItemClickListener;
+        private final View view;
 
         public MainListViewHolder(@NonNull View itemView,
                                   OnItemClickListener onItemClickListener) {
@@ -71,6 +82,7 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
             textViewMoney = itemView.findViewById(R.id.tv_money);
             imageView = itemView.findViewById(R.id.iv_category_icon);
             imageViewPayment = itemView.findViewById(R.id.imageViewPaymentMode);
+            view = itemView.findViewById(R.id.view_exp_inc);
 
             itemView.setOnClickListener(this);
         }

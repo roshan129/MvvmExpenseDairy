@@ -42,6 +42,11 @@ public interface ExpenseDao {
     @Query("Select * from expenseentity WHERE date BETWEEN :firstWeekDay AND :lastWeekDay")
     Flowable<List<ExpenseEntity>> getWeeklyWiseRecords(Date firstWeekDay, Date lastWeekDay);
 
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Expense' AND date BETWEEN :firstWeekDay AND :lastWeekDay")
+    Flowable<Double> getTotalWeekExpense(Date firstWeekDay, Date lastWeekDay);
+
+    @Query("Select SUM(amount) from expenseentity WHERE date BETWEEN :firstWeekDay AND :lastWeekDay AND transaction_type = 'Income'")
+    Flowable<Double> getTotalWeekIncome(Date firstWeekDay, Date lastWeekDay);
 
     //month
     @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
@@ -49,7 +54,7 @@ public interface ExpenseDao {
 
 
     //year
-    @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
+    @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay ORDER BY id desc")
     Flowable<List<ExpenseEntity>> getYearWiseRecords(Date firstDay, Date lastDay);
 
     @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Expense'")
