@@ -56,6 +56,7 @@ public class DayTransactionsFragment extends Fragment {
         String today = Utils.getDisplayDate();
         binding.tvDate.setText(today);
         viewModel.getDayWiseRecords(today);
+        viewModel.getTotalDayExpenseIncome(today);
     }
 
     private void setUpOnClickListeners() {
@@ -89,6 +90,7 @@ public class DayTransactionsFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 viewModel.getDayWiseRecords(s.toString());
+                viewModel.getTotalDayExpenseIncome(s.toString());
                 Timber.d("afterTextChanged" + s.toString());
             }
         });
@@ -110,6 +112,15 @@ public class DayTransactionsFragment extends Fragment {
             adapter.submitList(expenseEntities);
         });
 
+        viewModel.dayExpenseCount.observe(getViewLifecycleOwner(), s -> {
+            String exp = getString(R.string.rupee) + s;
+            binding.tvMoneySpent.setText(exp);
+        });
+
+        viewModel.dayIncomeCount.observe(getViewLifecycleOwner(), s -> {
+            String inc = getString(R.string.rupee) + s;
+            binding.tvMoneySpent.setText(inc);
+        });
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {

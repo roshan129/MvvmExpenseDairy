@@ -26,6 +26,8 @@ public class DayTransactionViewModel extends ViewModel {
     private DayTransactionRepository repository;
     private CompositeDisposable compositeDisposable;
     public MutableLiveData<List<ExpenseEntity>> dayTransactions = new MutableLiveData<>();
+    public MutableLiveData<String> dayExpenseCount = new MutableLiveData<>();
+    public MutableLiveData<String> dayIncomeCount = new MutableLiveData<>();
 
     @Inject
     public DayTransactionViewModel(DayTransactionRepository repository) {
@@ -35,7 +37,6 @@ public class DayTransactionViewModel extends ViewModel {
     }
 
     private void init() {
-
 
     }
 
@@ -50,7 +51,34 @@ public class DayTransactionViewModel extends ViewModel {
                     Timber.d("exception:getDayWiseRecords: " + throwable);
                 })
         );
+    }
 
+
+    public void getTotalDayExpenseIncome(String date) {
+        compositeDisposable.add(
+                repository.getTotalDayExpense(Utils.convertToStoringDate(date))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(aDouble -> {
+                    dayExpenseCount.postValue(Utils.convertToDecimalFormat(String.valueOf(aDouble)));
+                }, throwable -> {
+                    Timber.d("exception: getTotalDayExpense: %s", throwable.toString());
+                })
+        );
+
+        compositeDisposable.add(
+                repository.getTotalDayIncome(Utils.convertToStoringDate(date))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aDouble -> {
+                            dayIncomeCount.postValue(Utils.convertToDecimalFormat(String.valueOf(aDouble)));
+                        }, throwable -> {
+                            Timber.d("exception: getTotalDayExpense: %s", throwable.toString());
+                        })
+        );
+    }
+
+    public void getTotalDayIncome(String today) {
 
     }
 

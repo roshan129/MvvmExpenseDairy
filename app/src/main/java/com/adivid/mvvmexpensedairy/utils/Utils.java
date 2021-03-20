@@ -46,7 +46,7 @@ public class Utils {
     }
 
     public static String convertToDecimalFormat(String value) {
-        DecimalFormat df = new DecimalFormat("0.00");
+        DecimalFormat df = new DecimalFormat("0.0");
         return df.format(Double.valueOf(value));
     }
 

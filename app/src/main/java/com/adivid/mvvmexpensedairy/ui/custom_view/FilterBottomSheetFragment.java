@@ -32,6 +32,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
         init();
         setUpOnClickListeners();
+
     }
 
     private void init() {

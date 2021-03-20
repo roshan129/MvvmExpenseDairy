@@ -17,7 +17,7 @@
         app:title="Monthly Report" />
 
     <RelativeLayout
-        android:id="@+id/linearLayout"
+        android:id="@+id/rl_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -62,7 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/rl_date" />
 
     <ImageView
         android:id="@+id/iv_back"
@@ -72,7 +72,7 @@
         android:layout_marginStart="24dp"
         android:padding="4dp"
         android:src="@drawable/ic_back"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintBottom_toTopOf="@+id/rl_date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

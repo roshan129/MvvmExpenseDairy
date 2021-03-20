@@ -26,18 +26,29 @@ public interface ExpenseDao {
     @Query("Select * from expenseentity ORDER BY id DESC LIMIT 4")
     LiveData<List<ExpenseEntity>> getAllRecentTransactions();
 
-   /* @Query("Select * from expenseentity WHERE date between :daySt AND :dayEnd")
-    LiveData<List<ExpenseEntity>> getDayWiseRecords(Date daySt, Date dayEnd);*/
 
+    //Day
     @Query("Select * from expenseentity WHERE date = :daySt")
     Flowable<List<ExpenseEntity>> getDayWiseRecords(Date daySt);
 
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Expense' AND date = :daySt")
+    Flowable<Double> getTotalDayExpense(Date daySt);
+
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income' AND date = :daySt")
+    Flowable<Double> getTotalDayIncome(Date daySt);
+
+
+    //week
     @Query("Select * from expenseentity WHERE date BETWEEN :firstWeekDay AND :lastWeekDay")
     Flowable<List<ExpenseEntity>> getWeeklyWiseRecords(Date firstWeekDay, Date lastWeekDay);
 
+
+    //month
     @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
     Flowable<List<ExpenseEntity>> getMonthWiseRecords(Date firstDay, Date lastDay);
 
+
+    //year
     @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
     Flowable<List<ExpenseEntity>> getYearWiseRecords(Date firstDay, Date lastDay);
 

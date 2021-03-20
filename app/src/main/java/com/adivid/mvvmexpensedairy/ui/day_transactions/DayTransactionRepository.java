@@ -26,4 +26,12 @@ public class DayTransactionRepository {
         return expenseDao.getDayWiseRecords(daySt);
     }
 
+    public Flowable<Double> getTotalDayExpense(Date date) {
+        return expenseDao.getTotalDayExpense(date);
+    }
+
+    public Flowable<Double> getTotalDayIncome(Date date) {
+        return expenseDao.getTotalDayIncome(date);
+    }
+
 }
