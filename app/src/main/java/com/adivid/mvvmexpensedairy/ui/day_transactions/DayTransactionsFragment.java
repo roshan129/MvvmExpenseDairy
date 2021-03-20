@@ -92,6 +92,7 @@ public class DayTransactionsFragment extends Fragment {
                 viewModel.getDayWiseRecords(s.toString());
                 viewModel.getTotalDayExpenseIncome(s.toString());
                 Timber.d("afterTextChanged" + s.toString());
+
             }
         });
 
