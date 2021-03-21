@@ -106,6 +106,7 @@ public class MonthTransactionFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                resetTextViews();
                 Date firstDay = getFirstDayOfMonth(s.toString());
                 Date lastDay = getLastDayOfMonth(firstDay);
                 viewModel.getMonthlyRecords(firstDay, lastDay);
@@ -157,5 +158,10 @@ public class MonthTransactionFragment extends Fragment {
 
         }
     };
+
+    private void resetTextViews() {
+        binding.tvMoneySpent.setText(getString(R.string._000_0));
+        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
 
 }

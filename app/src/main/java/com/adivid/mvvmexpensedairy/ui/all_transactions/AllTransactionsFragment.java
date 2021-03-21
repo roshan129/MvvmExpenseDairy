@@ -106,7 +106,6 @@ public class    AllTransactionsFragment extends Fragment implements
     }
 
     private void observers() {
-
         viewModel.allTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
             expenseEntityList.addAll(expenseEntities);
             adapter.submitList(expenseEntityList);

@@ -175,9 +175,9 @@ public class AddTransactionFragment extends Fragment {
                             Locale.getDefault());
                     binding.etDate.setText(dateFormat.format(newDate.getTime()));
 
-                    Timber.d("day: " + newDate.get(Calendar.DAY_OF_MONTH));
-                    Timber.d("month: " + newDate.get(Calendar.MONTH));
-                    Timber.d("year: " + newDate.get(Calendar.YEAR));
+                    Timber.d("day: %s", newDate.get(Calendar.DAY_OF_MONTH));
+                    Timber.d("month: %s", newDate.get(Calendar.MONTH));
+                    Timber.d("year: %s", newDate.get(Calendar.YEAR));
 
                     mDay = newDate.get(Calendar.DAY_OF_MONTH);
                     mMonth = newDate.get(Calendar.MONTH);
@@ -199,10 +199,6 @@ public class AddTransactionFragment extends Fragment {
             stringNote = "Not Specified";
         }
         stringAmount = Utils.convertToDecimalFormat(stringAmount);
-
-        /*if(!stringAmount.contains(".")){
-            stringAmount = stringAmount + ".0";
-        }*/
         return true;
     }
 
@@ -218,7 +214,6 @@ public class AddTransactionFragment extends Fragment {
         if (imm != null) {
             imm.hideSoftInputFromWindow(requireActivity().getCurrentFocus().getWindowToken(), 0);
         }
-
     }
 
     @Override

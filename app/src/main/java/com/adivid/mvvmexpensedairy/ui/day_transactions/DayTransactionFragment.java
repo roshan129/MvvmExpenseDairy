@@ -90,6 +90,7 @@ public class DayTransactionFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                resetTextViews();
                 viewModel.getDayWiseRecords(s.toString());
                 viewModel.getTotalDayExpenseIncome(s.toString());
                 Timber.d("afterTextChanged" + s.toString());
@@ -135,5 +136,10 @@ public class DayTransactionFragment extends Fragment {
 
         }
     };
+
+    private void resetTextViews() {
+        binding.tvMoneySpent.setText(getString(R.string._000_0));
+        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
 
 }

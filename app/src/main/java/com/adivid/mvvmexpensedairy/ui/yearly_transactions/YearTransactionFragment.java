@@ -84,9 +84,11 @@ public class YearTransactionFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
+                resetTextViews();
                 Date firstDay = getFirstDayOfYear(s.toString());
                 Date lastDay = getLastDayOfYear(s.toString());
                 viewModel.getYearlyRecords(firstDay, lastDay);
+                viewModel.getYearlyExpenseIncome(firstDay, lastDay);
             }
         });
 
@@ -100,6 +102,16 @@ public class YearTransactionFragment extends Fragment {
     private void observers() {
         viewModel.yearlyExpenseTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
             adapter.submitList(expenseEntities);
+        });
+
+        viewModel.yearlyExpense.observe(getViewLifecycleOwner(), s -> {
+            String exp = getString(R.string.rupee) + s;
+            binding.tvMoneySpent.setText(exp);
+        });
+
+        viewModel.yearlyIncome.observe(getViewLifecycleOwner(), s -> {
+            String inc = getString(R.string.rupee) + s;
+            binding.tvMoneyIncome.setText(inc);
         });
     }
 
@@ -144,5 +156,10 @@ public class YearTransactionFragment extends Fragment {
 
         }
     };
+
+    private void resetTextViews() {
+        binding.tvMoneySpent.setText(getString(R.string._000_0));
+        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
 
 }

@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.domain.Expense;
+import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.util.Date;
 import java.util.List;
@@ -24,12 +25,16 @@ public class YearTransactionViewModel extends ViewModel {
     private final YearTransactionsRepository repository;
     private final CompositeDisposable compositeDisposable;
     public MutableLiveData<List<ExpenseEntity>> yearlyExpenseTransactions;
+    public MutableLiveData<String> yearlyExpense;
+    public MutableLiveData<String> yearlyIncome;
 
     @Inject
     public YearTransactionViewModel(YearTransactionsRepository repository) {
         this.repository = repository;
         compositeDisposable = new CompositeDisposable();
         yearlyExpenseTransactions = new MutableLiveData<>();
+        yearlyExpense = new MutableLiveData<>();
+        yearlyIncome = new MutableLiveData<>();
     }
 
     public void getYearlyRecords(Date firstDay, Date lastDay) {
@@ -41,6 +46,30 @@ public class YearTransactionViewModel extends ViewModel {
                             yearlyExpenseTransactions.postValue(expenseEntities);
                         }, throwable -> {
                             Timber.d("exception: " + throwable);
+                        })
+        );
+    }
+
+    public void getYearlyExpenseIncome(Date firstDay, Date lastDay){
+        compositeDisposable.add(
+                repository.getYearlyExpense(firstDay, lastDay)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aDouble -> {
+                            yearlyExpense.postValue(Utils.convertToDecimalFormat(String.valueOf(aDouble)));
+                        },throwable -> {
+                            Timber.d("getYearlyExpenseIncome exception: %s", throwable.toString());
+                        })
+        );
+
+        compositeDisposable.add(
+                repository.getYearlyIncome(firstDay, lastDay)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aDouble -> {
+                            yearlyIncome.postValue(Utils.convertToDecimalFormat(String.valueOf(aDouble)));
+                        },throwable -> {
+                            Timber.d("getYearlyExpenseIncome exception: %s", throwable.toString());
                         })
         );
     }

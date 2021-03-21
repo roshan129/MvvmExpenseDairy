@@ -23,4 +23,13 @@ public class YearTransactionsRepository {
         return expenseDao.getYearWiseRecords(firstDay, lastDay);
     }
 
+    public Flowable<Double> getYearlyExpense(Date firstDay, Date lastDay) {
+        return expenseDao.getYearlyExpense(firstDay, lastDay);
+    }
+
+    public Flowable<Double> getYearlyIncome(Date firstDay, Date lastDay) {
+        return expenseDao.getYearlyIncome(firstDay, lastDay);
+    }
+
+
 }

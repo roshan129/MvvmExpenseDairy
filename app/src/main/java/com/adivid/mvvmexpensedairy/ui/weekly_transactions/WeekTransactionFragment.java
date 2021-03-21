@@ -130,6 +130,7 @@ public class WeekTransactionFragment extends Fragment {
 
     private void setUpOnClickListeners() {
         binding.buttonPrevious.setOnClickListener(v -> {
+            resetTextViews();
             counter = 0;
             expenseEntityList.clear();
             adapter.submitList(expenseEntityList);
@@ -147,6 +148,7 @@ public class WeekTransactionFragment extends Fragment {
         });
 
         binding.buttonNext.setOnClickListener(v -> {
+            resetTextViews();
             counter = 0;
             expenseEntityList.clear();
             adapter.submitList(expenseEntityList);
@@ -190,4 +192,9 @@ public class WeekTransactionFragment extends Fragment {
 
         }
     };
+
+    private void resetTextViews() {
+        binding.tvMoneySpent.setText(getString(R.string._000_0));
+        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
 }
