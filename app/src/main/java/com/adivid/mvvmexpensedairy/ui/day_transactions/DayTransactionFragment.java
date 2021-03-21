@@ -28,14 +28,14 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class DayTransactionsFragment extends Fragment {
+public class DayTransactionFragment extends Fragment {
 
     private FragmentDayTransactionsBinding binding;
     private DayTransactionViewModel viewModel;
     private MainListAdapter adapter;
     private List<Expense> expenseList;
 
-    public DayTransactionsFragment() {
+    public DayTransactionFragment() {
         super(R.layout.fragment_day_transactions);
     }
 

@@ -106,17 +106,6 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
                 }
             };
 
-
-    @Override
-    public void submitList(@Nullable List<ExpenseEntity> list) {
-        if(list == null){
-
-        }else{
-
-        }
-        super.submitList(list);
-    }
-
     private void setCategoryIcon(MainListViewHolder holder, String transaction_category) {
         switch (transaction_category) {
             case OTHERS:

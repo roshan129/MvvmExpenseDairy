@@ -52,6 +52,11 @@ public interface ExpenseDao {
     @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay")
     Flowable<List<ExpenseEntity>> getMonthWiseRecords(Date firstDay, Date lastDay);
 
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Expense' AND date BETWEEN :firstMonthDay AND :lastMonthDay")
+    Flowable<Double> getTotalMonthExpense(Date firstMonthDay, Date lastMonthDay);
+
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income' AND date BETWEEN :firstMonthDay AND :lastMonthDay")
+    Flowable<Double> getTotalMonthIncome(Date firstMonthDay, Date lastMonthDay);
 
     //year
     @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay ORDER BY id desc")

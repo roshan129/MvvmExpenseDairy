@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.util.Date;
 import java.util.List;
@@ -23,11 +24,15 @@ public class MonthTransactionViewModel extends ViewModel {
     private CompositeDisposable compositeDisposable;
 
     public MutableLiveData<List<ExpenseEntity>> monthlyExpenseEntities = new MutableLiveData<>();
+    public MutableLiveData<String> monthlyExpense;
+    public MutableLiveData<String> monthlyIncome;
 
     @Inject
     public MonthTransactionViewModel(MonthTransactionRepository repository) {
         this.repository = repository;
         compositeDisposable = new CompositeDisposable();
+        monthlyExpense = new MutableLiveData<>();
+        monthlyIncome = new MutableLiveData<>();
     }
 
     public void getMonthlyRecords(Date firstDay, Date lastDay) {
@@ -39,6 +44,30 @@ public class MonthTransactionViewModel extends ViewModel {
                             monthlyExpenseEntities.postValue(expenseEntities);
                         }, throwable -> {
                             Timber.d("getMonthlyRecords exception: %s", throwable.toString());
+                        })
+        );
+    }
+
+    public void getTotalMonthExpenseIncome(Date firstMonthDay, Date lastMonthDay){
+        compositeDisposable.add(
+                repository.getMonthlyExpense(firstMonthDay, lastMonthDay)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aDouble -> {
+                            monthlyExpense.postValue(Utils.convertToDecimalFormat(String.valueOf(aDouble)));
+                        }, throwable -> {
+                            Timber.d("getTotalMonthExpenseIncome exception: %s", throwable.toString());
+                        })
+        );
+
+        compositeDisposable.add(
+                repository.getMonthlyIncome(firstMonthDay, lastMonthDay)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aDouble -> {
+                            monthlyIncome.postValue(Utils.convertToDecimalFormat(String.valueOf(aDouble)));
+                        }, throwable -> {
+                            Timber.d("getTotalMonthExpenseIncome exception: %s", throwable.toString());
                         })
         );
     }

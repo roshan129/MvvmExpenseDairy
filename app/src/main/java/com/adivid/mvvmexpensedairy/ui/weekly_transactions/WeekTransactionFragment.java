@@ -67,6 +67,8 @@ public class WeekTransactionFragment extends Fragment {
         binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(getFirstDayOfWeek()));
         binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(getLastDayOfWeek()));
         weekFirstDate = calendarFirst.getTime();
+        Timber.d("weekFirstDate"   + weekFirstDate.toString());
+        Timber.d("weekFirstDate gettime"   + weekFirstDate.getTime());
         weekLastDate = calendarLast.getTime();
         viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
         viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
@@ -131,7 +133,6 @@ public class WeekTransactionFragment extends Fragment {
             counter = 0;
             expenseEntityList.clear();
             adapter.submitList(expenseEntityList);
-            //adapter.notifyDataSetChanged();
             calendarFirst.add(Calendar.DATE, -7);
             binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
 
@@ -149,7 +150,6 @@ public class WeekTransactionFragment extends Fragment {
             counter = 0;
             expenseEntityList.clear();
             adapter.submitList(expenseEntityList);
-            //adapter.notifyDataSetChanged();
             calendarFirst.add(Calendar.DATE, +7);
             binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
 

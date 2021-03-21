@@ -49,7 +49,7 @@
     </fragment>
     <fragment
         android:id="@+id/dayTransactionsFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.day_transactions.DayTransactionsFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.day_transactions.DayTransactionFragment"
         android:label="fragment_day_transactions"
         tools:layout="@layout/fragment_day_transactions" >
         <action

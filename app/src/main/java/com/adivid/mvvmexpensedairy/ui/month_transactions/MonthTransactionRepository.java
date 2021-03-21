@@ -25,4 +25,13 @@ public class MonthTransactionRepository {
         return expenseDao.getMonthWiseRecords(firstDay, lastDay);
     }
 
+    public Flowable<Double> getMonthlyExpense(Date firstDay, Date lastDay){
+        return expenseDao.getTotalMonthExpense(firstDay, lastDay);
+    }
+
+    public Flowable<Double> getMonthlyIncome(Date firstDay, Date lastDay){
+        return expenseDao.getTotalMonthIncome(firstDay, lastDay);
+    }
+
+
 }

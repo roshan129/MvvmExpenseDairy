@@ -54,6 +54,28 @@ public class MonthTransactionFragment extends Fragment {
         setUpOnClickListeners();
     }
 
+    private void init() {
+        setUpRecyclerView();
+        viewModel = new ViewModelProvider(this).get(MonthTransactionViewModel.class);
+
+    }
+
+    private void observers() {
+        viewModel.monthlyExpenseEntities.observe(getViewLifecycleOwner(), expenseEntities -> {
+            adapter.submitList(expenseEntities);
+        });
+
+        viewModel.monthlyExpense.observe(getViewLifecycleOwner(), s -> {
+            String exp = getString(R.string.rupee) + s;
+            binding.tvMoneySpent.setText(exp);
+        });
+
+        viewModel.monthlyIncome.observe(getViewLifecycleOwner(), s -> {
+            String inc = getString(R.string.rupee) + s;
+            binding.tvMoneyIncome.setText(inc);
+        });
+    }
+
     private void setUpOnClickListeners() {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
@@ -87,6 +109,7 @@ public class MonthTransactionFragment extends Fragment {
                 Date firstDay = getFirstDayOfMonth(s.toString());
                 Date lastDay = getLastDayOfMonth(firstDay);
                 viewModel.getMonthlyRecords(firstDay, lastDay);
+                viewModel.getTotalMonthExpenseIncome(firstDay, lastDay);
             }
         });
 
@@ -97,23 +120,11 @@ public class MonthTransactionFragment extends Fragment {
         });
     }
 
-    private void init() {
-        setUpRecyclerView();
-        viewModel = new ViewModelProvider(this).get(MonthTransactionViewModel.class);
-
-    }
-
     private void setUpRecyclerView() {
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(adapter);
 
-    }
-
-    private void observers() {
-        viewModel.monthlyExpenseEntities.observe(getViewLifecycleOwner(), expenseEntities -> {
-            adapter.submitList(expenseEntities);
-        });
     }
 
     private Date getFirstDayOfMonth(String stringMonthYear) {
