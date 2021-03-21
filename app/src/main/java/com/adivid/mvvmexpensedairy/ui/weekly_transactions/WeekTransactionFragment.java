@@ -132,6 +132,7 @@ public class WeekTransactionFragment extends Fragment {
         binding.buttonPrevious.setOnClickListener(v -> {
             resetTextViews();
             counter = 0;
+
             expenseEntityList.clear();
             adapter.submitList(expenseEntityList);
             calendarFirst.add(Calendar.DATE, -7);
