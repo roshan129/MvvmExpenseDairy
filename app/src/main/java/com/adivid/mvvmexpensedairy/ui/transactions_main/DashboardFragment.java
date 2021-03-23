@@ -1,9 +1,12 @@
 package com.adivid.mvvmexpensedairy.ui.transactions_main;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -19,6 +22,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +33,16 @@ import timber.log.Timber;
 import static com.adivid.mvvmexpensedairy.utils.Constants.TIME_INTERVAL;
 
 @AndroidEntryPoint
-public class DashboardFragment extends Fragment implements FragmentManager.OnBackStackChangedListener {
+public class DashboardFragment extends Fragment {
 
     private FragmentDashboardBinding binding;
     private NavController navController;
     private DashboardViewModel viewModel;
     private List<Expense> expenseList;
     private MainListAdapter adapter;
-    private long backPressed = 0;
+
+    private boolean doubleBackToExitPressedOnce = false;
+
 
     public DashboardFragment() {
         super(R.layout.fragment_dashboard);
@@ -54,6 +60,10 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
     }
 
     private void init() {
+        requireActivity().getOnBackPressedDispatcher().addCallback(
+                getViewLifecycleOwner(),
+                onBackPressedCallback
+        );
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         expenseList = new ArrayList<>();
@@ -127,17 +137,19 @@ public class DashboardFragment extends Fragment implements FragmentManager.OnBac
         super.onDestroyView();
     }
 
-    @Override
-    public void onBackStackChanged() {
-        if(backPressed + TIME_INTERVAL > System.currentTimeMillis()){
-            requireActivity().finish();
-        }else{
-            Toast.makeText(requireContext(), "Press back again to exit!", Toast.LENGTH_SHORT)
-                    .show();
+    private final OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+        @Override
+        public void handleOnBackPressed() {
+            if (doubleBackToExitPressedOnce) {
+                requireActivity().finish();
+            }
+            doubleBackToExitPressedOnce = true;
+            Snackbar.make(requireActivity().getWindow().getDecorView().findViewById(android.R.id.content),
+                    "Press Back Again to Exit", Snackbar.LENGTH_SHORT).show();
+            long DOUBLE_BACK_PRESS_TO_EXIT = 2000;
+            new Handler(Looper.getMainLooper()).postDelayed(() ->
+                    doubleBackToExitPressedOnce = false, DOUBLE_BACK_PRESS_TO_EXIT);
         }
-        backPressed = System.currentTimeMillis();
-    }
-
-
+    };
 
 }

@@ -1,6 +1,8 @@
 package com.adivid.mvvmexpensedairy;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.MenuItem;
 
 import androidx.annotation.NonNull;
@@ -19,6 +21,7 @@ import com.adivid.mvvmexpensedairy.adapter.MenuAdapter;
 import com.adivid.mvvmexpensedairy.databinding.ActivityMainBinding;
 import com.adivid.mvvmexpensedairy.model.Menu;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ActivityMainBinding binding;
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,5 +106,8 @@ public class MainActivity extends AppCompatActivity {
         if (binding.drawerlayout.isDrawerOpen(GravityCompat.START)) {
             binding.drawerlayout.closeDrawer(GravityCompat.START);
         }
+
+
+
     }
 }

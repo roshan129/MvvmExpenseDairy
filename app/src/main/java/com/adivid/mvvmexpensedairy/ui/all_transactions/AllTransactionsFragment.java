@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
+import androidx.navigation.NavDirections;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 @AndroidEntryPoint
-public class    AllTransactionsFragment extends Fragment implements
+public class AllTransactionsFragment extends Fragment implements
         FragmentManager.OnBackStackChangedListener {
 
     private FragmentAllTransactionsBinding binding;
@@ -113,10 +114,15 @@ public class    AllTransactionsFragment extends Fragment implements
 
     }
 
-    private final OnItemClickListener recyclerViewClickListener =  new OnItemClickListener() {
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
             Timber.d("list clicked" + position);
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            NavDirections directions =
+                    AllTransactionsFragmentDirections
+                            .actionAllTransactionsFragment2ToAddTransactionFragment(expenseEntity);
+            navController.navigate(directions);
         }
 
         @Override

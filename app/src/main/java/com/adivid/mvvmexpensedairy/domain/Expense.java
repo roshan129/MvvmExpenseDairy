@@ -1,6 +1,9 @@
 package com.adivid.mvvmexpensedairy.domain;
 
-public class Expense {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Expense implements Parcelable {
 
     private int id;
 
@@ -29,6 +32,29 @@ public class Expense {
         this.note = note;
         this.payment_type = payment_type;
     }
+
+    protected Expense(Parcel in) {
+        id = in.readInt();
+        date = in.readString();
+        time = in.readString();
+        amount = in.readString();
+        transaction_type = in.readString();
+        transaction_category = in.readString();
+        note = in.readString();
+        payment_type = in.readString();
+    }
+
+    public static final Creator<Expense> CREATOR = new Creator<Expense>() {
+        @Override
+        public Expense createFromParcel(Parcel in) {
+            return new Expense(in);
+        }
+
+        @Override
+        public Expense[] newArray(int size) {
+            return new Expense[size];
+        }
+    };
 
     public String getPayment_type() {
         return payment_type;
@@ -97,5 +123,22 @@ public class Expense {
     @Override
     public int hashCode() {
         return super.hashCode();
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(date);
+        dest.writeString(time);
+        dest.writeString(amount);
+        dest.writeString(transaction_type);
+        dest.writeString(transaction_category);
+        dest.writeString(note);
+        dest.writeString(payment_type);
     }
 }

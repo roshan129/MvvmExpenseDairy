@@ -1,13 +1,18 @@
 package com.adivid.mvvmexpensedairy.data.db;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.Keep;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 import androidx.room.TypeConverters;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Entity
-public class ExpenseEntity {
+public class ExpenseEntity implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
@@ -40,6 +45,29 @@ public class ExpenseEntity {
         this.payment_type = payment_type;
         this.current_time_millis = current_time_millis;
     }
+
+    protected ExpenseEntity(Parcel in) {
+        id = in.readInt();
+        time = in.readString();
+        amount = in.readString();
+        transaction_type = in.readString();
+        transaction_category = in.readString();
+        note = in.readString();
+        payment_type = in.readString();
+        current_time_millis = in.readString();
+    }
+
+/*    public static final Creator<ExpenseEntity> CREATOR = new Creator<ExpenseEntity>() {
+        @Override
+        public ExpenseEntity createFromParcel(Parcel in) {
+            return new ExpenseEntity(in);
+        }
+
+        @Override
+        public ExpenseEntity[] newArray(int size) {
+            return new ExpenseEntity[size];
+        }
+    };*/
 
     public String getPayment_type() {
         return payment_type;
@@ -117,4 +145,21 @@ public class ExpenseEntity {
     public int hashCode() {
         return super.hashCode();
     }
+
+/*    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
+        dest.writeString(time);
+        dest.writeString(amount);
+        dest.writeString(transaction_type);
+        dest.writeString(transaction_category);
+        dest.writeString(note);
+        dest.writeString(payment_type);
+        dest.writeString(current_time_millis);
+    }*/
 }

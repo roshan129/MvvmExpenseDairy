@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavArgs;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
@@ -44,6 +45,8 @@ public class AddTransactionFragment extends Fragment {
     private List<String> listCategory;
     private AddTransactionViewModel viewModel;
 
+    private NavArgs navArgs;
+
     private ArrayAdapter<String> arrayAdapterCategory;
 
     public AddTransactionFragment() {
@@ -74,6 +77,19 @@ public class AddTransactionFragment extends Fragment {
         mYear = calendar.get(Calendar.YEAR);
 
         addDynamicChips();
+
+        if (getArguments() != null) {
+            ExpenseEntity expenseEntity =
+                    AddTransactionFragmentArgs.fromBundle(getArguments()).getExpense();
+            setUpData(expenseEntity);
+        }
+
+    }
+
+    private void setUpData(ExpenseEntity expenseEntity) {
+        binding.etNote.setText(expenseEntity.getNote());
+        binding.etAmount.setText(expenseEntity.getAmount());
+        binding.etDate.setText(Utils.convertToDisplayDate(expenseEntity.getDate()));
 
     }
 
