@@ -23,8 +23,8 @@ import timber.log.Timber;
 @HiltViewModel
 public class DayTransactionViewModel extends ViewModel {
 
-    private DayTransactionRepository repository;
-    private CompositeDisposable compositeDisposable;
+    private final DayTransactionRepository repository;
+    private final CompositeDisposable compositeDisposable;
     public MutableLiveData<List<ExpenseEntity>> dayTransactions = new MutableLiveData<>();
     public MutableLiveData<String> dayExpenseCount = new MutableLiveData<>();
     public MutableLiveData<String> dayIncomeCount = new MutableLiveData<>();

@@ -14,7 +14,7 @@ import io.reactivex.rxjava3.core.Flowable;
 
 public class DayTransactionRepository {
 
-    private ExpenseDao expenseDao;
+    private final ExpenseDao expenseDao;
 
     @Inject
     public DayTransactionRepository(ExpenseDao expenseDao) {
