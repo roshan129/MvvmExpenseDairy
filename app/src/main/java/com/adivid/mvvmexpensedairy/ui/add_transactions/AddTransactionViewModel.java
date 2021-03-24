@@ -38,6 +38,19 @@ public class AddTransactionViewModel extends ViewModel {
         );
     }
 
+    public void updateTransaction(ExpenseEntity expenseEntity){
+        compositeDisposable.add(
+                repository.updateTransaction(expenseEntity)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(aLong -> {
+                            Timber.d("updateTransaction: " + aLong);
+                        },throwable -> {
+                            Timber.d("updateTransaction excpetion: %s", throwable.getMessage());
+                        })
+        );
+    }
+
     @Override
     protected void onCleared() {
         compositeDisposable.clear();

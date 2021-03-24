@@ -4,13 +4,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -20,17 +18,16 @@ import com.adivid.mvvmexpensedairy.MainActivity;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
-import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
-import timber.log.Timber;
 
-import static com.adivid.mvvmexpensedairy.utils.Constants.TIME_INTERVAL;
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 
 @AndroidEntryPoint
 public class DashboardFragment extends Fragment {
@@ -38,11 +35,10 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboardBinding binding;
     private NavController navController;
     private DashboardViewModel viewModel;
-    private List<Expense> expenseList;
+    private List<ExpenseEntity> expenseEntityList;
     private MainListAdapter adapter;
 
     private boolean doubleBackToExitPressedOnce = false;
-
 
     public DashboardFragment() {
         super(R.layout.fragment_dashboard);
@@ -66,7 +62,7 @@ public class DashboardFragment extends Fragment {
         );
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
-        expenseList = new ArrayList<>();
+        expenseEntityList = new ArrayList<>();
 
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
@@ -76,6 +72,7 @@ public class DashboardFragment extends Fragment {
 
     private void observers() {
         viewModel.recentAllTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
+            this.expenseEntityList = expenseEntities;
             adapter.submitList(expenseEntities);
             adapter.notifyDataSetChanged();
         });
@@ -122,7 +119,11 @@ public class DashboardFragment extends Fragment {
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Timber.d("pos: %s", position);
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(
+                    R.id.action_dashboardFragment_to_addTransactionFragment, bundle);
         }
 
         @Override

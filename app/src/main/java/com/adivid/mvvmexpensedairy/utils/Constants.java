@@ -21,7 +21,14 @@ public class Constants {
     public static final String INSURANCE = "Insurance";
     public static final String GIFTS_AND_DONATIONS = "Gifts and Donations";
 
+    public static final String SALARY = "Salary";
+    public static final String BONUS = "Bonus";
+    public static final String SAVINGS = "Savings";
+    public static final String DEPOSITS = "Deposits";
+
     public static final int TIME_INTERVAL = 2000;
+
+    public static final String EXPENSE_BUNDLE_KEY = "expense_key";
 
 
 }

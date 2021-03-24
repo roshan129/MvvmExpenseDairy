@@ -10,11 +10,14 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentMonthTransactionBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
@@ -33,12 +36,16 @@ import dagger.hilt.android.AndroidEntryPoint;
 
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+
 @AndroidEntryPoint
 public class MonthTransactionFragment extends Fragment {
 
     private FragmentMonthTransactionBinding binding;
     private MonthTransactionViewModel viewModel;
     private MainListAdapter adapter;
+    private NavController navController;
+    private List<ExpenseEntity> expenseEntityList;
 
     public MonthTransactionFragment() {
         super(R.layout.fragment_month_transaction);
@@ -56,12 +63,15 @@ public class MonthTransactionFragment extends Fragment {
 
     private void init() {
         setUpRecyclerView();
+        navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(MonthTransactionViewModel.class);
+        expenseEntityList = new ArrayList<>();
 
     }
 
     private void observers() {
         viewModel.monthlyExpenseEntities.observe(getViewLifecycleOwner(), expenseEntities -> {
+            expenseEntityList = expenseEntities;
             adapter.submitList(expenseEntities);
         });
 
@@ -116,9 +126,7 @@ public class MonthTransactionFragment extends Fragment {
 
         binding.tvDate.setText(df.format(c.getTime()));
 
-        binding.ivBack.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
     }
 
     private void setUpRecyclerView() {
@@ -150,7 +158,11 @@ public class MonthTransactionFragment extends Fragment {
     private final OnItemClickListener recyclerViewClickListener =  new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Timber.d("day list clicked" + position);
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(
+                    R.id.action_monthTransactionFragment_to_addTransactionFragment, bundle);
         }
 
         @Override

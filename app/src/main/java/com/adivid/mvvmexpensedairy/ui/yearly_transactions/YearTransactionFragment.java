@@ -9,22 +9,29 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentYearTransactionBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
+
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 
 @AndroidEntryPoint
 public class YearTransactionFragment extends Fragment {
@@ -32,6 +39,8 @@ public class YearTransactionFragment extends Fragment {
     private FragmentYearTransactionBinding binding;
     private YearTransactionViewModel viewModel;
     private MainListAdapter adapter;
+    private NavController navController;
+    private List<ExpenseEntity> expenseEntityList;
 
     public YearTransactionFragment() {
         super(R.layout.fragment_year_transaction);
@@ -48,10 +57,13 @@ public class YearTransactionFragment extends Fragment {
     }
 
     private void init() {
+        navController = NavHostFragment.findNavController(this);
         setUpRecyclerView();
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         viewModel = new ViewModelProvider(this).get(YearTransactionViewModel.class);
         viewModel.getYearlyRecords(getFirstDayOfYear(currentYear), getLastDayOfYear(currentYear));
+
+        expenseEntityList = new ArrayList<>();
     }
 
     private void setUpOnClickListeners() {
@@ -94,13 +106,12 @@ public class YearTransactionFragment extends Fragment {
 
         binding.tvDate.setText(df.format(c.getTime()));
 
-        binding.ivBack.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
     }
 
     private void observers() {
         viewModel.yearlyExpenseTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
+            expenseEntityList = expenseEntities;
             adapter.submitList(expenseEntities);
         });
 
@@ -148,7 +159,11 @@ public class YearTransactionFragment extends Fragment {
     private final OnItemClickListener recyclerItemClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(
+                    R.id.action_yearTransactionFragment_to_addTransactionFragment, bundle);
         }
 
         @Override

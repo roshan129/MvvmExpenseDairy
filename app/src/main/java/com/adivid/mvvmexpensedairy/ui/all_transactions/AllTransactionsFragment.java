@@ -27,6 +27,8 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+
 @AndroidEntryPoint
 public class AllTransactionsFragment extends Fragment implements
         FragmentManager.OnBackStackChangedListener {
@@ -119,10 +121,10 @@ public class AllTransactionsFragment extends Fragment implements
         public void onItemClick(View view, int position) {
             Timber.d("list clicked" + position);
             ExpenseEntity expenseEntity = expenseEntityList.get(position);
-            NavDirections directions =
-                    AllTransactionsFragmentDirections
-                            .actionAllTransactionsFragment2ToAddTransactionFragment(expenseEntity);
-            navController.navigate(directions);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(R.id.action_allTransactionsFragment2_to_addTransactionFragment,
+                    bundle);
         }
 
         @Override

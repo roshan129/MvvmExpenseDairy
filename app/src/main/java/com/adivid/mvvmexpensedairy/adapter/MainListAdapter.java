@@ -151,6 +151,18 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
                 holder.imageView.setImageResource(R.drawable.ic_gifts);
                 break;
 
+            case SALARY:
+                holder.imageView.setImageResource(R.drawable.ic_salary);
+                break;
+            case BONUS:
+                holder.imageView.setImageResource(R.drawable.ic_bonus);
+                break;
+            case SAVINGS:
+                holder.imageView.setImageResource(R.drawable.ic_savings);
+                break;
+            case DEPOSITS:
+                holder.imageView.setImageResource(R.drawable.ic_deposits);
+                break;
 
         }
     }

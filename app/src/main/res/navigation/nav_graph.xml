@@ -9,12 +9,7 @@
         android:id="@+id/addTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.add_transactions.AddTransactionFragment"
         android:label="fragment_add_transaction"
-        tools:layout="@layout/fragment_add_transaction" >
-        <argument
-            android:name="expense"
-            app:argType="com.adivid.mvvmexpensedairy.data.db.ExpenseEntity"
-            app:nullable="true" />
-    </fragment>
+        tools:layout="@layout/fragment_add_transaction" />
     <fragment
         android:id="@+id/dashboardFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.transactions_main.DashboardFragment"
@@ -42,6 +37,7 @@
         <action
             android:id="@+id/action_dashboardFragment_to_customViewFragment2"
             app:destination="@id/customViewFragment" />
+
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
@@ -64,25 +60,44 @@
         <action
             android:id="@+id/action_dayTransactionsFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
+        <action
+            android:id="@+id/action_dayTransactionsFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
     </fragment>
     <fragment
         android:id="@+id/monthTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.month_transactions.MonthTransactionFragment"
         android:label="fragment_month_transaction"
-        tools:layout="@layout/fragment_month_transaction" />
+        tools:layout="@layout/fragment_month_transaction" >
+        <action
+            android:id="@+id/action_monthTransactionFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/yearTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.yearly_transactions.YearTransactionFragment"
         android:label="fragment_year_transaction"
-        tools:layout="@layout/fragment_year_transaction" />
+        tools:layout="@layout/fragment_year_transaction" >
+        <action
+            android:id="@+id/action_yearTransactionFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/weekTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.weekly_transactions.WeekTransactionFragment"
         android:label="fragment_week_transactions"
-        tools:layout="@layout/fragment_week_transactions" />
+        tools:layout="@layout/fragment_week_transactions" >
+        <action
+            android:id="@+id/action_weekTransactionFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
     <fragment
         android:id="@+id/customViewFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.custom_view.CustomViewFragment"
         android:label="fragment_custom_view"
-        tools:layout="@layout/fragment_custom_view" />
+        tools:layout="@layout/fragment_custom_view" >
+        <action
+            android:id="@+id/action_customViewFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+    </fragment>
 </navigation>

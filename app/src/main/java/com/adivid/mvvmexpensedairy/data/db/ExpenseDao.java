@@ -3,7 +3,9 @@ package com.adivid.mvvmexpensedairy.data.db;
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
 import androidx.room.Insert;
+import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
+import androidx.room.Update;
 
 import java.util.Date;
 import java.util.List;
@@ -16,6 +18,9 @@ public interface ExpenseDao {
 
     @Insert
     Maybe<Long> insertTransaction(ExpenseEntity expense);
+
+    @Update
+    Maybe<Integer> updateTransaction(ExpenseEntity expenseEntity);
 
     @Query("Select * from expenseentity ORDER BY id DESC")
     LiveData<List<ExpenseEntity>> getAllTransactions();

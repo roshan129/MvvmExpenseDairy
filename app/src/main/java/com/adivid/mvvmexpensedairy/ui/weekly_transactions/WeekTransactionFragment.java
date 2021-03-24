@@ -8,6 +8,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -28,6 +30,8 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+
 @AndroidEntryPoint
 public class WeekTransactionFragment extends Fragment {
 
@@ -42,6 +46,7 @@ public class WeekTransactionFragment extends Fragment {
     private int counter = 0;
     private List<ExpenseEntity> expenseEntityList;
     private Date weekFirstDate, weekLastDate;
+    private NavController navController;
 
     public WeekTransactionFragment() {
         super(R.layout.fragment_week_transactions);
@@ -59,6 +64,7 @@ public class WeekTransactionFragment extends Fragment {
     }
 
     private void init() {
+        navController =  NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(WeekTransactionViewModel.class);
         expenseEntityList = new ArrayList<>();
 
@@ -185,7 +191,11 @@ public class WeekTransactionFragment extends Fragment {
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(
+                    R.id.action_weekTransactionFragment_to_addTransactionFragment, bundle);
         }
 
         @Override

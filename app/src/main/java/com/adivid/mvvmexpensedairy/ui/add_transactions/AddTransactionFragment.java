@@ -30,6 +30,7 @@ import java.util.Locale;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DATE_DISPLAY_FORMAT;
 
 @AndroidEntryPoint
@@ -48,6 +49,7 @@ public class AddTransactionFragment extends Fragment {
     private NavArgs navArgs;
 
     private ArrayAdapter<String> arrayAdapterCategory;
+    private int updateId;
 
     public AddTransactionFragment() {
         super(R.layout.fragment_add_transaction);
@@ -58,9 +60,11 @@ public class AddTransactionFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         binding = FragmentAddTransactionBinding.bind(view);
 
+        Timber.d("int ; " + updateId);
         init();
         setUpAdapters();
         setUpOnClickListeners();
+        getExtras();
     }
 
     private void init() {
@@ -78,19 +82,34 @@ public class AddTransactionFragment extends Fragment {
 
         addDynamicChips();
 
-        if (getArguments() != null) {
-            ExpenseEntity expenseEntity =
-                    AddTransactionFragmentArgs.fromBundle(getArguments()).getExpense();
-            setUpData(expenseEntity);
-        }
+    }
 
+    private void getExtras() {
+        if (getArguments() != null) {
+            Bundle bundle = getArguments();
+            ExpenseEntity expenseEntity = (ExpenseEntity) bundle.getSerializable(EXPENSE_BUNDLE_KEY);
+            if (expenseEntity != null) {
+                setUpData(expenseEntity);
+            }
+        }
     }
 
     private void setUpData(ExpenseEntity expenseEntity) {
         binding.etNote.setText(expenseEntity.getNote());
         binding.etAmount.setText(expenseEntity.getAmount());
         binding.etDate.setText(Utils.convertToDisplayDate(expenseEntity.getDate()));
-
+        if (expenseEntity.getTransaction_type().equals("Income")) {
+            binding.chipIncome.setChecked(true);
+            listCategory.addAll(new ArrayList<>(Arrays.asList(
+                    getResources().getStringArray(R.array.category_arr_exp))));
+            arrayAdapterCategory.notifyDataSetChanged();
+        }
+        binding.spinnerCategory.setSelection(listCategory.indexOf(
+                expenseEntity.getTransaction_category()));
+        if(expenseEntity.getPayment_type().equals("Card")){
+            binding.chipCard.setChecked(true);
+        }
+        updateId = expenseEntity.getId();
     }
 
     private void setUpAdapters() {
@@ -174,9 +193,14 @@ public class AddTransactionFragment extends Fragment {
     private void saveInDb() {
         ExpenseEntity expenseEntity = new ExpenseEntity(
                 storingDate, stringTime, stringAmount, stringTransactionType,
-                stringCategoryType, stringNote,stringPaymentType, String.valueOf(System.currentTimeMillis())
+                stringCategoryType, stringNote, stringPaymentType, String.valueOf(System.currentTimeMillis())
         );
-        viewModel.insertTransaction(expenseEntity);
+        if(updateId != 0){
+            expenseEntity.setId(updateId);
+            viewModel.updateTransaction(expenseEntity);
+        }else {
+            viewModel.insertTransaction(expenseEntity);
+        }
         hideKeyboard();
         requireActivity().onBackPressed();
 

@@ -9,13 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDayTransactionsBinding;
-import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -27,13 +29,16 @@ import java.util.Locale;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+
 @AndroidEntryPoint
 public class DayTransactionFragment extends Fragment {
 
     private FragmentDayTransactionsBinding binding;
     private DayTransactionViewModel viewModel;
     private MainListAdapter adapter;
-    private List<Expense> expenseList;
+    private List<ExpenseEntity> expenseEntityList;
+    private NavController navController;
 
     public DayTransactionFragment() {
         super(R.layout.fragment_day_transactions);
@@ -51,8 +56,9 @@ public class DayTransactionFragment extends Fragment {
 
     private void init() {
         setUpRecyclerView();
+        navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(DayTransactionViewModel.class);
-        expenseList = new ArrayList<>();
+        expenseEntityList = new ArrayList<>();
         String today = Utils.getDisplayDate();
         binding.tvDate.setText(today);
         viewModel.getDayWiseRecords(today);
@@ -111,6 +117,7 @@ public class DayTransactionFragment extends Fragment {
 
     private void observers() {
         viewModel.dayTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
+            expenseEntityList = expenseEntities;
             adapter.submitList(expenseEntities);
         });
 
@@ -128,7 +135,11 @@ public class DayTransactionFragment extends Fragment {
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
-            Timber.d("month list clicked" + position);
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(
+                    R.id.action_dashboardFragment_to_addTransactionFragment, bundle);
         }
 
         @Override

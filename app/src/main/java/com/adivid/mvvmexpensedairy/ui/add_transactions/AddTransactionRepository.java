@@ -21,4 +21,7 @@ public class AddTransactionRepository {
         return expenseDao.insertTransaction(expenseEntity);
     }
 
+    public Maybe<Integer> updateTransaction(ExpenseEntity expenseEntity) {
+        return expenseDao.updateTransaction(expenseEntity);
+    }
 }
