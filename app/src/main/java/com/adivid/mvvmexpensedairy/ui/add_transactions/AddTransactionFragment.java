@@ -46,8 +46,6 @@ public class AddTransactionFragment extends Fragment {
     private List<String> listCategory;
     private AddTransactionViewModel viewModel;
 
-    private NavArgs navArgs;
-
     private ArrayAdapter<String> arrayAdapterCategory;
     private int updateId;
 
@@ -95,7 +93,11 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void setUpData(ExpenseEntity expenseEntity) {
-        binding.etNote.setText(expenseEntity.getNote());
+        if(expenseEntity.getNote().equals("Not Specified")){
+            binding.etNote.setText("");
+        }else{
+            binding.etNote.setText(expenseEntity.getNote());
+        }
         binding.etAmount.setText(expenseEntity.getAmount());
         binding.etDate.setText(Utils.convertToDisplayDate(expenseEntity.getDate()));
         if (expenseEntity.getTransaction_type().equals("Income")) {
