@@ -24,4 +24,11 @@ public class CustomViewRepository {
         return expenseDao.getCustomRecords(firstDay, lastDay, category, paymentMode);
     }
 
+    public Flowable<Double> getCustomExpense(Date firstDay, Date lastDay, String category, String paymentMode){
+        return expenseDao.getCustomExpense(firstDay, lastDay, category, paymentMode);
+    }
+
+    public Flowable<Double> getCustomIncome(Date firstDay, Date lastDay, String category, String paymentMode){
+        return expenseDao.getCustomIncome(firstDay, lastDay, category, paymentMode);
+    }
 }

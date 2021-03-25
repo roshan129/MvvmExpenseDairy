@@ -7,18 +7,33 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
+import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
+import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentCustomViewBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
+
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 
 @AndroidEntryPoint
 public class CustomViewFragment extends Fragment {
 
     private FragmentCustomViewBinding binding;
     private CustomViewViewModel viewModel;
+    private List<ExpenseEntity> expenseEntityList;
+    private MainListAdapter adapter;
+    private NavController navController;
 
     public CustomViewFragment() {
         super(R.layout.fragment_custom_view);
@@ -35,17 +50,43 @@ public class CustomViewFragment extends Fragment {
     }
 
     private void init() {
+        navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(CustomViewViewModel.class);
+
+        expenseEntityList = new ArrayList<>();
+
+        setUpRecyclerView();
 
         String dateFirst = "01 Mar, 2021";
         String dateLast = "31 Mar, 2021";
         viewModel.getCustomList(Utils.convertToStoringDate(dateFirst),
                 Utils.convertToStoringDate(dateLast), "", "");
+        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(dateFirst),
+                Utils.convertToStoringDate(dateLast), "", "");
 
     }
 
-    private void observers() {
+    private void setUpRecyclerView() {
+        adapter = new MainListAdapter(recyclerViewClickListener);
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        binding.recyclerView.setAdapter(adapter);
+    }
 
+    private void observers() {
+        viewModel.customTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
+            expenseEntityList = expenseEntities;
+            adapter.submitList(expenseEntityList);
+        });
+
+        viewModel.customExpenseCount.observe(getViewLifecycleOwner(), s -> {
+            String exp = getString(R.string.rupee) + s;
+            binding.tvMoneySpent.setText(exp);
+        });
+
+        viewModel.customIncomeCount.observe(getViewLifecycleOwner(), s -> {
+            String inc = getString(R.string.rupee) + s;
+            binding.tvMoneyIncome.setText(inc);
+        });
     }
 
     private void setUpOnClickListeners() {
@@ -60,4 +101,20 @@ public class CustomViewFragment extends Fragment {
         });
 
     }
+
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
+        @Override
+        public void onItemClick(View view, int position) {
+            ExpenseEntity expenseEntity = expenseEntityList.get(position);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
+            navController.navigate(
+                    R.id.action_customViewFragment_to_addTransactionFragment, bundle);
+        }
+
+        @Override
+        public void onLongItemClick(View view, int position) {
+
+        }
+    };
 }

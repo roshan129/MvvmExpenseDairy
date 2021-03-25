@@ -90,13 +90,13 @@ public interface ExpenseDao {
             Date firstWeekDay, Date lastWeekDay, int offset);
 
     //custom
-    @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay AND transaction_category = :category AND payment_type = :paymentMode")
+    @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay AND transaction_category LIKE '%' || :category || '%' AND payment_type LIKE '%' || :paymentMode || '%'")
     Flowable<List<ExpenseEntity>> getCustomRecords(Date firstDay, Date lastDay, String category, String paymentMode);
 
-    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Expense' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND transaction_category = :category AND payment_type = :paymentMode")
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Expense' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND transaction_category LIKE '%' || :category || '%' AND payment_type LIKE '%' || :paymentMode || '%'")
     Flowable<Double> getCustomExpense(Date firstMonthDay, Date lastMonthDay, String category, String paymentMode);
 
-    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND transaction_category = :category AND payment_type = :paymentMode")
+    @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND transaction_category LIKE '%' || :category || '%' AND payment_type LIKE '%' || :paymentMode || '%'")
     Flowable<Double> getCustomIncome(Date firstMonthDay, Date lastMonthDay, String category, String paymentMode);
 
 
