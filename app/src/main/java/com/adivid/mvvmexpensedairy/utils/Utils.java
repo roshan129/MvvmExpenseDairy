@@ -50,4 +50,19 @@ public class Utils {
         return df.format(Double.valueOf(value));
     }
 
+    public static Date getFirstDayOfMonth(String stringDate) {
+        Calendar c = Calendar.getInstance();   // this takes current date
+        c.set(Calendar.DAY_OF_MONTH, 1);
+
+       /* SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());*/
+        return c.getTime();
+    }
+
+    public static Date getLastDayOfMonth(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        return c.getTime();
+    }
+
 }

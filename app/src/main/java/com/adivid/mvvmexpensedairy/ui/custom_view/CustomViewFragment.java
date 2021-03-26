@@ -5,6 +5,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -17,6 +18,7 @@ import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentCustomViewBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,6 +92,7 @@ public class CustomViewFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
+
         binding.ivBack.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
