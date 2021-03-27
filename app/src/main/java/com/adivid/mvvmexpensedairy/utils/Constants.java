@@ -30,5 +30,9 @@ public class Constants {
 
     public static final String EXPENSE_BUNDLE_KEY = "expense_key";
 
+    public static final String BUNDLE_DATE_RANGE = "bundle_date_range";
+    public static final String BUNDLE_CATEGORY = "bundle_category";
+    public static final String BUNDLE_PAYMENT = "bundle_payment";
+
 
 }

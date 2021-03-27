@@ -26,6 +26,9 @@ import java.util.List;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.BUNDLE_CATEGORY;
+import static com.adivid.mvvmexpensedairy.utils.Constants.BUNDLE_DATE_RANGE;
+import static com.adivid.mvvmexpensedairy.utils.Constants.BUNDLE_PAYMENT;
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 
 @AndroidEntryPoint
@@ -98,7 +101,13 @@ public class CustomViewFragment extends Fragment {
         });
 
         binding.ivFilter.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(BUNDLE_DATE_RANGE, String.valueOf(binding.chipMonthYear.getText()));
+            bundle.putString(BUNDLE_CATEGORY, String.valueOf(binding.chipCategoryType.getText()));
+            bundle.putString(BUNDLE_PAYMENT, String.valueOf(binding.chipPaymentMode.getText()));
+
             FilterBottomSheetFragment fragment = new FilterBottomSheetFragment();
+            fragment.setArguments(bundle);
             fragment.show(getChildFragmentManager(), "FilterBottomSheetFragment");
             fragment.setCancelable(true);
         });

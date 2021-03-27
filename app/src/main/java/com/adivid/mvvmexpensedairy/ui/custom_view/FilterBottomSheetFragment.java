@@ -1,6 +1,7 @@
 package com.adivid.mvvmexpensedairy.ui.custom_view;
 
 import android.app.DatePickerDialog;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,13 +10,16 @@ import android.widget.AdapterView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.databinding.FragmentFilterBottomSheetBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
+import com.google.android.material.chip.Chip;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
@@ -24,13 +28,19 @@ import java.util.Locale;
 
 import timber.log.Timber;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.BUNDLE_CATEGORY;
+import static com.adivid.mvvmexpensedairy.utils.Constants.BUNDLE_DATE_RANGE;
+import static com.adivid.mvvmexpensedairy.utils.Constants.BUNDLE_PAYMENT;
+
 public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private FragmentFilterBottomSheetBinding binding;
 
     private List<String> listFilterDate;
-    private String selectedDateFilter, stringFromDate, stringToDate;
+    private String stringSpinnerDateFilter, stringFromDate, stringToDate;
     private int mYearFrom, mMonthFrom, mDayFrom, mYearTo, mMonthTo, mDayTo;
+
+    private String selectedDateRange, selectedCategory, selectedPaymentType;
 
     public FilterBottomSheetFragment() {
     }
@@ -50,22 +60,28 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
         init();
         setUpOnClickListeners();
+        addChipsToChipGroup();
 
     }
 
     private void init() {
         listFilterDate = Arrays.asList(getResources().getStringArray(R.array.filter_arr));
 
-        Calendar c = Calendar.getInstance();
-        mYearFrom = c.get(Calendar.YEAR);
-        mMonthFrom = c.get(Calendar.MONTH);
-        mDayFrom = c.get(Calendar.DAY_OF_MONTH);
-
-        mYearTo = c.get(Calendar.YEAR);
-        mMonthTo = c.get(Calendar.MONTH);
-        mDayTo = c.get(Calendar.DAY_OF_MONTH);
-
+        Bundle bundle = getArguments();
+        if (bundle != null) {
+            selectedDateRange = bundle.getString(BUNDLE_DATE_RANGE);
+            selectedCategory = bundle.getString(BUNDLE_CATEGORY);
+            selectedPaymentType = bundle.getString(BUNDLE_PAYMENT);
+        }
         setUpFirstAndLastDayMonth();
+
+        if(!selectedDateRange.isEmpty()){
+            if(selectedDateRange.contains(">")){
+
+            }else{
+
+            }
+        }
 
     }
 
@@ -78,11 +94,20 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         Date fromDate = Utils.getFirstDayOfMonth(currentDate);
         Date toDate = Utils.getLastDayOfMonth(fromDate);
 
-        Timber.d("Date from: " + fromDate.toString());
-        Timber.d("Date to: " + toDate.toString());
-
         binding.etFromDate.setText(Utils.convertToDisplayDate(fromDate));
         binding.etToDate.setText(Utils.convertToDisplayDate(toDate));
+
+        Calendar calendarFrom = Calendar.getInstance();
+        calendarFrom.setTime(fromDate);
+        mYearFrom = calendarFrom.get(Calendar.YEAR);
+        mMonthFrom = calendarFrom.get(Calendar.MONTH);
+        mDayFrom = calendarFrom.get(Calendar.DAY_OF_MONTH);
+
+        Calendar calendarTo = Calendar.getInstance();
+        calendarTo.setTime(toDate);
+        mYearTo = calendarTo.get(Calendar.YEAR);
+        mMonthTo = calendarTo.get(Calendar.MONTH);
+        mDayTo = calendarTo.get(Calendar.DAY_OF_MONTH);
 
     }
 
@@ -94,10 +119,10 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         binding.spinnerDateRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                selectedDateFilter = listFilterDate.get(position);
-                if(selectedDateFilter.equals("Date Range")){
+                stringSpinnerDateFilter = listFilterDate.get(position);
+                if (stringSpinnerDateFilter.equals("Date Range")) {
                     binding.linearLayoutDateRange.setVisibility(View.VISIBLE);
-                }else{
+                } else {
                     //binding.linearLayoutDateRange.setVisibility(View.GONE);
                 }
             }
@@ -116,20 +141,57 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         });
     }
 
+
+    private void addChipsToChipGroup() {
+        List<String> listExpCategory = Arrays.asList(getResources().getStringArray(R.array.category_arr_exp));
+        List<String> listIncCategory = Arrays.asList(getResources().getStringArray(R.array.category_arr_inc));
+
+        List<String> totalCategoryList = new ArrayList<>();
+        totalCategoryList.add("All Categories");
+        totalCategoryList.addAll(listExpCategory);
+        totalCategoryList.addAll(listIncCategory);
+
+        for (int i = 0; i < totalCategoryList.size(); i++) {
+            Chip chip = new Chip(requireContext());
+            chip.setId(i);
+            chip.setText(totalCategoryList.get(i));
+            chip.setCheckable(true);
+            chip.setClickable(true);
+            chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chip_bg_color)));
+            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+            if (totalCategoryList.get(i).equals(selectedCategory)) chip.setChecked(true);
+            binding.chipGroupCategories.addView(chip);
+        }
+
+        String[] arr_payment_mode = getResources().getStringArray(R.array.payment_mode);
+        for (int i = 0; i < arr_payment_mode.length; i++) {
+            Chip chip = new Chip(requireContext());
+            chip.setId(i);
+            chip.setText(arr_payment_mode[i]);
+            chip.setCheckable(true);
+            chip.setClickable(true);
+            chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chip_bg_color)));
+            chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
+            if (arr_payment_mode[i].equals(selectedPaymentType)) chip.setChecked(true);
+            binding.chipGroupPaymentType.addView(chip);
+        }
+
+    }
+
     private void showDatePickerFrom() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
                 (DatePickerDialog.OnDateSetListener) (view, year, month, dayOfMonth) -> {
-            Calendar calendar = Calendar.getInstance();
-            calendar.set(year, month, dayOfMonth);
-            SimpleDateFormat format = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
-            stringFromDate = format.format(calendar.getTime());
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.set(year, month, dayOfMonth);
+                    SimpleDateFormat format = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+                    stringFromDate = format.format(calendar.getTime());
 
-            binding.etFromDate.setText(stringFromDate);
-            mYearFrom = year;
-            mMonthFrom = month;
-            mDayFrom = dayOfMonth;
+                    binding.etFromDate.setText(stringFromDate);
+                    mYearFrom = year;
+                    mMonthFrom = month;
+                    mDayFrom = dayOfMonth;
 
-        }, mYearFrom, mMonthFrom, mDayFrom);
+                }, mYearFrom, mMonthFrom, mDayFrom);
         datePickerDialog.show();
     }
 
@@ -142,11 +204,11 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
                     stringToDate = format.format(calendar.getTime());
 
                     binding.etToDate.setText(stringToDate);
-                    mYearFrom = year;
+                    mYearTo = year;
                     mMonthFrom = month;
-                    mDayFrom = dayOfMonth;
+                    mDayTo = dayOfMonth;
 
-                }, mYearFrom, mMonthFrom, mDayFrom);
+                }, mYearTo, mMonthTo, mDayTo);
         datePickerDialog.show();
     }
 

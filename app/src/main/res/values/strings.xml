@@ -15,6 +15,7 @@
     <string name="category">Category:</string>
     <string name="type">Type:</string>
     <string name="all_transactions">All Transactions</string>
+    <string name="all_categories">All Categories</string>
     <string name="day_report">Day Report</string>
     <string name="monthly_report">Monthly Report</string>
     <string name="categories">Categories</string>
