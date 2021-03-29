@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
+import com.adivid.mvvmexpensedairy.adapter.interfaces.FilterCallback;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentCustomViewBinding;
@@ -40,6 +41,8 @@ public class CustomViewFragment extends Fragment {
     private MainListAdapter adapter;
     private NavController navController;
 
+    private String filterFromDate, filterToDate, filterCat, filterPay;
+
     public CustomViewFragment() {
         super(R.layout.fragment_custom_view);
     }
@@ -62,12 +65,17 @@ public class CustomViewFragment extends Fragment {
 
         setUpRecyclerView();
 
-        String dateFirst = "01 Mar, 2021";
-        String dateLast = "31 Mar, 2021";
-        viewModel.getCustomList(Utils.convertToStoringDate(dateFirst),
-                Utils.convertToStoringDate(dateLast), "", "");
-        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(dateFirst),
-                Utils.convertToStoringDate(dateLast), "", "");
+        filterFromDate = "01 Mar, 2021";
+        filterToDate = "31 Mar, 2021";
+        filterCat = "";
+        filterPay = "";
+
+        binding.chipMonthYear.setText(filterFromDate + " > " + filterToDate);
+
+        viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate),
+                Utils.convertToStoringDate(filterToDate), "", "");
+        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate),
+                Utils.convertToStoringDate(filterToDate), "", "");
 
     }
 
@@ -106,7 +114,7 @@ public class CustomViewFragment extends Fragment {
             bundle.putString(BUNDLE_CATEGORY, String.valueOf(binding.chipCategoryType.getText()));
             bundle.putString(BUNDLE_PAYMENT, String.valueOf(binding.chipPaymentMode.getText()));
 
-            FilterBottomSheetFragment fragment = new FilterBottomSheetFragment();
+            FilterBottomSheetFragment fragment = new FilterBottomSheetFragment(filterResult);
             fragment.setArguments(bundle);
             fragment.show(getChildFragmentManager(), "FilterBottomSheetFragment");
             fragment.setCancelable(true);
@@ -128,5 +136,37 @@ public class CustomViewFragment extends Fragment {
         public void onLongItemClick(View view, int position) {
 
         }
+    };
+
+    private final FilterCallback filterResult = (dateRange, category, paymentType) -> {
+        String fromDate = "", toDate = "";
+        if (dateRange.contains(">")) {
+            int separatorIndex = dateRange.lastIndexOf(">");
+            fromDate = dateRange.substring(0, separatorIndex - 1);
+            toDate = dateRange.substring(separatorIndex + 2);
+            Timber.d("fromdte: " + fromDate);
+            Timber.d("toDate: " + toDate);
+        } else {
+            Timber.d("doesnt contain");
+        }
+        binding.chipMonthYear.setText(dateRange);
+        binding.chipCategoryType.setText(category);
+        binding.chipPaymentMode.setText(paymentType);
+
+        if (category.equals(getString(R.string.all_categories))) category = "";
+        if (paymentType.equals("All Payment Modes")) paymentType = "";
+
+        filterFromDate = fromDate;
+        filterToDate = toDate;
+        filterCat = category;
+        filterPay = paymentType;
+
+        Timber.d("filter data: " + filterFromDate + filterToDate + filterCat + filterPay);
+
+        viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate),
+                Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
+        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate),
+                Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
+
     };
 }

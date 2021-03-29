@@ -13,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 
 import com.adivid.mvvmexpensedairy.R;
+import com.adivid.mvvmexpensedairy.adapter.interfaces.FilterCallback;
 import com.adivid.mvvmexpensedairy.databinding.FragmentFilterBottomSheetBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Locale;
 
@@ -37,12 +39,18 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     private FragmentFilterBottomSheetBinding binding;
 
     private List<String> listFilterDate;
-    private String stringSpinnerDateFilter, stringFromDate, stringToDate;
+    private String stringSpinnerDateFilter, stringFromDate, stringToDate,
+            stringChipCategory = "All Categories", stringChipPayment = "All Payment Modes";
     private int mYearFrom, mMonthFrom, mDayFrom, mYearTo, mMonthTo, mDayTo;
 
-    private String selectedDateRange, selectedCategory, selectedPaymentType;
+    private String selectedDateRange;
+    private FilterCallback filterCallback;
 
     public FilterBottomSheetFragment() {
+    }
+
+    public FilterBottomSheetFragment(FilterCallback filterCallback) {
+        this.filterCallback = filterCallback;
     }
 
     @Nullable
@@ -70,8 +78,9 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         Bundle bundle = getArguments();
         if (bundle != null) {
             selectedDateRange = bundle.getString(BUNDLE_DATE_RANGE);
-            selectedCategory = bundle.getString(BUNDLE_CATEGORY);
-            selectedPaymentType = bundle.getString(BUNDLE_PAYMENT);
+            stringChipCategory = bundle.getString(BUNDLE_CATEGORY);
+            stringChipPayment = bundle.getString(BUNDLE_PAYMENT);
+
         }
         setUpFirstAndLastDayMonth();
 
@@ -91,6 +100,16 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         String currentDate = df.format(c.getTime());
         Timber.d("filter current date: " + currentDate);
 
+        if(selectedDateRange.contains(">")){
+            int separatorIndex = selectedDateRange.lastIndexOf(">");
+            String fromDate = selectedDateRange.substring(0, separatorIndex - 1);
+            String toDate = selectedDateRange.substring(separatorIndex + 2);
+            Timber.d("fromdte: /" + fromDate + "/");
+            Timber.d("toDate: /" + toDate  + "/");
+        }else{
+            Timber.d("doesnt contain");
+        }
+
         Date fromDate = Utils.getFirstDayOfMonth(currentDate);
         Date toDate = Utils.getLastDayOfMonth(fromDate);
 
@@ -109,6 +128,8 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         mMonthTo = calendarTo.get(Calendar.MONTH);
         mDayTo = calendarTo.get(Calendar.DAY_OF_MONTH);
 
+        stringFromDate = String.valueOf(binding.etFromDate.getText());
+        stringToDate = String.valueOf(binding.etToDate.getText());
     }
 
     private void setUpOnClickListeners() {
@@ -139,12 +160,17 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         binding.etToDate.setOnClickListener(v -> {
             showDatePickerTo();
         });
-    }
 
+        binding.chipGroupCategories.setOnCheckedChangeListener((group, checkedId) -> {
+
+
+        });
+    }
 
     private void addChipsToChipGroup() {
         List<String> listExpCategory = Arrays.asList(getResources().getStringArray(R.array.category_arr_exp));
-        List<String> listIncCategory = Arrays.asList(getResources().getStringArray(R.array.category_arr_inc));
+        List<String> listIncCategory =  new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.category_arr_inc)));
+        listIncCategory.remove(0); //removing others category so no duplication
 
         List<String> totalCategoryList = new ArrayList<>();
         totalCategoryList.add("All Categories");
@@ -159,7 +185,10 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             chip.setClickable(true);
             chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chip_bg_color)));
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-            if (totalCategoryList.get(i).equals(selectedCategory)) chip.setChecked(true);
+            if (totalCategoryList.get(i).equals(stringChipCategory)) chip.setChecked(true);
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(isChecked) stringChipCategory = chip.getText().toString();
+            });
             binding.chipGroupCategories.addView(chip);
         }
 
@@ -172,7 +201,10 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             chip.setClickable(true);
             chip.setChipBackgroundColor(ColorStateList.valueOf(ContextCompat.getColor(requireContext(), R.color.chip_bg_color)));
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
-            if (arr_payment_mode[i].equals(selectedPaymentType)) chip.setChecked(true);
+            if (arr_payment_mode[i].equals(stringChipPayment)) chip.setChecked(true);
+            chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+                if(isChecked) stringChipPayment = chip.getText().toString();
+            });
             binding.chipGroupPaymentType.addView(chip);
         }
 
@@ -215,7 +247,16 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        setUpResultCallBackData();
         binding = null;
+    }
+
+    private void setUpResultCallBackData() {
+   /*     Timber.d("chip selected %s", stringChipCategory);
+        Timber.d("chip selected %s", stringChipPayment);
+        Timber.d("date selected" +  stringFromDate + ">" + stringToDate);*/
+        String dateRange = stringFromDate + " > " + stringToDate;
+        filterCallback.filterResult(dateRange, stringChipCategory, stringChipPayment);
     }
 
     @Override

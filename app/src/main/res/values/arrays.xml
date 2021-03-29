@@ -27,6 +27,13 @@
         <item>Deposits</item>
     </string-array>
 
+    <string-array name="category_arr_inc_filter">
+        <item>Salary</item>
+        <item>Bonus</item>
+        <item>Savings</item>
+        <item>Deposits</item>
+    </string-array>
+
     <string-array name="filter_arr">
         <item>Year/Month</item>
         <item>Date Range</item>
