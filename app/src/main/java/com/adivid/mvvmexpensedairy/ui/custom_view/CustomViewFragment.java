@@ -5,7 +5,6 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
@@ -19,7 +18,6 @@ import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentCustomViewBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -103,23 +101,28 @@ public class CustomViewFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
 
-        binding.ivBack.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        binding.ivFilter.setOnClickListener(v -> loadFilterFragment());
 
-        binding.ivFilter.setOnClickListener(v -> {
-            Bundle bundle = new Bundle();
-            bundle.putString(BUNDLE_DATE_RANGE, String.valueOf(binding.chipMonthYear.getText()));
-            bundle.putString(BUNDLE_CATEGORY, String.valueOf(binding.chipCategoryType.getText()));
-            bundle.putString(BUNDLE_PAYMENT, String.valueOf(binding.chipPaymentMode.getText()));
+        binding.chipMonthYear.setOnClickListener(v -> loadFilterFragment());
 
-            FilterBottomSheetFragment fragment = new FilterBottomSheetFragment(filterResult);
-            fragment.setArguments(bundle);
-            fragment.show(getChildFragmentManager(), "FilterBottomSheetFragment");
-            fragment.setCancelable(true);
-        });
+        binding.chipCategoryType.setOnClickListener(v -> loadFilterFragment());
 
+        binding.chipPaymentMode.setOnClickListener(v -> loadFilterFragment());
+
+    }
+
+    private void loadFilterFragment() {
+        Bundle bundle = new Bundle();
+        bundle.putString(BUNDLE_DATE_RANGE, String.valueOf(binding.chipMonthYear.getText()));
+        bundle.putString(BUNDLE_CATEGORY, String.valueOf(binding.chipCategoryType.getText()));
+        bundle.putString(BUNDLE_PAYMENT, String.valueOf(binding.chipPaymentMode.getText()));
+
+        FilterBottomSheetFragment fragment = new FilterBottomSheetFragment(filterResult);
+        fragment.setArguments(bundle);
+        fragment.show(getChildFragmentManager(), "FilterBottomSheetFragment");
+        fragment.setCancelable(true);
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
@@ -144,8 +147,8 @@ public class CustomViewFragment extends Fragment {
             int separatorIndex = dateRange.lastIndexOf(">");
             fromDate = dateRange.substring(0, separatorIndex - 1);
             toDate = dateRange.substring(separatorIndex + 2);
-            Timber.d("fromdte: " + fromDate);
-            Timber.d("toDate: " + toDate);
+            Timber.d("fromdte: %s", fromDate);
+            Timber.d("toDate: %s", toDate);
         } else {
             Timber.d("doesnt contain");
         }

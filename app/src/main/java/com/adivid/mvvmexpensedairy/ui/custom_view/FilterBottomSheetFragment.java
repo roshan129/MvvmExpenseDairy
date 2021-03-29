@@ -1,5 +1,6 @@
 package com.adivid.mvvmexpensedairy.ui.custom_view;
 
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -80,7 +82,6 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             selectedDateRange = bundle.getString(BUNDLE_DATE_RANGE);
             stringChipCategory = bundle.getString(BUNDLE_CATEGORY);
             stringChipPayment = bundle.getString(BUNDLE_PAYMENT);
-
         }
         setUpFirstAndLastDayMonth();
 
@@ -98,7 +99,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
         String currentDate = df.format(c.getTime());
-        Timber.d("filter current date: " + currentDate);
+        Timber.d("filter current date: %s", currentDate);
 
         if(selectedDateRange.contains(">")){
             int separatorIndex = selectedDateRange.lastIndexOf(">");
@@ -133,9 +134,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     private void setUpOnClickListeners() {
-        binding.ivClose.setOnClickListener(v -> {
-            dismiss();
-        });
+        binding.ivClose.setOnClickListener(v -> dismiss());
 
         binding.spinnerDateRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -143,8 +142,10 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
                 stringSpinnerDateFilter = listFilterDate.get(position);
                 if (stringSpinnerDateFilter.equals("Date Range")) {
                     binding.linearLayoutDateRange.setVisibility(View.VISIBLE);
+                    binding.linearLayoutMonthYear.setVisibility(View.GONE);
                 } else {
-                    //binding.linearLayoutDateRange.setVisibility(View.GONE);
+                    binding.linearLayoutDateRange.setVisibility(View.GONE);
+                    binding.linearLayoutMonthYear.setVisibility(View.VISIBLE);
                 }
             }
 
@@ -153,18 +154,14 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             }
         });
 
-        binding.etFromDate.setOnClickListener(v -> {
-            showDatePickerFrom();
-        });
+        binding.etFromDate.setOnClickListener(v -> showDatePickerFrom());
 
-        binding.etToDate.setOnClickListener(v -> {
-            showDatePickerTo();
-        });
+        binding.etToDate.setOnClickListener(v -> showDatePickerTo());
 
-        binding.chipGroupCategories.setOnCheckedChangeListener((group, checkedId) -> {
-
+        binding.buttonMonthYear.setOnClickListener(v -> {
 
         });
+
     }
 
     private void addChipsToChipGroup() {
@@ -207,7 +204,6 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             });
             binding.chipGroupPaymentType.addView(chip);
         }
-
     }
 
     private void showDatePickerFrom() {
