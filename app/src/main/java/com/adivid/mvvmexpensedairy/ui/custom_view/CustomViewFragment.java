@@ -20,6 +20,7 @@ import com.adivid.mvvmexpensedairy.databinding.FragmentCustomViewBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import dagger.hilt.android.AndroidEntryPoint;
@@ -143,6 +144,7 @@ public class CustomViewFragment extends Fragment {
 
     private final FilterCallback filterResult = (dateRange, category, paymentType) -> {
         String fromDate = "", toDate = "";
+        Date dateFrom = null, toFrom = null;
         if (dateRange.contains(">")) {
             int separatorIndex = dateRange.lastIndexOf(">");
             fromDate = dateRange.substring(0, separatorIndex - 1);
@@ -150,7 +152,9 @@ public class CustomViewFragment extends Fragment {
             Timber.d("fromdte: %s", fromDate);
             Timber.d("toDate: %s", toDate);
         } else {
-            Timber.d("doesnt contain");
+            dateFrom = Utils.getFirstDayOfMonthFromMonthYear(dateRange);
+            toFrom = Utils.getLastDayOfMonth(dateFrom);
+
         }
         binding.chipMonthYear.setText(dateRange);
         binding.chipCategoryType.setText(category);
@@ -166,10 +170,17 @@ public class CustomViewFragment extends Fragment {
 
         Timber.d("filter data: " + filterFromDate + filterToDate + filterCat + filterPay);
 
-        viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate),
-                Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
-        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate),
-                Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
+        if (dateRange.contains(">")) {
+            viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate),
+                    Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
+            viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate),
+                    Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
+        }else{
+            viewModel.getCustomList(dateFrom,
+                    toFrom, filterCat, filterPay);
+            viewModel.getCustomExpenseIncomeCount(dateFrom,
+                    toFrom, filterCat, filterPay);
+        }
 
     };
 }

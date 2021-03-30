@@ -65,4 +65,17 @@ public class Utils {
         return c.getTime();
     }
 
+    public static Date getFirstDayOfMonthFromMonthYear(String stringMonthYear) {
+        stringMonthYear = "01 " + stringMonthYear;
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM, yyyy", Locale.getDefault());
+        Date newDate = null;
+        try {
+            newDate = sdf.parse(stringMonthYear);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return newDate;
+    }
+
+
 }

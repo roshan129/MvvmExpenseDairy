@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.DatePicker;
 
 import androidx.annotation.NonNull;
@@ -18,6 +19,7 @@ import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.FilterCallback;
 import com.adivid.mvvmexpensedairy.databinding.FragmentFilterBottomSheetBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
+import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 
@@ -40,13 +42,17 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private FragmentFilterBottomSheetBinding binding;
 
-    private List<String> listFilterDate;
+    private List<String> listFilterDate, listMonth, listYear;
     private String stringSpinnerDateFilter, stringFromDate, stringToDate,
-            stringChipCategory = "All Categories", stringChipPayment = "All Payment Modes";
+            stringChipCategory = "All Categories", stringChipPayment = "All Payment Modes",
+            stringSelectedMonth, stringSelectedYear;
     private int mYearFrom, mMonthFrom, mDayFrom, mYearTo, mMonthTo, mDayTo;
 
-    private String selectedDateRange;
+    private ArrayAdapter<String> arrayAdapterMonth, arrayAdapterYear;
+    private String selectedDateRange, bundleMonth, bundleYear;
     private FilterCallback filterCallback;
+
+    private MonthYearPickerDialogFragment dialogFragment;
 
     public FilterBottomSheetFragment() {
     }
@@ -76,23 +82,32 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void init() {
         listFilterDate = Arrays.asList(getResources().getStringArray(R.array.filter_arr));
+        listMonth = Arrays.asList(getResources().getStringArray(R.array.month));
+        listYear = new ArrayList<>();
+        dialogFragment = MonthYearPickerDialogFragment
+                .getInstance(1, 2020);
+
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             selectedDateRange = bundle.getString(BUNDLE_DATE_RANGE);
             stringChipCategory = bundle.getString(BUNDLE_CATEGORY);
             stringChipPayment = bundle.getString(BUNDLE_PAYMENT);
+            binding.etMonthYear.setText(selectedDateRange);
         }
         setUpFirstAndLastDayMonth();
 
-        if(!selectedDateRange.isEmpty()){
-            if(selectedDateRange.contains(">")){
-
-            }else{
-
+        if (!selectedDateRange.isEmpty()) {
+            if (selectedDateRange.contains(">")) {
+                binding.spinnerDateRange.setSelection(0);
+            } else {
+                binding.spinnerDateRange.setSelection(1);
+                bundleMonth = selectedDateRange.substring(0, selectedDateRange.indexOf(","));
+                bundleYear = selectedDateRange.substring(selectedDateRange.indexOf(",") + 1);
+                Timber.d("bundleMonth: " + bundleMonth);
+                Timber.d("bundleYear: " + bundleYear);
             }
         }
-
     }
 
     private void setUpFirstAndLastDayMonth() {
@@ -101,13 +116,13 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         String currentDate = df.format(c.getTime());
         Timber.d("filter current date: %s", currentDate);
 
-        if(selectedDateRange.contains(">")){
+        if (selectedDateRange.contains(">")) {
             int separatorIndex = selectedDateRange.lastIndexOf(">");
             String fromDate = selectedDateRange.substring(0, separatorIndex - 1);
             String toDate = selectedDateRange.substring(separatorIndex + 2);
             Timber.d("fromdte: /" + fromDate + "/");
-            Timber.d("toDate: /" + toDate  + "/");
-        }else{
+            Timber.d("toDate: /" + toDate + "/");
+        } else {
             Timber.d("doesnt contain");
         }
 
@@ -158,15 +173,22 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
         binding.etToDate.setOnClickListener(v -> showDatePickerTo());
 
-        binding.buttonMonthYear.setOnClickListener(v -> {
+        binding.etMonthYear.setOnClickListener(v -> {
+            dialogFragment.show(requireActivity().getSupportFragmentManager(), null);
 
         });
 
+        dialogFragment.setOnDateSetListener((year, monthOfYear) -> {
+            String[] monthArray = getResources().getStringArray(R.array.month);
+            stringSelectedMonth = monthArray[monthOfYear];
+            stringSelectedYear = String.valueOf(year);
+            binding.etMonthYear.setText(stringSelectedMonth +", "+ stringSelectedYear);
+        });
     }
 
     private void addChipsToChipGroup() {
         List<String> listExpCategory = Arrays.asList(getResources().getStringArray(R.array.category_arr_exp));
-        List<String> listIncCategory =  new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.category_arr_inc)));
+        List<String> listIncCategory = new LinkedList<>(Arrays.asList(getResources().getStringArray(R.array.category_arr_inc)));
         listIncCategory.remove(0); //removing others category so no duplication
 
         List<String> totalCategoryList = new ArrayList<>();
@@ -184,7 +206,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
             if (totalCategoryList.get(i).equals(stringChipCategory)) chip.setChecked(true);
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if(isChecked) stringChipCategory = chip.getText().toString();
+                if (isChecked) stringChipCategory = chip.getText().toString();
             });
             binding.chipGroupCategories.addView(chip);
         }
@@ -200,7 +222,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             chip.setTextColor(ContextCompat.getColor(requireContext(), R.color.white));
             if (arr_payment_mode[i].equals(stringChipPayment)) chip.setChecked(true);
             chip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                if(isChecked) stringChipPayment = chip.getText().toString();
+                if (isChecked) stringChipPayment = chip.getText().toString();
             });
             binding.chipGroupPaymentType.addView(chip);
         }
@@ -208,7 +230,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void showDatePickerFrom() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                (DatePickerDialog.OnDateSetListener) (view, year, month, dayOfMonth) -> {
+                (view, year, month, dayOfMonth) -> {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, dayOfMonth);
                     SimpleDateFormat format = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
@@ -225,7 +247,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void showDatePickerTo() {
         DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(),
-                (DatePickerDialog.OnDateSetListener) (view, year, month, dayOfMonth) -> {
+                (view, year, month, dayOfMonth) -> {
                     Calendar calendar = Calendar.getInstance();
                     calendar.set(year, month, dayOfMonth);
                     SimpleDateFormat format = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
@@ -248,11 +270,14 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     }
 
     private void setUpResultCallBackData() {
-   /*     Timber.d("chip selected %s", stringChipCategory);
-        Timber.d("chip selected %s", stringChipPayment);
-        Timber.d("date selected" +  stringFromDate + ">" + stringToDate);*/
-        String dateRange = stringFromDate + " > " + stringToDate;
+        String dateRange;
+        if (stringSpinnerDateFilter.equals("Date Range")) {
+            dateRange = stringFromDate + " > " + stringToDate;
+        } else {
+            dateRange = stringSelectedMonth + ", " + stringSelectedYear;
+        }
         filterCallback.filterResult(dateRange, stringChipCategory, stringChipPayment);
+
     }
 
     @Override
