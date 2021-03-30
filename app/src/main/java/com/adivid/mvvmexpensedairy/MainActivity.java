@@ -18,6 +18,9 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.adivid.mvvmexpensedairy.adapter.MenuAdapter;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseDiaryDatabase;
+import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.ActivityMainBinding;
 import com.adivid.mvvmexpensedairy.model.Menu;
 import com.google.android.material.navigation.NavigationView;
@@ -30,6 +33,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.Executors;
+
+import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
@@ -41,6 +47,8 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
 
+    @Inject
+    public ExpenseDao expenseDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +57,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         init();
+
+        Date date = new Date();
+        date.setTime(1617125075);
+        ExpenseEntity expenseEntity = new ExpenseEntity(
+                date, "11:11", "55.0", "Expense", "Others", "Test Dummy One",
+                "Cash", "1617124057887"
+        );
+        Executors.newSingleThreadScheduledExecutor().execute(() -> {
+            expenseDao.insertTransaction(expenseEntity);
+        });
 
 
         setUpOnClickListeners();
