@@ -115,6 +115,10 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="24dp"
                     android:id="@+id/etMonthYear"
+                    android:focusable="false"
+                    android:clickable="false"
+                    android:focusableInTouchMode="false"
+                    android:cursorVisible="false"
                     />
 
             </LinearLayout>

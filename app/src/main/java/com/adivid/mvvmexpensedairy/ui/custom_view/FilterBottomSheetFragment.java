@@ -85,15 +85,14 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         listMonth = Arrays.asList(getResources().getStringArray(R.array.month));
         listYear = new ArrayList<>();
         dialogFragment = MonthYearPickerDialogFragment
-                .getInstance(1, 2020);
-
+                .getInstance(Calendar.getInstance().get(Calendar.MONTH),
+                        Calendar.getInstance().get(Calendar.YEAR));
 
         Bundle bundle = getArguments();
         if (bundle != null) {
             selectedDateRange = bundle.getString(BUNDLE_DATE_RANGE);
             stringChipCategory = bundle.getString(BUNDLE_CATEGORY);
             stringChipPayment = bundle.getString(BUNDLE_PAYMENT);
-            binding.etMonthYear.setText(selectedDateRange);
         }
         setUpFirstAndLastDayMonth();
 
@@ -103,9 +102,15 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             } else {
                 binding.spinnerDateRange.setSelection(1);
                 bundleMonth = selectedDateRange.substring(0, selectedDateRange.indexOf(","));
-                bundleYear = selectedDateRange.substring(selectedDateRange.indexOf(",") + 1);
+                bundleYear = selectedDateRange.substring(selectedDateRange.indexOf(",") + 2);
+                List<String> arrMonth = Arrays.asList(getResources().getStringArray(R.array.month));
+                int monthIndex = arrMonth.indexOf(bundleMonth);
                 Timber.d("bundleMonth: " + bundleMonth);
                 Timber.d("bundleYear: " + bundleYear);
+                Timber.d("index: " + monthIndex);
+                binding.etMonthYear.setText(selectedDateRange);
+                dialogFragment = MonthYearPickerDialogFragment
+                        .getInstance(monthIndex, Integer.parseInt(bundleYear));
             }
         }
     }
