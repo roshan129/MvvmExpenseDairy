@@ -13,6 +13,10 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 import java.util.Date;
 import java.util.concurrent.Executors;
 
+import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.schedulers.Schedulers;
+import timber.log.Timber;
+
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DB_NAME;
 
 @Database(entities = {ExpenseEntity.class}, version = 5, exportSchema = false)
@@ -45,11 +49,17 @@ public abstract class ExpenseDiaryDatabase extends RoomDatabase {
 
     private static void insertData() {
         Date date = new Date();
-        date.setTime(1617125075);
+        date.setTime(1617199621);
         ExpenseEntity expenseEntity = new ExpenseEntity(
                 date, "11:11", "55.0", "Expense", "Others", "Test Dummy One",
                 "Cash", "1617124057887"
         );
-        databaseInstance.getExpenseDao().insertTransaction(expenseEntity);
+        databaseInstance.getExpenseDao().insertTransaction(expenseEntity)
+        .subscribeOn(Schedulers.io())
+        .observeOn(AndroidSchedulers.mainThread())
+        .subscribe(aLong -> {
+            Timber.d("success : " + aLong);
+        })
+        ;
     }
 }

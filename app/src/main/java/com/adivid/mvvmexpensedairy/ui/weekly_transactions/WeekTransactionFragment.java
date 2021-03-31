@@ -1,5 +1,6 @@
 package com.adivid.mvvmexpensedairy.ui.weekly_transactions;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AbsListView;
@@ -18,6 +19,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentWeekTransactionsBinding;
+import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.ParseException;
@@ -60,6 +62,7 @@ public class WeekTransactionFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
+        swipeForRecyclerView();
 
     }
 
@@ -134,41 +137,63 @@ public class WeekTransactionFragment extends Fragment {
 
     private void setUpOnClickListeners() {
         binding.buttonPrevious.setOnClickListener(v -> {
-            resetTextViews();
-            counter = 0;
-
-            expenseEntityList.clear();
-            adapter.submitList(expenseEntityList);
-            calendarFirst.add(Calendar.DATE, -7);
-            binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
-
-            calendarLast.add(Calendar.DATE, -7);
-            binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
-            weekFirstDate = calendarFirst.getTime();
-            weekLastDate = calendarLast.getTime();
-            viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
-            viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
-
+            previousClicked();
         });
 
         binding.buttonNext.setOnClickListener(v -> {
-            resetTextViews();
-            counter = 0;
-            expenseEntityList.clear();
-            adapter.submitList(expenseEntityList);
-            calendarFirst.add(Calendar.DATE, +7);
-            binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
-
-            calendarLast.add(Calendar.DATE, +7);
-            binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
-            weekFirstDate = calendarFirst.getTime();
-            weekLastDate = calendarLast.getTime();
-            viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
-            viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
-
+            nextClicked();
         });
 
         binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void swipeForRecyclerView() {
+        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(requireContext()) {
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                previousClicked();
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                nextClicked();
+            }
+        });
+    }
+
+    private void previousClicked() {
+        resetTextViews();
+        counter = 0;
+        expenseEntityList.clear();
+        adapter.submitList(expenseEntityList);
+        calendarFirst.add(Calendar.DATE, -7);
+        binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
+
+        calendarLast.add(Calendar.DATE, -7);
+        binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
+        weekFirstDate = calendarFirst.getTime();
+        weekLastDate = calendarLast.getTime();
+        viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+        viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
+    }
+
+    private void nextClicked() {
+        resetTextViews();
+        counter = 0;
+        expenseEntityList.clear();
+        adapter.submitList(expenseEntityList);
+        calendarFirst.add(Calendar.DATE, +7);
+        binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
+
+        calendarLast.add(Calendar.DATE, +7);
+        binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
+        weekFirstDate = calendarFirst.getTime();
+        weekLastDate = calendarLast.getTime();
+        viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+        viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
     }
 
     private Date getFirstDayOfWeek() {

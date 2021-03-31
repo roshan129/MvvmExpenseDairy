@@ -1,5 +1,6 @@
 package com.adivid.mvvmexpensedairy.ui.day_transactions;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDayTransactionsBinding;
+import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -40,6 +42,9 @@ public class DayTransactionFragment extends Fragment {
     private List<ExpenseEntity> expenseEntityList;
     private NavController navController;
 
+    private Calendar c;
+    private SimpleDateFormat df;
+
     public DayTransactionFragment() {
         super(R.layout.fragment_day_transactions);
     }
@@ -52,6 +57,7 @@ public class DayTransactionFragment extends Fragment {
         init();
         setUpOnClickListeners();
         observers();
+        swipeForRecyclerView();
     }
 
     private void init() {
@@ -66,22 +72,15 @@ public class DayTransactionFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+        c = Calendar.getInstance();
+        df = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
 
         binding.buttonPrevious.setOnClickListener(v -> {
-            c.add(Calendar.DATE, -1);
-            String formattedDate1 = df.format(c.getTime());
-            Timber.d(formattedDate1);
-            binding.tvDate.setText(formattedDate1);
+            previousClicked();
         });
 
         binding.buttonNext.setOnClickListener(v -> {
-            c.add(Calendar.DATE, 1);
-            String formattedDate1 = df.format(c.getTime());
-
-            Timber.d(formattedDate1);
-            binding.tvDate.setText(formattedDate1);
+            nextClicked();
         });
 
         binding.tvDate.addTextChangedListener(new TextWatcher() {
@@ -109,10 +108,41 @@ public class DayTransactionFragment extends Fragment {
 
     }
 
+    private void previousClicked() {
+        c.add(Calendar.DATE, -1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
+    }
+
+    private void nextClicked() {
+        c.add(Calendar.DATE, 1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
+    }
+
     private void setUpRecyclerView() {
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(adapter);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void swipeForRecyclerView() {
+        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(requireContext()) {
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                previousClicked();
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                nextClicked();
+            }
+        });
     }
 
     private void observers() {

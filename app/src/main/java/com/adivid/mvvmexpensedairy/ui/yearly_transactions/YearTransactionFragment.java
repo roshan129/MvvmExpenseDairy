@@ -1,5 +1,6 @@
 package com.adivid.mvvmexpensedairy.ui.yearly_transactions;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -18,6 +19,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentYearTransactionBinding;
+import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.ParseException;
@@ -42,6 +44,9 @@ public class YearTransactionFragment extends Fragment {
     private NavController navController;
     private List<ExpenseEntity> expenseEntityList;
 
+    private Calendar c;
+    private SimpleDateFormat df;
+
     public YearTransactionFragment() {
         super(R.layout.fragment_year_transaction);
     }
@@ -54,6 +59,7 @@ public class YearTransactionFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
+        swipeForRecyclerView();
     }
 
     private void init() {
@@ -65,22 +71,15 @@ public class YearTransactionFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("yyyy", Locale.getDefault());
+        c = Calendar.getInstance();
+        df = new SimpleDateFormat("yyyy", Locale.getDefault());
 
         binding.buttonPrevious.setOnClickListener(v -> {
-            c.add(Calendar.YEAR, -1);
-            String formattedDate1 = df.format(c.getTime());
-            Timber.d(formattedDate1);
-            binding.tvDate.setText(formattedDate1);
+            previousClicked();
         });
 
         binding.buttonNext.setOnClickListener(v -> {
-            c.add(Calendar.YEAR, 1);
-            String formattedDate1 = df.format(c.getTime());
-
-            Timber.d(formattedDate1);
-            binding.tvDate.setText(formattedDate1);
+            nextClicked();
         });
 
         binding.tvDate.addTextChangedListener(new TextWatcher() {
@@ -130,8 +129,39 @@ public class YearTransactionFragment extends Fragment {
         binding.recyclerView.setAdapter(adapter);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
+    private void swipeForRecyclerView() {
+        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(requireContext()) {
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                previousClicked();
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                nextClicked();
+            }
+        });
+    }
+
+    private void previousClicked() {
+        c.add(Calendar.YEAR, -1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
+    }
+
+    private void nextClicked() {
+        c.add(Calendar.YEAR, 1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
+    }
+
     private Date getFirstDayOfYear(String year) {
-        String firstDay = "01 " + "Jan, " + year  +" 00:00:00";
+        String firstDay = "01 " + "Jan, " + year + " 00:00:00";
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss", Locale.getDefault());
         Date newDate = null;
         try {

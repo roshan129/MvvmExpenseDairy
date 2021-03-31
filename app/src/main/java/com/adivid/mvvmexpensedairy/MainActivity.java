@@ -66,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
         );
         Executors.newSingleThreadScheduledExecutor().execute(() -> {
             expenseDao.insertTransaction(expenseEntity);
+
         });
 
 

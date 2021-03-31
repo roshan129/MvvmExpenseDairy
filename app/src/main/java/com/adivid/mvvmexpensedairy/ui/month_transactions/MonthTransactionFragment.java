@@ -1,8 +1,10 @@
 package com.adivid.mvvmexpensedairy.ui.month_transactions;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -21,6 +23,7 @@ import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentMonthTransactionBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
+import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.DateFormat;
@@ -47,10 +50,15 @@ public class MonthTransactionFragment extends Fragment {
     private NavController navController;
     private List<ExpenseEntity> expenseEntityList;
 
+    private Calendar c;
+    private SimpleDateFormat df;
+
     public MonthTransactionFragment() {
         super(R.layout.fragment_month_transaction);
     }
 
+
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -59,6 +67,21 @@ public class MonthTransactionFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
+
+        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(view.getContext()) {
+            @Override
+            public void onSwipeRight() {
+                super.onSwipeRight();
+                previousClicked();
+            }
+
+            @Override
+            public void onSwipeLeft() {
+                super.onSwipeLeft();
+                nextClicked();
+            }
+        });
+
     }
 
     private void init() {
@@ -87,22 +110,15 @@ public class MonthTransactionFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
-        Calendar c = Calendar.getInstance();
-        SimpleDateFormat df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+        c = Calendar.getInstance();
+        df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
         binding.buttonPrevious.setOnClickListener(v -> {
-            c.add(Calendar.MONTH, -1);
-            String formattedDate1 = df.format(c.getTime());
-            Timber.d(formattedDate1);
-            binding.tvDate.setText(formattedDate1);
+            previousClicked();
         });
 
         binding.buttonNext.setOnClickListener(v -> {
-            c.add(Calendar.MONTH, 1);
-            String formattedDate1 = df.format(c.getTime());
-
-            Timber.d(formattedDate1);
-            binding.tvDate.setText(formattedDate1);
+            nextClicked();
         });
 
         binding.tvDate.addTextChangedListener(new TextWatcher() {
@@ -127,6 +143,20 @@ public class MonthTransactionFragment extends Fragment {
         binding.tvDate.setText(df.format(c.getTime()));
 
         binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
+    }
+
+    private void previousClicked() {
+        c.add(Calendar.MONTH, -1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
+    }
+
+    private void nextClicked() {
+        c.add(Calendar.MONTH, 1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
     }
 
     private void setUpRecyclerView() {
@@ -157,7 +187,7 @@ public class MonthTransactionFragment extends Fragment {
         return c.getTime();
     }
 
-    private final OnItemClickListener recyclerViewClickListener =  new OnItemClickListener() {
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
             ExpenseEntity expenseEntity = expenseEntityList.get(position);
