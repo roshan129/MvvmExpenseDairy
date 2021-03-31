@@ -71,10 +71,10 @@ public class CustomViewFragment extends Fragment {
 
         binding.chipMonthYear.setText(filterFromDate + " > " + filterToDate);
 
-        viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate),
-                Utils.convertToStoringDate(filterToDate), "", "");
-        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate),
-                Utils.convertToStoringDate(filterToDate), "", "");
+        viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate, "00:00"),
+                Utils.convertToStoringDate(filterToDate, "23:59"), "", "");
+        viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate, "00:00"),
+                Utils.convertToStoringDate(filterToDate, "23:59"), "", "");
 
     }
 
@@ -171,10 +171,10 @@ public class CustomViewFragment extends Fragment {
         Timber.d("filter data: " + filterFromDate + filterToDate + filterCat + filterPay);
 
         if (dateRange.contains(">")) {
-            viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate),
-                    Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
-            viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate),
-                    Utils.convertToStoringDate(filterToDate), filterCat, filterPay);
+            viewModel.getCustomList(Utils.convertToStoringDate(filterFromDate, "00:00"),
+                    Utils.convertToStoringDate(filterToDate, "23:59"), filterCat, filterPay);
+            viewModel.getCustomExpenseIncomeCount(Utils.convertToStoringDate(filterFromDate , "00:00"),
+                    Utils.convertToStoringDate(filterToDate, "23:59"), filterCat, filterPay);
         }else{
             viewModel.getCustomList(dateFrom,
                     toFrom, filterCat, filterPay);

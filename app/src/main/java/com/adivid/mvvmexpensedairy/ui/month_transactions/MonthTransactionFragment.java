@@ -137,8 +137,8 @@ public class MonthTransactionFragment extends Fragment {
     }
 
     private Date getFirstDayOfMonth(String stringMonthYear) {
-        stringMonthYear = "01 " + stringMonthYear;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy", Locale.getDefault());
+        stringMonthYear = "01 " + stringMonthYear + " 00:00";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
         Date newDate = null;
         try {
             newDate = sdf.parse(stringMonthYear);
@@ -152,6 +152,8 @@ public class MonthTransactionFragment extends Fragment {
         Calendar c = Calendar.getInstance();
         c.setTime(date);
         c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        c.set(Calendar.HOUR, 23);
+        c.set(Calendar.MINUTE, 59);
         return c.getTime();
     }
 

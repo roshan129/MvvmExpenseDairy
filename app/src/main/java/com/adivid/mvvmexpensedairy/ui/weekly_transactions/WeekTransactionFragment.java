@@ -64,7 +64,7 @@ public class WeekTransactionFragment extends Fragment {
     }
 
     private void init() {
-        navController =  NavHostFragment.findNavController(this);
+        navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(WeekTransactionViewModel.class);
         expenseEntityList = new ArrayList<>();
 
@@ -73,8 +73,6 @@ public class WeekTransactionFragment extends Fragment {
         binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(getFirstDayOfWeek()));
         binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(getLastDayOfWeek()));
         weekFirstDate = calendarFirst.getTime();
-        Timber.d("weekFirstDate"   + weekFirstDate.toString());
-        Timber.d("weekFirstDate gettime"   + weekFirstDate.getTime());
         weekLastDate = calendarLast.getTime();
         viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
         viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
@@ -89,12 +87,12 @@ public class WeekTransactionFragment extends Fragment {
         });
 
         viewModel.weeklyExpense.observe(getViewLifecycleOwner(), s -> {
-            String exp = getString(R.string.rupee)  + s;
+            String exp = getString(R.string.rupee) + s;
             binding.tvMoneySpent.setText(exp);
         });
 
         viewModel.weeklyIncome.observe(getViewLifecycleOwner(), s -> {
-            String inc = getString(R.string.rupee)  + s;
+            String inc = getString(R.string.rupee) + s;
             binding.tvMoneyIncome.setText(inc);
         });
     }
@@ -151,7 +149,6 @@ public class WeekTransactionFragment extends Fragment {
             viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
             viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
 
-
         });
 
         binding.buttonNext.setOnClickListener(v -> {
@@ -171,20 +168,26 @@ public class WeekTransactionFragment extends Fragment {
 
         });
 
-        binding.ivBack.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
     }
 
     private Date getFirstDayOfWeek() {
         calendarFirst = Calendar.getInstance();
         calendarFirst.set(Calendar.DAY_OF_WEEK, 1);
+        calendarFirst.set(Calendar.HOUR, 0);
+        calendarFirst.set(Calendar.MINUTE, 0);
+        calendarFirst.set(Calendar.SECOND, 0);
+        calendarFirst.set(Calendar.HOUR_OF_DAY, 0);
         return calendarFirst.getTime();
     }
 
     private Date getLastDayOfWeek() {
         calendarLast = Calendar.getInstance();
         calendarLast.set(Calendar.DAY_OF_WEEK, 7);
+        calendarLast.set(Calendar.HOUR, 23);
+        calendarLast.set(Calendar.MINUTE, 59);
+        calendarLast.set(Calendar.SECOND, 59);
+        calendarLast.set(Calendar.HOUR_OF_DAY, 23);
         return calendarLast.getTime();
     }
 

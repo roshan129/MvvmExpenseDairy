@@ -42,14 +42,14 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private FragmentFilterBottomSheetBinding binding;
 
-    private List<String> listFilterDate, listMonth, listYear;
+    private List<String> listFilterDate;
     private String stringSpinnerDateFilter, stringFromDate, stringToDate,
             stringChipCategory = "All Categories", stringChipPayment = "All Payment Modes",
             stringSelectedMonth, stringSelectedYear;
     private int mYearFrom, mMonthFrom, mDayFrom, mYearTo, mMonthTo, mDayTo;
 
     private ArrayAdapter<String> arrayAdapterMonth, arrayAdapterYear;
-    private String selectedDateRange, bundleMonth, bundleYear;
+    private String selectedDateRange;
     private FilterCallback filterCallback;
 
     private MonthYearPickerDialogFragment dialogFragment;
@@ -82,8 +82,6 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void init() {
         listFilterDate = Arrays.asList(getResources().getStringArray(R.array.filter_arr));
-        listMonth = Arrays.asList(getResources().getStringArray(R.array.month));
-        listYear = new ArrayList<>();
         dialogFragment = MonthYearPickerDialogFragment
                 .getInstance(Calendar.getInstance().get(Calendar.MONTH),
                         Calendar.getInstance().get(Calendar.YEAR));
@@ -101,13 +99,12 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
                 binding.spinnerDateRange.setSelection(0);
             } else {
                 binding.spinnerDateRange.setSelection(1);
-                bundleMonth = selectedDateRange.substring(0, selectedDateRange.indexOf(","));
-                bundleYear = selectedDateRange.substring(selectedDateRange.indexOf(",") + 2);
+                String bundleMonth = selectedDateRange.substring(0, selectedDateRange.indexOf(","));
+                String bundleYear = selectedDateRange.substring(selectedDateRange.indexOf(",") + 2);
+                stringSelectedMonth  = bundleMonth;
+                stringSelectedYear = bundleYear;
                 List<String> arrMonth = Arrays.asList(getResources().getStringArray(R.array.month));
                 int monthIndex = arrMonth.indexOf(bundleMonth);
-                Timber.d("bundleMonth: " + bundleMonth);
-                Timber.d("bundleYear: " + bundleYear);
-                Timber.d("index: " + monthIndex);
                 binding.etMonthYear.setText(selectedDateRange);
                 dialogFragment = MonthYearPickerDialogFragment
                         .getInstance(monthIndex, Integer.parseInt(bundleYear));
@@ -151,6 +148,11 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
         stringFromDate = String.valueOf(binding.etFromDate.getText());
         stringToDate = String.valueOf(binding.etToDate.getText());
+
+        String currentMonthYear = Utils.getMonthAndYear();
+        binding.etMonthYear.setText(currentMonthYear);
+        stringSelectedMonth = currentMonthYear.substring(0, currentMonthYear.indexOf(","));
+        stringSelectedYear = currentMonthYear.substring(currentMonthYear.indexOf(",") + 2);
     }
 
     private void setUpOnClickListeners() {

@@ -61,8 +61,6 @@ public class YearTransactionFragment extends Fragment {
         setUpRecyclerView();
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         viewModel = new ViewModelProvider(this).get(YearTransactionViewModel.class);
-        viewModel.getYearlyRecords(getFirstDayOfYear(currentYear), getLastDayOfYear(currentYear));
-
         expenseEntityList = new ArrayList<>();
     }
 
@@ -133,8 +131,8 @@ public class YearTransactionFragment extends Fragment {
     }
 
     private Date getFirstDayOfYear(String year) {
-        String firstDay = "01 " + "Jan, " + year;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+        String firstDay = "01 " + "Jan, " + year  +" 00:00:00";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss", Locale.getDefault());
         Date newDate = null;
         try {
             newDate = sdf.parse(firstDay);
@@ -145,8 +143,8 @@ public class YearTransactionFragment extends Fragment {
     }
 
     private Date getLastDayOfYear(String year) {
-        String lastDay = "31 " + "Dec, " + year;
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+        String lastDay = "31 " + "Dec, " + year + " 23:59:59";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss", Locale.getDefault());
         Date newDate = null;
         try {
             newDate = sdf.parse(lastDay);

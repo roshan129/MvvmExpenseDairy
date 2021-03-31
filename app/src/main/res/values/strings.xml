@@ -27,6 +27,7 @@
     <string name="add_filter">Add Filter</string>
     <string name="payment_type">Payment Type</string>
     <string name="_000_0">₹ 000.0</string>
+    <string name="time">Time</string>
 
     <integer name="enter_from_right_dur">150</integer>
 

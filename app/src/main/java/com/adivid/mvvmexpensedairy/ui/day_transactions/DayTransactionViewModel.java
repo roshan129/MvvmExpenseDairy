@@ -41,22 +41,27 @@ public class DayTransactionViewModel extends ViewModel {
     }
 
     public void getDayWiseRecords(String date) {
+        Date dateStart = Utils.convertToStoringDate(date, "00:00");
+        Date dateEnd = Utils.convertToStoringDate(date, "23:59");
+
         compositeDisposable.add(
-                repository.getDayWiseRecords(Utils.convertToStoringDate(date))
+                repository.getDayWiseRecords(dateStart, dateEnd)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(expenseEntities -> {
                     dayTransactions.postValue(expenseEntities);
                 },throwable -> {
-                    Timber.d("exception:getDayWiseRecords: " + throwable);
+                    Timber.d("exception:getDayWiseRecords: %s", throwable.toString());
                 })
         );
     }
 
-
     public void getTotalDayExpenseIncome(String date) {
+        Date dateStart = Utils.convertToStoringDate(date, "00:00");
+        Date dateEnd = Utils.convertToStoringDate(date, "23:59");
+
         compositeDisposable.add(
-                repository.getTotalDayExpense(Utils.convertToStoringDate(date))
+                repository.getTotalDayExpense(dateStart, dateEnd)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(aDouble -> {
@@ -67,7 +72,7 @@ public class DayTransactionViewModel extends ViewModel {
         );
 
         compositeDisposable.add(
-                repository.getTotalDayIncome(Utils.convertToStoringDate(date))
+                repository.getTotalDayIncome(dateStart, dateEnd)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(aDouble -> {

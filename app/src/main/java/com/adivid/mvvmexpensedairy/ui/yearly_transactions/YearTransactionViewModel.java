@@ -45,7 +45,7 @@ public class YearTransactionViewModel extends ViewModel {
                         .subscribe(expenseEntities -> {
                             yearlyExpenseTransactions.postValue(expenseEntities);
                         }, throwable -> {
-                            Timber.d("exception: " + throwable);
+                            Timber.d("exception: %s", throwable);
                         })
         );
     }

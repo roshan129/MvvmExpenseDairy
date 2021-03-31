@@ -22,16 +22,16 @@ public class DayTransactionRepository {
 
     }
 
-    public Flowable<List<ExpenseEntity>> getDayWiseRecords(Date daySt) {
-        return expenseDao.getDayWiseRecords(daySt);
+    public Flowable<List<ExpenseEntity>> getDayWiseRecords(Date daySt, Date dayEnd) {
+        return expenseDao.getDayWiseRecords(daySt, dayEnd);
     }
 
-    public Flowable<Double> getTotalDayExpense(Date date) {
-        return expenseDao.getTotalDayExpense(date);
+    public Flowable<Double> getTotalDayExpense(Date dayStart, Date dayEnd) {
+        return expenseDao.getTotalDayExpense(dayStart, dayEnd);
     }
 
-    public Flowable<Double> getTotalDayIncome(Date date) {
-        return expenseDao.getTotalDayIncome(date);
+    public Flowable<Double> getTotalDayIncome(Date dayStart, Date dayEnd) {
+        return expenseDao.getTotalDayIncome(dayStart, dayEnd);
     }
 
 }

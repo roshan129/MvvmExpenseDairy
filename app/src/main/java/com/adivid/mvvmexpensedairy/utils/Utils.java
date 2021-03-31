@@ -28,11 +28,11 @@ public class Utils {
         return sdf.format(new Date());
     }
 
-    public static Date convertToStoringDate(String date) {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+    public static Date convertToStoringDate(String date, String time) {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm", Locale.getDefault());
         Date newDate = null;
         try {
-            newDate = sdf.parse(date);
+            newDate = sdf.parse(date + " " + time);
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -41,6 +41,7 @@ public class Utils {
 
     public static String convertToDisplayDate(Date date) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
+
         return sdf.format(date);
 
     }
@@ -77,5 +78,10 @@ public class Utils {
         return newDate;
     }
 
+    public static String getMonthAndYear() {
+        Calendar c = Calendar.getInstance();
+        SimpleDateFormat df = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault());
+        return df.format(c.getTime());
+    }
 
 }

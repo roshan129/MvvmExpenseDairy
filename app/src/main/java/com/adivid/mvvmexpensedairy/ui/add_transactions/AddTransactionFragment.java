@@ -1,12 +1,14 @@
 package com.adivid.mvvmexpensedairy.ui.add_transactions;
 
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.TimePicker;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +20,8 @@ import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentAddTransactionBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
+import com.google.android.material.timepicker.MaterialTimePicker;
+import com.google.android.material.timepicker.TimeFormat;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -41,7 +45,6 @@ public class AddTransactionFragment extends Fragment {
     private String stringDate, stringTime, stringAmount, stringTransactionType,
             stringCategoryType, stringNote, stringPaymentType;
     private Date storingDate;
-    private Calendar calendar;
     private int mDay, mMonth, mYear;
     private List<String> listCategory;
     private AddTransactionViewModel viewModel;
@@ -73,7 +76,7 @@ public class AddTransactionFragment extends Fragment {
         stringTransactionType = "Expense";
         stringCategoryType = "Others";
         stringPaymentType = "Cash";
-        calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
         mDay = calendar.get(Calendar.DAY_OF_MONTH);
         mMonth = calendar.get(Calendar.MONTH);
         mYear = calendar.get(Calendar.YEAR);
@@ -129,9 +132,7 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
-        binding.ivBack.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
 
         binding.spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -150,9 +151,9 @@ public class AddTransactionFragment extends Fragment {
             }
         });
 
-        binding.etDate.setOnClickListener(v -> {
-            showDatePickerDialog();
-        });
+        binding.etDate.setOnClickListener(v -> showDatePickerDialog());
+
+        binding.etTime.setOnClickListener(v -> showMaterialTimePicker());
 
         binding.chipGroupTransactionType.setOnCheckedChangeListener((group, checkedId) -> {
             switch (checkedId) {
@@ -208,6 +209,24 @@ public class AddTransactionFragment extends Fragment {
 
     }
 
+    private void showMaterialTimePicker() {
+        String time = binding.etTime.getText().toString();
+        int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
+        int minute = Integer.parseInt(time.substring(time.indexOf(":") + 1));
+        Timber.d("hour: " +hour + " minute: " + minute);
+
+        MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
+                .setTimeFormat(TimeFormat.CLOCK_12H)
+                .setHour(hour)
+                .setMinute(minute)
+                .build();
+        materialTimePicker.show(getChildFragmentManager(), null);
+        materialTimePicker.addOnPositiveButtonClickListener(v -> {
+            stringTime = materialTimePicker.getHour() + ":" + materialTimePicker.getMinute();
+            binding.etTime.setText(stringTime);
+        });
+    }
+
     private void showDatePickerDialog() {
         new DatePickerDialog(requireContext(),
                 (view, year, monthOfYear, dayOfMonth) -> {
@@ -229,7 +248,7 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private boolean validateFields() {
-        storingDate = Utils.convertToStoringDate(binding.etDate.getText().toString());
+        storingDate = Utils.convertToStoringDate(binding.etDate.getText().toString(), stringTime);
         stringAmount = binding.etAmount.getText().toString().trim();
         stringNote = binding.etNote.getText().toString();
 
@@ -248,6 +267,7 @@ public class AddTransactionFragment extends Fragment {
         stringDate = Utils.getDisplayDate();
         stringTime = Utils.getCurrentTime();
         binding.etDate.setText(stringDate);
+        binding.etTime.setText(stringTime);
     }
 
     private void hideKeyboard() {
