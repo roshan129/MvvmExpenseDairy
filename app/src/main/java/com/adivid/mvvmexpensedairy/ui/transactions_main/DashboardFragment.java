@@ -78,13 +78,23 @@ public class DashboardFragment extends Fragment {
         });
 
         viewModel.expenseCount.observe(getViewLifecycleOwner(), aDouble -> {
-            if(aDouble == null) binding.tvExpMoney.setText("0");
-            else binding.tvExpMoney.setText(String.valueOf(aDouble));
+            if(aDouble == null){
+                binding.tvExpMoney.setText("0");
+            }
+            else{
+                String exp = getString(R.string.rupee) + aDouble;
+                binding.tvExpMoney.setText(exp);
+            }
         });
 
         viewModel.incomeCount.observe(getViewLifecycleOwner(), aDouble -> {
-            if(aDouble == null) binding.tvIncomeMoney.setText("0");
-            else binding.tvIncomeMoney.setText(String.valueOf(aDouble));
+            if(aDouble == null){
+                binding.tvIncomeMoney.setText("0");
+            }
+            else{
+                String inc = getString(R.string.rupee) + aDouble;
+                binding.tvIncomeMoney.setText(inc);
+            }
         });
 
     }
@@ -107,7 +117,7 @@ public class DashboardFragment extends Fragment {
         });
 
         binding.cardYearly.setOnClickListener(v -> {
-            navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
+           navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
         });
 
         binding.tvSeeAll.setOnClickListener(v -> {

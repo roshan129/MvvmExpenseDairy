@@ -60,8 +60,10 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
 
         if(expense.getTransaction_type().equals("Income")){
             holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.green_primary));
+            holder.textViewMoney.setTextColor(ContextCompat.getColor(context, R.color.text_income_color));
         }else{
             holder.view.setBackgroundColor(ContextCompat.getColor(context, R.color.red_primary));
+            holder.textViewMoney.setTextColor(context.getResources().getColor(R.color.fab_bg));
         }
 
     }

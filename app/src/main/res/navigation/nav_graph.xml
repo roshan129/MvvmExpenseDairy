@@ -21,22 +21,30 @@
             app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_allTransactionsFragment"
-            app:destination="@id/allTransactionsFragment2" />
+            app:destination="@id/allTransactionsFragment2"
+            app:enterAnim="@anim/enter_from_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_dayTransactionsFragment"
-            app:destination="@id/dayTransactionsFragment" />
+            app:destination="@id/dayTransactionsFragment"
+            app:enterAnim="@anim/enter_from_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_monthTransactionFragment"
-            app:destination="@id/monthTransactionFragment" />
+            app:destination="@id/monthTransactionFragment"
+            app:enterAnim="@anim/enter_from_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_yearTransactionFragment"
-            app:destination="@id/yearTransactionFragment" />
+            app:destination="@id/yearTransactionFragment"
+            app:enterAnim="@anim/enter_from_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_weekTransactionFragment"
-            app:destination="@id/weekTransactionFragment" />
+            app:destination="@id/weekTransactionFragment"
+            app:enterAnim="@anim/enter_from_right"/>
         <action
             android:id="@+id/action_dashboardFragment_to_customViewFragment2"
             app:destination="@id/customViewFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_categoriesFragment"
+            app:destination="@id/categoriesFragment" />
 
     </fragment>
     <fragment
@@ -99,5 +107,14 @@
         <action
             android:id="@+id/action_customViewFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/categoriesFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.categories.CategoriesFragment"
+        android:label="fragment_categories"
+        tools:layout="@layout/fragment_categories" >
+        <action
+            android:id="@+id/action_categoriesFragment_to_dashboardFragment"
+            app:destination="@id/dashboardFragment" />
     </fragment>
 </navigation>

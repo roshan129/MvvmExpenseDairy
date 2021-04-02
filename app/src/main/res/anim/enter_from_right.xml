@@ -4,5 +4,6 @@
     <translate
         android:fromXDelta="100%p" android:toXDelta="0%"
         android:fromYDelta="0%" android:toYDelta="0%"
-        android:duration="@integer/enter_from_right_dur" />
+        android:duration="500" />
 </set>
+

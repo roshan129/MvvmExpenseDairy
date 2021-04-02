@@ -8,11 +8,10 @@
     tools:context=".ui.transactions_main.DashboardFragment">
 
     <androidx.core.widget.NestedScrollView
+        android:id="@+id/nested_sv"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/nested_sv"
         android:fillViewport="true">
-
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -67,8 +66,8 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="12dp"
                 android:text="Overview Report"
-                android:textStyle="bold"
                 android:textColor="@color/text_color"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
@@ -79,6 +78,10 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/ripple_effect"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/small_card_corner"
                 app:layout_constraintEnd_toStartOf="@+id/card_monthly"
                 app:layout_constraintStart_toStartOf="parent"
@@ -103,6 +106,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="8dp"
+                android:background="@drawable/ripple_effect"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/small_card_corner"
                 app:layout_constraintEnd_toStartOf="@+id/card_yearly"
                 app:layout_constraintStart_toEndOf="@id/card_weekly"
@@ -127,6 +134,10 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
                 android:layout_marginEnd="16dp"
+                android:background="@drawable/ripple_effect"
+                android:clickable="true"
+                android:focusable="true"
+                android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/small_card_corner"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@id/card_monthly"
@@ -151,8 +162,8 @@
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="22dp"
                 android:text="This Month"
-                android:textStyle="bold"
                 android:textColor="@color/text_color"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/card_weekly" />
 
@@ -160,6 +171,13 @@
                 android:id="@+id/linear_this_month"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="12dp"
+                android:layout_marginEnd="12dp"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingTop="12dp"
+                android:paddingBottom="12dp"
                 android:weightSum="2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_this_month">
@@ -169,15 +187,23 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="4dp"
-                    android:layout_marginTop="04dp"
-                    android:layout_marginEnd="0dp"
+                    android:layout_marginTop="0dp"
+                    android:layout_marginEnd="08dp"
                     android:layout_weight="1"
+                    android:background="@drawable/ripple_effect"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="25dp"
-                    app:cardUseCompatPadding="true">
+                    app:cardElevation="6dp"
+
+
+                    >
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/main_layout_border_exp"
                         android:padding="8dp">
 
                         <TextView
@@ -213,16 +239,21 @@
                     android:id="@+id/card_income"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="04dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="0dp"
                     android:layout_marginEnd="4dp"
                     android:layout_weight="1"
+                    android:background="@drawable/ripple_effect"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:foreground="?android:attr/selectableItemBackground"
                     app:cardCornerRadius="25dp"
-
-                    app:cardUseCompatPadding="true">
+                    app:cardElevation="4dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:background="@drawable/main_layout_border_inc"
                         android:padding="8dp"
 
                         >
@@ -265,9 +296,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
-                android:textStyle="bold"
                 android:text="Latest Transactions"
                 android:textColor="@color/text_color"
+                android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/linear_this_month" />
 

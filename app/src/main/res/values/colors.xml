@@ -13,8 +13,8 @@
 
     <color name="bg_color">@color/white</color>
     <color name="text_color">@color/black</color>
-    <color name="text_expense_color">@color/green_primary</color>
-    <color name="text_income_color">@color/alertRed</color>
+    <color name="text_expense_color">@color/alertRed</color>
+    <color name="text_income_color">@color/green_primary</color>
     <color name="fab_bg">@color/bittersweet</color>
     <color name="fab_src">@color/white</color>
     <color name="et_border_color">@color/black</color>
