@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setTheme(R.style.Theme_MvvmExpenseDairy);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -68,7 +69,6 @@ public class MainActivity extends AppCompatActivity {
             expenseDao.insertTransaction(expenseEntity);
 
         });
-
 
         setUpOnClickListeners();
     }
@@ -103,10 +103,11 @@ public class MainActivity extends AppCompatActivity {
     private void showAboutAlertDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("Xpense Dairy")
-                .setMessage("Version: 1.0\n Version Code: 1")
+                .setMessage("Version: 1.0\nVersion Code: 1")
                 .setPositiveButton("Ok", (dialog, which) -> {
                    dialog.dismiss();
                 });
+        builder.show();
     }
 
     public void openDrawer() {

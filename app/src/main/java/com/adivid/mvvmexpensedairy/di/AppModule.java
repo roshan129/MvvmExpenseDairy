@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDiaryDatabase;
+import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
 
 import javax.inject.Singleton;
 
@@ -29,6 +30,10 @@ public final class AppModule {
         return db.getExpenseDao();
     }
 
-
+    @Singleton
+    @Provides
+    public SharedPrefManager getSharedPrefManager(@ApplicationContext Context context) {
+        return new SharedPrefManager(context);
+    }
 
 }

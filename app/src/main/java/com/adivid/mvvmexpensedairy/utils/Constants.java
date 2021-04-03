@@ -4,6 +4,10 @@ public class Constants {
 
     public static String KEY_DB_NAME = "expense_manager_db";
 
+    public static String SHARED_PREF_NAME = "xpense_shared_pref";
+
+    public static String KEY_NIGHT_MODE = "key_night_mode";
+
     public static String KEY_DATE_DISPLAY_FORMAT = "dd MMM, yyyy";
 
     public static final String OTHERS = "Others";
