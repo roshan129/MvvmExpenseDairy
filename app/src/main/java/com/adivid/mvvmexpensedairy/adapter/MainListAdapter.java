@@ -8,7 +8,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.DiffUtil;
 import androidx.recyclerview.widget.ListAdapter;
@@ -19,7 +18,6 @@ import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
-import java.util.List;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.*;
 
@@ -48,7 +46,8 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
         ExpenseEntity expense = getItem(position);
         holder.textViewNote.setText(expense.getNote());
         holder.textViewDate.setText(Utils.convertToDisplayDate(expense.getDate()));
-        holder.textViewMoney.setText("₹ " + expense.getAmount());
+        String exp = "₹ " + expense.getAmount();
+        holder.textViewMoney.setText(exp);
 
         setCategoryIcon(holder, expense.getTransaction_category());
 

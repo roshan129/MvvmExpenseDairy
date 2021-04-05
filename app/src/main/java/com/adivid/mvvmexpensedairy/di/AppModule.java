@@ -5,6 +5,7 @@ import android.content.Context;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDiaryDatabase;
 import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
+import com.google.firebase.auth.FirebaseAuth;
 
 import javax.inject.Singleton;
 
@@ -34,6 +35,12 @@ public final class AppModule {
     @Provides
     public SharedPrefManager getSharedPrefManager(@ApplicationContext Context context) {
         return new SharedPrefManager(context);
+    }
+
+    @Singleton
+    @Provides
+    public FirebaseAuth getFirebaseAuth() {
+        return FirebaseAuth.getInstance();
     }
 
 }

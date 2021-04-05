@@ -2,6 +2,7 @@ plugins {
     id 'com.android.application'
     id 'dagger.hilt.android.plugin'
     id 'androidx.navigation.safeargs'
+    id 'com.google.gms.google-services'
 
 }
 
@@ -35,9 +36,8 @@ android {
 }
 
 dependencies {
-
     def hilt_version = "2.33-beta"
-    def lifecycle_version = "2.3.0"
+    def lifecycle_version = "2.3.1"
     def nav_version = "2.3.4"
     def room_version = "2.3.0-rc01"
 
@@ -88,5 +88,11 @@ dependencies {
 
     //month and year only date picker
     implementation 'com.github.dewinjm:monthyear-picker:1.0.2'
+
+    //firestore and firebase athentication
+    implementation 'com.google.firebase:firebase-firestore:22.1.2'
+    implementation 'com.google.firebase:firebase-auth:20.0.3'
+
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
 
 }

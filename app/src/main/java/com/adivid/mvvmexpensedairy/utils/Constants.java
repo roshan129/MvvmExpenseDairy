@@ -38,5 +38,7 @@ public class Constants {
     public static final String BUNDLE_CATEGORY = "bundle_category";
     public static final String BUNDLE_PAYMENT = "bundle_payment";
 
+    public static final int KEY_SIGN_IN = 101;
+
 
 }

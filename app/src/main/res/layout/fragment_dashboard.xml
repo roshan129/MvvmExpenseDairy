@@ -54,6 +54,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:src="@drawable/male_user"
+                    android:id="@+id/profileImage"
 
                     />
             </RelativeLayout>

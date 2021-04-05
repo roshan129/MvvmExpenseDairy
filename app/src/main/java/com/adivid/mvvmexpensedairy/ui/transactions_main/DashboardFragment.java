@@ -124,6 +124,9 @@ public class DashboardFragment extends Fragment {
             navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment);
         });
 
+        binding.profileImage.setOnClickListener(v -> {
+            navController.navigate(R.id.action_dashboardFragment_to_signInFragment);
+        });
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {

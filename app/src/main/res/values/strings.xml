@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Xpense Diary</string>
     <string name="rupee">₹</string>
+    <!--<string-array name="default_web_client_id">786240409527-vehdu0oqpbaocu91pigb7251oeu23le2.apps.googleusercontent.com</string-array>-->
 
     <string name="hello_guest_user">Hello, Guest User</string>
     <string name="sign_in">Sign in</string>
@@ -30,6 +31,7 @@
     <string name="time">Time</string>
 
     <integer name="enter_from_right_dur">150</integer>
+
 
 
 </resources>

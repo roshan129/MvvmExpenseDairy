@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "786240409527",
+    "project_id": "mvvmexpensediary",
+    "storage_bucket": "mvvmexpensediary.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:786240409527:android:8fbb3e352fee4d2952e232",
+        "android_client_info": {
+          "package_name": "com.adivid.mvvmexpensedairy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "786240409527-01a6o5r1t9qeu1g9jfv82p9e2cvu020g.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adivid.mvvmexpensedairy",
+            "certificate_hash": "3408fc36a3271f8b564e375427ff434a9e7ee2b0"
+          }
+        },
+        {
+          "client_id": "786240409527-1ud0l75se0avsu63tljvg626snr7mhgk.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.adivid.mvvmexpensedairy",
+            "certificate_hash": "068b96228b15c74bb46c3aa2177706ca5feaf807"
+          }
+        },
+        {
+          "client_id": "786240409527-vehdu0oqpbaocu91pigb7251oeu23le2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA_7yuDIVRCf_eghlExf2xCazIpwomR9t8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "786240409527-vehdu0oqpbaocu91pigb7251oeu23le2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
