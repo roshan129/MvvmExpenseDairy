@@ -20,21 +20,18 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
-import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_SIGN_IN;
-
 @AndroidEntryPoint
 public class SignInFragment extends Fragment {
 
     private FragmentSignInBinding binding;
     private GoogleSignInClient googleSignInClient;
-    private SignInViewModel signInViewModel;
+    private SignInViewModel viewModel;
 
     @Inject
     public FirebaseAuth firebaseAuth;
@@ -49,12 +46,19 @@ public class SignInFragment extends Fragment {
         binding = FragmentSignInBinding.bind(view);
 
         init();
+        observers();
         setUpOnClickListners();
         setUpGoogleSignInClient();
     }
 
     private void init() {
-        signInViewModel = new ViewModelProvider(this).get(SignInViewModel.class);
+        viewModel = new ViewModelProvider(this).get(SignInViewModel.class);
+    }
+
+    private void observers() {
+        viewModel.firebaseUser.observe(getViewLifecycleOwner(), firebaseUser -> {
+            Timber.d("photo url : " + firebaseUser.getPhotoUrl());
+        });
     }
 
     private void setUpOnClickListners() {
@@ -96,8 +100,7 @@ public class SignInFragment extends Fragment {
             });
 
     private void firebaseAuthWithGoogle(String idToken) {
-        Timber.d("insie firebaseAuthWithGoogle");
-        signInViewModel.firebaseAuthWithGoogle(idToken);
+        viewModel.firebaseAuthWithGoogle(idToken);
     }
 
     private void showProgressBar(boolean show) {

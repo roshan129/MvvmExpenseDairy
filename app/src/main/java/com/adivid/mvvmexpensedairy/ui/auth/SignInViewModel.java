@@ -21,33 +21,25 @@ public class SignInViewModel extends ViewModel {
 
     private final SignInRepository repository;
     private final CompositeDisposable compositeDisposable;
-
-    private MutableLiveData<FirebaseUser> firebaseUser;
+    public final MutableLiveData<FirebaseUser> firebaseUser;
 
     @Inject
     public SignInViewModel(SignInRepository repository) {
         this.repository = repository;
         compositeDisposable = new CompositeDisposable();
+        firebaseUser = new MutableLiveData<>();
     }
 
     public void firebaseAuthWithGoogle(String idToken) {
         Timber.d("inside viewmodel");
-        Observable.fromCallable(repository.firebaseAuthWithGoogle(idToken))
+        compositeDisposable.add(repository.firebaseAuthWithGoogle(idToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe();
-
-        /*Observable.just(repository.firebaseAuthWithGoogle(idToken))
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(firebaseUserSingle -> {
-                    FirebaseUser user = firebaseUserSingle.blockingGet();
-                    Timber.d("user: " + user.getEmail());
-                }, throwable -> {
+                .subscribe(firebaseUser1 -> {
+                    firebaseUser.postValue(firebaseUser1);
+                },throwable -> {
                     Timber.d("firebaseAuthWithGoogle exception: %s", throwable.toString());
-                });*/
-
-
+                }));
     }
 
     @Override
