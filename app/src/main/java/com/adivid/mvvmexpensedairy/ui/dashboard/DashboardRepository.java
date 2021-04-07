@@ -1,4 +1,4 @@
-package com.adivid.mvvmexpensedairy.ui.transactions_main;
+package com.adivid.mvvmexpensedairy.ui.dashboard;
 
 import androidx.lifecycle.LiveData;
 

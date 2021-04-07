@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
 
-    tools:context=".ui.transactions_main.DashboardFragment">
+    tools:context=".ui.dashboard.DashboardFragment">
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/nested_sv"
@@ -38,6 +38,7 @@
                     android:tint="@color/text_color" />
 
                 <TextView
+                    android:id="@+id/tv_username"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
@@ -48,13 +49,13 @@
                     android:textSize="16sp" />
 
                 <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/profileImage"
                     android:layout_width="45dp"
                     android:layout_height="45dp"
                     android:layout_alignParentEnd="true"
                     android:layout_centerVertical="true"
                     android:layout_marginEnd="16dp"
                     android:src="@drawable/male_user"
-                    android:id="@+id/profileImage"
 
                     />
             </RelativeLayout>
@@ -72,7 +73,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/relativeLayout" />
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_weekly"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -84,6 +85,7 @@
                 android:focusable="true"
                 android:foreground="?android:attr/selectableItemBackground"
                 app:cardCornerRadius="@dimen/small_card_corner"
+                app:cardElevation="2dp"
                 app:layout_constraintEnd_toStartOf="@+id/card_monthly"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_overview_report">
@@ -98,14 +100,15 @@
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/small_card_text_size" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_monthly"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
+                app:cardElevation="2dp"
                 android:layout_marginEnd="8dp"
                 android:background="@drawable/ripple_effect"
                 android:clickable="true"
@@ -122,15 +125,16 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="12dp"
-                    android:text="Monthly"
+                    android:text="@string/monthly"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/small_card_text_size" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:id="@+id/card_yearly"
                 android:layout_width="0dp"
+                app:cardElevation="2dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
@@ -150,11 +154,11 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:padding="12dp"
-                    android:text="Yearly"
+                    android:text="@string/yearly"
                     android:textColor="@color/text_color"
                     android:textSize="@dimen/small_card_text_size" />
 
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
             <TextView
                 android:id="@+id/tv_this_month"

@@ -15,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.databinding.FragmentSignInBinding;
+import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -34,6 +35,9 @@ public class SignInFragment extends Fragment {
     private SignInViewModel viewModel;
 
     @Inject
+    public SharedPrefManager sharedPrefManager;
+
+    @Inject
     public FirebaseAuth firebaseAuth;
 
     public SignInFragment() {
@@ -47,21 +51,24 @@ public class SignInFragment extends Fragment {
 
         init();
         observers();
-        setUpOnClickListners();
+        setUpOnClickListeners();
         setUpGoogleSignInClient();
     }
 
     private void init() {
         viewModel = new ViewModelProvider(this).get(SignInViewModel.class);
+
+
     }
 
     private void observers() {
         viewModel.firebaseUser.observe(getViewLifecycleOwner(), firebaseUser -> {
-            Timber.d("photo url : " + firebaseUser.getPhotoUrl());
+            sharedPrefManager.saveUserName(firebaseUser.getDisplayName());
+            sharedPrefManager.saveEmail(firebaseUser.getEmail());
         });
     }
 
-    private void setUpOnClickListners() {
+    private void setUpOnClickListeners() {
         binding.ivBack.setOnClickListener(v -> {
             requireActivity().onBackPressed();
         });
@@ -85,16 +92,14 @@ public class SignInFragment extends Fragment {
 
     private final ActivityResultLauncher<Intent> startForResult  =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
+                showProgressBar(false);
                 if(result.getResultCode() == Activity.RESULT_OK){
-                    showProgressBar(false);
                     GoogleSignInAccount account =
                             GoogleSignIn.getSignedInAccountFromIntent(result.getData()).getResult();
                     firebaseAuthWithGoogle(account.getIdToken());
 
                 }else{
-                    showProgressBar(false);
-                    Toast.makeText(requireContext(), "Some Error Occurred",
-                            Toast.LENGTH_SHORT).show();
+                    showToast("Some Error Occurred");
                     Timber.d("result not ok");
                 }
             });
@@ -106,5 +111,9 @@ public class SignInFragment extends Fragment {
     private void showProgressBar(boolean show) {
         if(show) binding.progressBar.setVisibility(View.VISIBLE);
         else binding.progressBar.setVisibility(View.GONE);
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
     }
 }

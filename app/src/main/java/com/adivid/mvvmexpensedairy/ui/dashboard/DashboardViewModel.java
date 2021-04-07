@@ -1,10 +1,9 @@
-package com.adivid.mvvmexpensedairy.ui.transactions_main;
+package com.adivid.mvvmexpensedairy.ui.dashboard;
 
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 
 import java.util.List;

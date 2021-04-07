@@ -10,6 +10,9 @@ public class Constants {
 
     public static String KEY_DATE_DISPLAY_FORMAT = "dd MMM, yyyy";
 
+    public static String KEY_USER_NAME = "key_user_name";
+    public static String KEY_USER_EMAIL = "key_user_email";
+
     public static final String OTHERS = "Others";
     public static final String FOOD_N_DINING = "Food and Dining";
     public static final String SHOPPING = "Shopping";

@@ -12,7 +12,7 @@
         tools:layout="@layout/fragment_add_transaction" />
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.transactions_main.DashboardFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard" >
         <action

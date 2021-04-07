@@ -1,4 +1,4 @@
-package com.adivid.mvvmexpensedairy.ui.transactions_main;
+package com.adivid.mvvmexpensedairy.ui.dashboard;
 
 import android.os.Bundle;
 import android.os.Handler;
@@ -20,12 +20,16 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
+import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
+import timber.log.Timber;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 
@@ -37,6 +41,9 @@ public class DashboardFragment extends Fragment {
     private DashboardViewModel viewModel;
     private List<ExpenseEntity> expenseEntityList;
     private MainListAdapter adapter;
+
+    @Inject
+    public SharedPrefManager sharedPrefManager;
 
     private boolean doubleBackToExitPressedOnce = false;
 
@@ -64,6 +71,9 @@ public class DashboardFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         expenseEntityList = new ArrayList<>();
 
+        if(!sharedPrefManager.getUserName().isEmpty()) binding.tvUsername.setText(sharedPrefManager.getUserName());
+
+        Timber.d("username: " + sharedPrefManager.getUserName());
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(adapter);
@@ -141,7 +151,6 @@ public class DashboardFragment extends Fragment {
 
         @Override
         public void onLongItemClick(View view, int position) {
-
         }
     };
 
