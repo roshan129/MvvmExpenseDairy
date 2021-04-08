@@ -13,6 +13,8 @@ public class Constants {
     public static String KEY_USER_NAME = "key_user_name";
     public static String KEY_USER_EMAIL = "key_user_email";
 
+    public static String KEY_UNIQUE_WORK = "data_sync_work";
+
     public static final String OTHERS = "Others";
     public static final String FOOD_N_DINING = "Food and Dining";
     public static final String SHOPPING = "Shopping";

@@ -13,6 +13,11 @@ import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.adivid.mvvmexpensedairy.MainActivity;
 import com.adivid.mvvmexpensedairy.R;
@@ -20,6 +25,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
+import com.adivid.mvvmexpensedairy.utils.DataSyncWorker;
 import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
 import com.google.android.material.snackbar.Snackbar;
 
@@ -32,6 +38,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
 
 @AndroidEntryPoint
 public class DashboardFragment extends Fragment {
@@ -59,7 +66,7 @@ public class DashboardFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
-
+        syncOfflineDataToServer();
     }
 
     private void init() {
@@ -71,7 +78,8 @@ public class DashboardFragment extends Fragment {
         viewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
         expenseEntityList = new ArrayList<>();
 
-        if(!sharedPrefManager.getUserName().isEmpty()) binding.tvUsername.setText(sharedPrefManager.getUserName());
+        if (!sharedPrefManager.getUserName().isEmpty())
+            binding.tvUsername.setText(sharedPrefManager.getUserName());
 
         Timber.d("username: " + sharedPrefManager.getUserName());
         adapter = new MainListAdapter(recyclerViewClickListener);
@@ -88,20 +96,18 @@ public class DashboardFragment extends Fragment {
         });
 
         viewModel.expenseCount.observe(getViewLifecycleOwner(), aDouble -> {
-            if(aDouble == null){
+            if (aDouble == null) {
                 binding.tvExpMoney.setText("0");
-            }
-            else{
+            } else {
                 String exp = getString(R.string.rupee) + aDouble;
                 binding.tvExpMoney.setText(exp);
             }
         });
 
         viewModel.incomeCount.observe(getViewLifecycleOwner(), aDouble -> {
-            if(aDouble == null){
+            if (aDouble == null) {
                 binding.tvIncomeMoney.setText("0");
-            }
-            else{
+            } else {
                 String inc = getString(R.string.rupee) + aDouble;
                 binding.tvIncomeMoney.setText(inc);
             }
@@ -127,7 +133,7 @@ public class DashboardFragment extends Fragment {
         });
 
         binding.cardYearly.setOnClickListener(v -> {
-           navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
+            navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
         });
 
         binding.tvSeeAll.setOnClickListener(v -> {
@@ -153,6 +159,18 @@ public class DashboardFragment extends Fragment {
         public void onLongItemClick(View view, int position) {
         }
     };
+
+    private void syncOfflineDataToServer() {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(DataSyncWorker.class)
+                    .setConstraints(constraints)
+                    .addTag(KEY_UNIQUE_WORK)
+                    .build();
+            WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UNIQUE_WORK,
+                    ExistingWorkPolicy.KEEP, request);
+    }
 
     @Override
     public void onDestroyView() {

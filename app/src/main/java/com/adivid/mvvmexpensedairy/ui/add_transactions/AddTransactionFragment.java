@@ -15,13 +15,20 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavArgs;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentAddTransactionBinding;
+import com.adivid.mvvmexpensedairy.utils.DataSyncWorker;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
+import com.google.firebase.auth.FirebaseAuth;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -31,11 +38,14 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
+import javax.inject.Inject;
+
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DATE_DISPLAY_FORMAT;
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
 
 @AndroidEntryPoint
 public class AddTransactionFragment extends Fragment {
@@ -51,6 +61,9 @@ public class AddTransactionFragment extends Fragment {
 
     private ArrayAdapter<String> arrayAdapterCategory;
     private int updateId;
+
+    @Inject
+    public FirebaseAuth firebaseAuth;
 
     public AddTransactionFragment() {
         super(R.layout.fragment_add_transaction);
@@ -205,6 +218,7 @@ public class AddTransactionFragment extends Fragment {
             viewModel.insertTransaction(expenseEntity);
         }
         hideKeyboard();
+       // syncOfflineDataToServer();
         requireActivity().onBackPressed();
 
     }
@@ -261,6 +275,20 @@ public class AddTransactionFragment extends Fragment {
         }
         stringAmount = Utils.convertToDecimalFormat(stringAmount);
         return true;
+    }
+
+    private void syncOfflineDataToServer() {
+        if(firebaseAuth.getCurrentUser() != null) {
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
+            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(DataSyncWorker.class)
+                    .setConstraints(constraints)
+                    .addTag(KEY_UNIQUE_WORK)
+                    .build();
+            WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UNIQUE_WORK,
+                    ExistingWorkPolicy.KEEP, request);
+        }
     }
 
     private void setUpDateAndTime() {

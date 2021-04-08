@@ -31,6 +31,10 @@ public class ExpenseEntity implements Serializable{
 
     private String payment_type;
 
+    private String firebaseUid;
+
+    private String docId;
+
     private String current_time_millis;
 
     private boolean isDataSent = false;
@@ -46,6 +50,22 @@ public class ExpenseEntity implements Serializable{
         this.note = note;
         this.payment_type = payment_type;
         this.current_time_millis = current_time_millis;
+    }
+
+    public String getFirebaseUid() {
+        return firebaseUid;
+    }
+
+    public void setFirebaseUid(String firebaseUid) {
+        this.firebaseUid = firebaseUid;
+    }
+
+    public String getDocId() {
+        return docId;
+    }
+
+    public void setDocId(String docId) {
+        this.docId = docId;
     }
 
     public boolean isDataSent() {

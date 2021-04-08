@@ -20,7 +20,10 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
 
@@ -40,6 +43,8 @@ public class SignInFragment extends Fragment {
     @Inject
     public FirebaseAuth firebaseAuth;
 
+    private GoogleSignInOptions googleSignInOptions;
+
     public SignInFragment() {
         super(R.layout.fragment_sign_in);
     }
@@ -58,6 +63,14 @@ public class SignInFragment extends Fragment {
     private void init() {
         viewModel = new ViewModelProvider(this).get(SignInViewModel.class);
 
+        FirebaseUser user = firebaseAuth.getCurrentUser();
+        if (user != null) {
+            binding.tvName.setText(user.getDisplayName());
+            binding.tvEmail.setText(user.getEmail());
+            binding.tvName.setVisibility(View.VISIBLE);
+            binding.tvEmail.setVisibility(View.VISIBLE);
+            binding.buttonSignIn.setText(getString(R.string.sign_in));
+        }
 
     }
 
@@ -69,36 +82,55 @@ public class SignInFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
-        binding.ivBack.setOnClickListener(v -> {
-            requireActivity().onBackPressed();
-        });
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
 
         binding.buttonSignIn.setOnClickListener(v -> {
-            showProgressBar(true);
-            Intent signInIntent = googleSignInClient.getSignInIntent();
-            startForResult.launch(signInIntent);
+
+            if(binding.buttonSignIn.getText().equals(getString(R.string.sign_in))){
+                showProgressBar(true);
+                Intent signInIntent = googleSignInClient.getSignInIntent();
+                startForResult.launch(signInIntent);
+            }else{
+                GoogleSignInClient signInClient = GoogleSignIn.getClient(requireContext(),
+                        googleSignInOptions);
+                firebaseAuth.signOut();
+                sharedPrefManager.clearAllPrefs();
+                signInClient.signOut().addOnCompleteListener(task -> {
+                   if(task.isSuccessful()) {
+                       Timber.d("google sign out successful");
+                       showToast("Successfully Logged Out");
+                       binding.buttonSignIn.setText(getString(R.string.sign_in));
+                       binding.tvName.setVisibility(View.GONE);
+                       binding.tvEmail.setVisibility(View.GONE);
+                   }else{
+                       Timber.d("unsuccessfull");
+                   }
+                });
+
+            }
+
         });
 
     }
 
     private void setUpGoogleSignInClient() {
-        GoogleSignInOptions googleSignInOptions =
+        googleSignInOptions =
                 new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
+                        .requestIdToken(getString(R.string.default_web_client_id))
+                        .requestEmail()
+                        .build();
         googleSignInClient = GoogleSignIn.getClient(requireContext(), googleSignInOptions);
     }
 
-    private final ActivityResultLauncher<Intent> startForResult  =
-            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(),result -> {
+    private final ActivityResultLauncher<Intent> startForResult =
+            registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
                 showProgressBar(false);
-                if(result.getResultCode() == Activity.RESULT_OK){
+                if (result.getResultCode() == Activity.RESULT_OK) {
                     GoogleSignInAccount account =
                             GoogleSignIn.getSignedInAccountFromIntent(result.getData()).getResult();
                     firebaseAuthWithGoogle(account.getIdToken());
 
-                }else{
+                } else {
                     showToast("Some Error Occurred");
                     Timber.d("result not ok");
                 }
@@ -109,7 +141,7 @@ public class SignInFragment extends Fragment {
     }
 
     private void showProgressBar(boolean show) {
-        if(show) binding.progressBar.setVisibility(View.VISIBLE);
+        if (show) binding.progressBar.setVisibility(View.VISIBLE);
         else binding.progressBar.setVisibility(View.GONE);
     }
 

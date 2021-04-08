@@ -12,6 +12,7 @@ import java.util.List;
 
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
+import io.reactivex.rxjava3.core.Observable;
 
 @Dao
 public interface ExpenseDao {
@@ -98,5 +99,8 @@ public interface ExpenseDao {
     @Query("Select SUM(amount) from expenseentity WHERE transaction_type = 'Income' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND transaction_category LIKE '%' || :category || '%' AND payment_type LIKE '%' || :paymentMode || '%'")
     Flowable<Double> getCustomIncome(Date firstMonthDay, Date lastMonthDay, String category, String paymentMode);
 
+    //sync
+    @Query("Select * from expenseentity WHERE isDataSent = 0 ORDER BY date DESC")
+    Observable<List<ExpenseEntity>> getDataToSync();
 
 }

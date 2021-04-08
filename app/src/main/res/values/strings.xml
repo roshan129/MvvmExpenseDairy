@@ -31,6 +31,7 @@
     <string name="time">Time</string>
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
+    <string name="sign_out">Sign Out</string>
 
     <integer name="enter_from_right_dur">150</integer>
 
