@@ -33,6 +33,8 @@ public class ExpenseEntity implements Serializable{
 
     private String current_time_millis;
 
+    private boolean isDataSent = false;
+
     public ExpenseEntity(Date date, String time, String amount,
                          String transaction_type, String transaction_category, String note,
                          String payment_type, String current_time_millis) {
@@ -46,28 +48,13 @@ public class ExpenseEntity implements Serializable{
         this.current_time_millis = current_time_millis;
     }
 
-    protected ExpenseEntity(Parcel in) {
-        id = in.readInt();
-        time = in.readString();
-        amount = in.readString();
-        transaction_type = in.readString();
-        transaction_category = in.readString();
-        note = in.readString();
-        payment_type = in.readString();
-        current_time_millis = in.readString();
+    public boolean isDataSent() {
+        return isDataSent;
     }
 
-/*    public static final Creator<ExpenseEntity> CREATOR = new Creator<ExpenseEntity>() {
-        @Override
-        public ExpenseEntity createFromParcel(Parcel in) {
-            return new ExpenseEntity(in);
-        }
-
-        @Override
-        public ExpenseEntity[] newArray(int size) {
-            return new ExpenseEntity[size];
-        }
-    };*/
+    public void setDataSent(boolean dataSent) {
+        isDataSent = dataSent;
+    }
 
     public String getPayment_type() {
         return payment_type;

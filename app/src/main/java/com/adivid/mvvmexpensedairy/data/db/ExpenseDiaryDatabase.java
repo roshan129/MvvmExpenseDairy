@@ -19,7 +19,7 @@ import timber.log.Timber;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DB_NAME;
 
-@Database(entities = {ExpenseEntity.class}, version = 5, exportSchema = false)
+@Database(entities = {ExpenseEntity.class}, version = 6, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class ExpenseDiaryDatabase extends RoomDatabase {
 
