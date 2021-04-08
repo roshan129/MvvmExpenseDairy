@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Observable;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 
 public class AllTransactionsRepository {
@@ -26,7 +27,7 @@ public class AllTransactionsRepository {
         return expenseDao.getAllTransactions();
     }
 
-    public Flowable<List<ExpenseEntity>> getAllTransactionsOffset(int offset) {
+    public Observable<List<ExpenseEntity>> getAllTransactionsOffset(int offset) {
         return expenseDao.getAllMainTransactionsOffset(offset);
     }
 }

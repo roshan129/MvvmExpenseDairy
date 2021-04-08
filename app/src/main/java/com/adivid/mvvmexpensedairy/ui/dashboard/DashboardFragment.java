@@ -66,7 +66,7 @@ public class DashboardFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
-        syncOfflineDataToServer();
+        //syncOfflineDataToServer();
     }
 
     private void init() {

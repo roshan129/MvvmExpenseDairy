@@ -17,7 +17,6 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
-import com.adivid.mvvmexpensedairy.adapter.MenuAdapter;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDiaryDatabase;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;

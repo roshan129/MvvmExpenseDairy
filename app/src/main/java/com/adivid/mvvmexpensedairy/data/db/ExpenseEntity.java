@@ -39,6 +39,10 @@ public class ExpenseEntity implements Serializable{
 
     private boolean isDataSent = false;
 
+    private boolean isUpdated = false;
+
+    private boolean isDeleted = false;
+
     public ExpenseEntity(Date date, String time, String amount,
                          String transaction_type, String transaction_category, String note,
                          String payment_type, String current_time_millis) {
@@ -50,6 +54,22 @@ public class ExpenseEntity implements Serializable{
         this.note = note;
         this.payment_type = payment_type;
         this.current_time_millis = current_time_millis;
+    }
+
+    public boolean isUpdated() {
+        return isUpdated;
+    }
+
+    public void setUpdated(boolean updated) {
+        isUpdated = updated;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public String getFirebaseUid() {

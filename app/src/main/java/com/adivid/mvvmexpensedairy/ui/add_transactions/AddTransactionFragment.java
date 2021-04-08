@@ -95,7 +95,8 @@ public class AddTransactionFragment extends Fragment {
         mYear = calendar.get(Calendar.YEAR);
 
         addDynamicChips();
-
+        binding.etAmount.requestFocus();
+        showOrHideKeyBoard(true);
     }
 
     private void getExtras() {
@@ -145,7 +146,10 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void setUpOnClickListeners() {
-        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
+        binding.ivBack.setOnClickListener(v -> {
+            showOrHideKeyBoard(false);
+            requireActivity().onBackPressed();
+        });
 
         binding.spinnerCategory.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -217,8 +221,8 @@ public class AddTransactionFragment extends Fragment {
         }else {
             viewModel.insertTransaction(expenseEntity);
         }
-        hideKeyboard();
-       // syncOfflineDataToServer();
+        showOrHideKeyBoard(false);
+        syncOfflineDataToServer();
         requireActivity().onBackPressed();
 
     }
@@ -298,11 +302,15 @@ public class AddTransactionFragment extends Fragment {
         binding.etTime.setText(stringTime);
     }
 
-    private void hideKeyboard() {
+    private void showOrHideKeyBoard(Boolean b) {
         InputMethodManager imm =
                 (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if (imm != null) {
-            imm.hideSoftInputFromWindow(requireActivity().getCurrentFocus().getWindowToken(), 0);
+        if(b) {
+            //imm.showSoftInput(binding.etAmount, InputMethodManager.SHOW_IMPLICIT);
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+        }else{
+            imm.hideSoftInputFromWindow(binding.etAmount.getWindowToken(), 0);
+            //imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0)
         }
     }
 

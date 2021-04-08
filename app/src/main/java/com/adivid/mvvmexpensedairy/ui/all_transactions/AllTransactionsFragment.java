@@ -39,7 +39,7 @@ public class AllTransactionsFragment extends Fragment implements
     private MainListAdapter adapter;
 
     private LinearLayoutManager linearLayoutManager;
-    private boolean isScrolling;
+    private boolean isScrolling, lockScrolling;
     private int currentItems, scrolledOutItems, totalItems;
     private int counter = 0;
     private List<ExpenseEntity> expenseEntityList;
@@ -95,7 +95,7 @@ public class AllTransactionsFragment extends Fragment implements
                 totalItems = linearLayoutManager.getItemCount();
                 scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
 
-                if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                if (isScrolling && (currentItems + scrolledOutItems == totalItems) && !lockScrolling) {
                     //binding.pro.setVisibility(View.VISIBLE);
                     isScrolling = false;
                     counter++;
@@ -110,8 +110,12 @@ public class AllTransactionsFragment extends Fragment implements
 
     private void observers() {
         viewModel.allTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseEntityList.addAll(expenseEntities);
-            adapter.submitList(expenseEntityList);
+            if(!expenseEntities.isEmpty()) {
+                expenseEntityList.addAll(expenseEntities);
+                adapter.submitList(expenseEntityList);
+            } else {
+                lockScrolling = true;
+            }
         });
 
     }

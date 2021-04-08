@@ -83,7 +83,7 @@ public interface ExpenseDao {
     /////  offset change /////////////////////////////////////////////////
 
     @Query("Select * from expenseentity ORDER BY id DESC LIMIT 10 OFFSET :offset")
-    Flowable<List<ExpenseEntity>> getAllMainTransactionsOffset(int offset);
+    Observable<List<ExpenseEntity>> getAllMainTransactionsOffset(int offset);
 
     @Query("Select * from expenseentity WHERE date BETWEEN :firstWeekDay AND :lastWeekDay LIMIT 10 OFFSET :offset")
     Flowable<List<ExpenseEntity>> getWeeklyWiseRecordsOffset(
@@ -101,6 +101,6 @@ public interface ExpenseDao {
 
     //sync
     @Query("Select * from expenseentity WHERE isDataSent = 0 ORDER BY date DESC")
-    Observable<List<ExpenseEntity>> getDataToSync();
+    Maybe<List<ExpenseEntity>> getDataToSync();
 
 }
