@@ -43,7 +43,7 @@ public class WeekTransactionFragment extends Fragment {
     private MainListAdapter adapter;
 
     private LinearLayoutManager linearLayoutManager;
-    private boolean isScrolling;
+    private boolean isScrolling, lockScrolling;
     private int currentItems, scrolledOutItems, totalItems;
     private int counter = 0;
     private List<ExpenseEntity> expenseEntityList;
@@ -84,9 +84,13 @@ public class WeekTransactionFragment extends Fragment {
 
     private void observers() {
         viewModel.weeklyTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseEntityList.addAll(expenseEntities);
-            adapter.submitList(expenseEntityList);
-            adapter.notifyDataSetChanged();
+            if(!expenseEntities.isEmpty()) {
+                expenseEntityList.addAll(expenseEntities);
+                adapter.submitList(expenseEntityList);
+                adapter.notifyDataSetChanged();
+            }else {
+                lockScrolling = true;
+            }
         });
 
         viewModel.weeklyExpense.observe(getViewLifecycleOwner(), s -> {
@@ -123,7 +127,7 @@ public class WeekTransactionFragment extends Fragment {
                 totalItems = linearLayoutManager.getItemCount();
                 scrolledOutItems = linearLayoutManager.findFirstVisibleItemPosition();
 
-                if (isScrolling && (currentItems + scrolledOutItems == totalItems)) {
+                if (isScrolling && (currentItems + scrolledOutItems == totalItems) && !lockScrolling) {
                     //binding.pro.setVisibility(View.VISIBLE);
                     isScrolling = false;
                     counter++;
@@ -235,5 +239,6 @@ public class WeekTransactionFragment extends Fragment {
     private void resetTextViews() {
         binding.tvMoneySpent.setText(getString(R.string._000_0));
         binding.tvMoneyIncome.setText(getString(R.string._000_0));
+        lockScrolling = false;
     }
 }
