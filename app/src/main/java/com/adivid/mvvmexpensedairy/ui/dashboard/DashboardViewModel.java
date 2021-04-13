@@ -82,13 +82,12 @@ public class DashboardViewModel extends ViewModel {
                             deleteRecord.postValue(Resource.error(throwable.getMessage(), null));
                             Timber.d("exception: %s", throwable.toString());
                         })
-
         );
     }
 
     @Override
     protected void onCleared() {
-        compositeDisposable.clear();    
+        compositeDisposable.clear();
         super.onCleared();
     }
 
