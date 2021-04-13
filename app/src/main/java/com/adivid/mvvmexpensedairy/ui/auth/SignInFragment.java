@@ -65,20 +65,43 @@ public class SignInFragment extends Fragment {
 
         FirebaseUser user = firebaseAuth.getCurrentUser();
         if (user != null) {
-            binding.tvName.setText(user.getDisplayName());
-            binding.tvEmail.setText(user.getEmail());
-            binding.tvName.setVisibility(View.VISIBLE);
-            binding.tvEmail.setVisibility(View.VISIBLE);
-            binding.buttonSignIn.setText(getString(R.string.sign_in));
+            showUserData(user);
         }
-
     }
 
     private void observers() {
-        viewModel.firebaseUser.observe(getViewLifecycleOwner(), firebaseUser -> {
-            sharedPrefManager.saveUserName(firebaseUser.getDisplayName());
-            sharedPrefManager.saveEmail(firebaseUser.getEmail());
+        viewModel.firebaseUser.observe(getViewLifecycleOwner(), firebaseUserResource -> {
+            switch (firebaseUserResource.status) {
+                case SUCCESS:
+                    showProgressBar(false);
+                    FirebaseUser user = firebaseUserResource.data;
+                    if (user != null) {
+                        sharedPrefManager.saveUserName(user.getDisplayName());
+                        sharedPrefManager.saveEmail(user.getEmail());
+                        showUserData(user);
+                    }else{
+                        showToast("Some Error Occurred");
+                    }
+                    break;
+                case LOADING:
+                    showProgressBar(true);
+                    break;
+                case ERROR:
+                    showProgressBar(false);
+                    showToast("Some Error Occurred");
+                    break;
+            }
+
+
         });
+    }
+
+    private void showUserData(FirebaseUser user) {
+        binding.tvName.setText(user.getDisplayName());
+        binding.tvEmail.setText(user.getEmail());
+        binding.tvName.setVisibility(View.VISIBLE);
+        binding.tvEmail.setVisibility(View.VISIBLE);
+        binding.buttonSignIn.setText(getString(R.string.sign_out));
     }
 
     private void setUpOnClickListeners() {
@@ -86,25 +109,25 @@ public class SignInFragment extends Fragment {
 
         binding.buttonSignIn.setOnClickListener(v -> {
 
-            if(binding.buttonSignIn.getText().equals(getString(R.string.sign_in))){
+            if (binding.buttonSignIn.getText().equals(getString(R.string.sign_in))) {
                 showProgressBar(true);
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startForResult.launch(signInIntent);
-            }else{
+            } else {
                 GoogleSignInClient signInClient = GoogleSignIn.getClient(requireContext(),
                         googleSignInOptions);
                 firebaseAuth.signOut();
                 sharedPrefManager.clearAllPrefs();
                 signInClient.signOut().addOnCompleteListener(task -> {
-                   if(task.isSuccessful()) {
-                       Timber.d("google sign out successful");
-                       showToast("Successfully Logged Out");
-                       binding.buttonSignIn.setText(getString(R.string.sign_in));
-                       binding.tvName.setVisibility(View.GONE);
-                       binding.tvEmail.setVisibility(View.GONE);
-                   }else{
-                       Timber.d("unsuccessfull");
-                   }
+                    if (task.isSuccessful()) {
+                        Timber.d("google sign out successful");
+                        showToast("Successfully Logged Out");
+                        binding.buttonSignIn.setText(getString(R.string.sign_in));
+                        binding.tvName.setVisibility(View.GONE);
+                        binding.tvEmail.setVisibility(View.GONE);
+                    } else {
+                        Timber.d("unsuccessfull");
+                    }
                 });
 
             }

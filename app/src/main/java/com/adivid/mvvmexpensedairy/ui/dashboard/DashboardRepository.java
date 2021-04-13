@@ -10,6 +10,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Single;
 
 public class DashboardRepository {
 
@@ -34,6 +35,10 @@ public class DashboardRepository {
 
     public LiveData<Double> getIncomeCount() {
         return expenseDao.getIncomeCount();
+    }
+
+    public Single<Integer> deleteRecordFromDb(ExpenseEntity expenseEntity) {
+        return expenseDao.deleteTransaction(expenseEntity);
     }
 
 

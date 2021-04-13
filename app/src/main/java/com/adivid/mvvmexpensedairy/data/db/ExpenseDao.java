@@ -2,6 +2,7 @@ package com.adivid.mvvmexpensedairy.data.db;
 
 import androidx.lifecycle.LiveData;
 import androidx.room.Dao;
+import androidx.room.Delete;
 import androidx.room.Insert;
 import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
@@ -13,6 +14,7 @@ import java.util.List;
 import io.reactivex.rxjava3.core.Flowable;
 import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Observable;
+import io.reactivex.rxjava3.core.Single;
 
 @Dao
 public interface ExpenseDao {
@@ -22,6 +24,12 @@ public interface ExpenseDao {
 
     @Update
     Maybe<Integer> updateTransaction(ExpenseEntity expenseEntity);
+
+    @Delete
+    Single<Integer> deleteTransaction(ExpenseEntity expenseEntity);
+
+    @Query("Delete FROM expenseentity WHERE id =:id")
+    Single<Integer> deleteRecordUsingId(int id);
 
     @Query("Select * from expenseentity ORDER BY id DESC")
     LiveData<List<ExpenseEntity>> getAllTransactions();
@@ -100,7 +108,9 @@ public interface ExpenseDao {
     Flowable<Double> getCustomIncome(Date firstMonthDay, Date lastMonthDay, String category, String paymentMode);
 
     //sync
-    @Query("Select * from expenseentity WHERE isDataSent = 0 ORDER BY date DESC")
+    @Query("Select * from expenseentity WHERE isDataSent = 0 AND isUpdated = 0 ORDER BY date DESC")
     Maybe<List<ExpenseEntity>> getDataToSync();
 
+    @Query("Select * from expenseentity WHERE isDataSent = 0 AND isUpdated = 1 ORDER BY date DESC")
+    Maybe<List<ExpenseEntity>> getUpdatedDataToSync();
 }

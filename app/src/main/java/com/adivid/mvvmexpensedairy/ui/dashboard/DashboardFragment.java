@@ -1,9 +1,11 @@
 package com.adivid.mvvmexpensedairy.ui.dashboard;
 
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -81,7 +83,7 @@ public class DashboardFragment extends Fragment {
         if (!sharedPrefManager.getUserName().isEmpty())
             binding.tvUsername.setText(sharedPrefManager.getUserName());
 
-        Timber.d("username: " + sharedPrefManager.getUserName());
+        Timber.d("username: %s", sharedPrefManager.getUserName());
         adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(adapter);
@@ -113,6 +115,24 @@ public class DashboardFragment extends Fragment {
             }
         });
 
+        viewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
+            switch (integerResource.status) {
+                case SUCCESS:
+                    showProgressBar(false);
+                    if (integerResource.data != null) {
+                        showToast("Deleted Successfully");
+                    }
+                    break;
+                case LOADING:
+                    showProgressBar(true);
+                    break;
+                case ERROR:
+                    showProgressBar(false);
+                    showToast("Some Error Occurred");
+                    break;
+            }
+        });
+
     }
 
     private void setUpOnClickListeners() {
@@ -120,29 +140,22 @@ public class DashboardFragment extends Fragment {
             navController.navigate(R.id.action_dashboardFragment_to_addTransactionFragment);
         });
 
-        binding.ivMenu.setOnClickListener(v -> {
-            ((MainActivity) requireActivity()).openDrawer();
-        });
+        binding.ivMenu.setOnClickListener(v -> ((MainActivity) requireActivity()).openDrawer());
 
-        binding.cardWeekly.setOnClickListener(v -> {
-            navController.navigate(R.id.action_dashboardFragment_to_weekTransactionFragment);
-        });
+        binding.cardWeekly.setOnClickListener(v ->
+                navController.navigate(R.id.action_dashboardFragment_to_weekTransactionFragment));
 
-        binding.cardMonthly.setOnClickListener(v -> {
-            navController.navigate(R.id.action_dashboardFragment_to_monthTransactionFragment);
-        });
+        binding.cardMonthly.setOnClickListener(v ->
+                navController.navigate(R.id.action_dashboardFragment_to_monthTransactionFragment));
 
-        binding.cardYearly.setOnClickListener(v -> {
-            navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment);
-        });
+        binding.cardYearly.setOnClickListener(v ->
+                navController.navigate(R.id.action_dashboardFragment_to_yearTransactionFragment));
 
-        binding.tvSeeAll.setOnClickListener(v -> {
-            navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment);
-        });
+        binding.tvSeeAll.setOnClickListener(v ->
+                navController.navigate(R.id.action_dashboardFragment_to_allTransactionsFragment));
 
-        binding.profileImage.setOnClickListener(v -> {
-            navController.navigate(R.id.action_dashboardFragment_to_signInFragment);
-        });
+        binding.profileImage.setOnClickListener(v ->
+                navController.navigate(R.id.action_dashboardFragment_to_signInFragment));
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
@@ -156,20 +169,47 @@ public class DashboardFragment extends Fragment {
         }
 
         @Override
-        public void onLongItemClick(View view, int position) {
+        public void onItemLongClick(View view, int position) {
+            showAlertDialogToDelete(position);
         }
     };
 
     private void syncOfflineDataToServer() {
-            Constraints constraints = new Constraints.Builder()
-                    .setRequiredNetworkType(NetworkType.CONNECTED)
-                    .build();
-            OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(DataSyncWorker.class)
-                    .setConstraints(constraints)
-                    .addTag(KEY_UNIQUE_WORK)
-                    .build();
-            WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UNIQUE_WORK,
-                    ExistingWorkPolicy.KEEP, request);
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(DataSyncWorker.class)
+                .setConstraints(constraints)
+                .addTag(KEY_UNIQUE_WORK)
+                .build();
+        WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UNIQUE_WORK,
+                ExistingWorkPolicy.KEEP, request);
+    }
+
+    private void showAlertDialogToDelete(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to delete this record?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    deleteRecordFromDb(position);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create().show();
+    }
+
+    private void deleteRecordFromDb(int position) {
+        viewModel.deleteRecordFromDb(expenseEntityList.get(position));
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(boolean b) {
+        if (b) binding.progressBar.setVisibility(View.VISIBLE);
+        else binding.progressBar.setVisibility(View.GONE);
     }
 
     @Override

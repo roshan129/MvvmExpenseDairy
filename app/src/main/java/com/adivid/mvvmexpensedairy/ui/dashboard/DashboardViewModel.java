@@ -5,6 +5,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.utils.Resource;
 
 import java.util.List;
 
@@ -12,6 +13,7 @@ import javax.inject.Inject;
 
 import dagger.hilt.android.lifecycle.HiltViewModel;
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers;
+import io.reactivex.rxjava3.core.Single;
 import io.reactivex.rxjava3.disposables.CompositeDisposable;
 import io.reactivex.rxjava3.schedulers.Schedulers;
 import timber.log.Timber;
@@ -25,6 +27,7 @@ public class DashboardViewModel extends ViewModel {
     public LiveData<List<ExpenseEntity>> recentAllTransactions;
     public LiveData<Double> expenseCount;
     public LiveData<Double> incomeCount;
+    public MutableLiveData<Resource<Integer>> deleteRecord;
 
     public MutableLiveData<List<ExpenseEntity>> allTransactions;
 
@@ -38,6 +41,7 @@ public class DashboardViewModel extends ViewModel {
     private void init() {
         compositeDisposable = new CompositeDisposable();
         allTransactions = new MutableLiveData<>();
+        deleteRecord = new MutableLiveData<>();
         recentAllTransactions = repository.getAllRecentTransactions();
         expenseCount = repository.getExpenseCount();
         incomeCount = repository.getIncomeCount();
@@ -47,24 +51,44 @@ public class DashboardViewModel extends ViewModel {
         if (repository != null) {
             compositeDisposable.add(
                     repository.getAllMainTransactions()
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(expenseEntities -> {
-                        if(!expenseEntities.isEmpty()){
-                            allTransactions.postValue(expenseEntities);
-                        }
-                    }, throwable -> {
-                        Timber.d("exception: %s", throwable.getMessage());
-                    })
+                            .subscribeOn(Schedulers.io())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe(expenseEntities -> {
+                                if (!expenseEntities.isEmpty()) {
+                                    allTransactions.postValue(expenseEntities);
+                                }
+                            }, throwable -> {
+                                Timber.d("exception: %s", throwable.getMessage());
+                            })
             );
-        }else{
+        } else {
             Timber.d("repo is null");
         }
     }
 
+    public void deleteRecordFromDb(ExpenseEntity expenseEntity) {
+        deleteRecord.postValue(Resource.loading(null));
+        compositeDisposable.add(
+                repository.deleteRecordFromDb(expenseEntity)
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(integer -> {
+                            if (integer != 0) {
+                                deleteRecord.postValue(Resource.success(integer));
+                            } else {
+                                deleteRecord.postValue(Resource.error("Some Error Occurred", null));
+                            }
+                        }, throwable -> {
+                            deleteRecord.postValue(Resource.error(throwable.getMessage(), null));
+                            Timber.d("exception: %s", throwable.toString());
+                        })
+
+        );
+    }
+
     @Override
     protected void onCleared() {
-        compositeDisposable.clear();
+        compositeDisposable.clear();    
         super.onCleared();
     }
 

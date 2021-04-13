@@ -42,7 +42,7 @@ public abstract class ExpenseDiaryDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db) {
             super.onCreate(db);
-            Executors.newSingleThreadScheduledExecutor().execute(ExpenseDiaryDatabase::insertData);
+            //Executors.newSingleThreadScheduledExecutor().execute(ExpenseDiaryDatabase::insertData);
 
         }
     };

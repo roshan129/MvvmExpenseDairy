@@ -198,7 +198,7 @@ public class MonthTransactionFragment extends Fragment {
         }
 
         @Override
-        public void onLongItemClick(View view, int position) {
+        public void onItemLongClick(View view, int position) {
 
         }
     };

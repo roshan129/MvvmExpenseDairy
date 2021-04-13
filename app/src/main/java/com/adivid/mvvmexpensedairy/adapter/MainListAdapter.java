@@ -67,7 +67,8 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
 
     }
 
-    public static class MainListViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    public static class MainListViewHolder extends RecyclerView.ViewHolder implements
+            View.OnClickListener, View.OnLongClickListener {
         private final TextView textViewNote, textViewDate, textViewMoney;
         private final ImageView imageView, imageViewPayment;
         private final OnItemClickListener onItemClickListener;
@@ -86,11 +87,18 @@ public class MainListAdapter extends ListAdapter<ExpenseEntity, MainListAdapter.
             view = itemView.findViewById(R.id.view_exp_inc);
 
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
         }
 
         @Override
         public void onClick(View v) {
             onItemClickListener.onItemClick(v, getAdapterPosition());
+        }
+
+        @Override
+        public boolean onLongClick(View v) {
+            onItemClickListener.onItemLongClick(v, getAdapterPosition());
+            return false;
         }
     }
 

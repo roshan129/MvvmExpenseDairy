@@ -3,6 +3,7 @@ package com.adivid.mvvmexpensedairy.ui.auth;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.adivid.mvvmexpensedairy.utils.Resource;
 import com.google.firebase.auth.FirebaseUser;
 
 import javax.inject.Inject;
@@ -21,7 +22,7 @@ public class SignInViewModel extends ViewModel {
 
     private final SignInRepository repository;
     private final CompositeDisposable compositeDisposable;
-    public final MutableLiveData<FirebaseUser> firebaseUser;
+    public final MutableLiveData<Resource<FirebaseUser>> firebaseUser;
 
     @Inject
     public SignInViewModel(SignInRepository repository) {
@@ -32,12 +33,14 @@ public class SignInViewModel extends ViewModel {
 
     public void firebaseAuthWithGoogle(String idToken) {
         Timber.d("inside viewmodel");
+        firebaseUser.postValue(Resource.loading(null));
         compositeDisposable.add(repository.firebaseAuthWithGoogle(idToken)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(firebaseUser1 -> {
-                    firebaseUser.postValue(firebaseUser1);
-                },throwable -> {
+                    firebaseUser.postValue(Resource.success(firebaseUser1));
+                }, throwable -> {
+                    firebaseUser.postValue(Resource.error(throwable.getMessage(), null));
                     Timber.d("firebaseAuthWithGoogle exception: %s", throwable.toString());
                 }));
     }

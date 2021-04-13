@@ -24,7 +24,9 @@ import androidx.work.WorkManager;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentAddTransactionBinding;
+import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.utils.DataSyncWorker;
+import com.adivid.mvvmexpensedairy.utils.UpdateDataSyncWorker;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 import com.google.android.material.timepicker.MaterialTimePicker;
 import com.google.android.material.timepicker.TimeFormat;
@@ -46,6 +48,7 @@ import timber.log.Timber;
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DATE_DISPLAY_FORMAT;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UPDATE_UNIQUE_WORK;
 
 @AndroidEntryPoint
 public class AddTransactionFragment extends Fragment {
@@ -61,6 +64,8 @@ public class AddTransactionFragment extends Fragment {
 
     private ArrayAdapter<String> arrayAdapterCategory;
     private int updateId;
+
+    private ExpenseEntity existingExpenseEntity;
 
     @Inject
     public FirebaseAuth firebaseAuth;
@@ -102,17 +107,17 @@ public class AddTransactionFragment extends Fragment {
     private void getExtras() {
         if (getArguments() != null) {
             Bundle bundle = getArguments();
-            ExpenseEntity expenseEntity = (ExpenseEntity) bundle.getSerializable(EXPENSE_BUNDLE_KEY);
-            if (expenseEntity != null) {
-                setUpData(expenseEntity);
+            existingExpenseEntity = (ExpenseEntity) bundle.getSerializable(EXPENSE_BUNDLE_KEY);
+            if (existingExpenseEntity != null) {
+                setUpData(existingExpenseEntity);
             }
         }
     }
 
     private void setUpData(ExpenseEntity expenseEntity) {
-        if(expenseEntity.getNote().equals("Not Specified")){
+        if (expenseEntity.getNote().equals("Not Specified")) {
             binding.etNote.setText("");
-        }else{
+        } else {
             binding.etNote.setText(expenseEntity.getNote());
         }
         binding.etAmount.setText(expenseEntity.getAmount());
@@ -125,7 +130,7 @@ public class AddTransactionFragment extends Fragment {
         }
         binding.spinnerCategory.setSelection(listCategory.indexOf(
                 expenseEntity.getTransaction_category()));
-        if(expenseEntity.getPayment_type().equals("Card")){
+        if (expenseEntity.getPayment_type().equals("Card")) {
             binding.chipCard.setChecked(true);
         }
         updateId = expenseEntity.getId();
@@ -215,10 +220,14 @@ public class AddTransactionFragment extends Fragment {
                 storingDate, stringTime, stringAmount, stringTransactionType,
                 stringCategoryType, stringNote, stringPaymentType, String.valueOf(System.currentTimeMillis())
         );
-        if(updateId != 0){
+        if (updateId != 0) {
             expenseEntity.setId(updateId);
+            expenseEntity.setDataSent(false);
+            expenseEntity.setUpdated(true);
+            expenseEntity.setDocId(existingExpenseEntity.getDocId());
+            expenseEntity.setFirebaseUid(existingExpenseEntity.getFirebaseUid());
             viewModel.updateTransaction(expenseEntity);
-        }else {
+        } else {
             viewModel.insertTransaction(expenseEntity);
         }
         showOrHideKeyBoard(false);
@@ -231,7 +240,7 @@ public class AddTransactionFragment extends Fragment {
         String time = binding.etTime.getText().toString();
         int hour = Integer.parseInt(time.substring(0, time.indexOf(":")));
         int minute = Integer.parseInt(time.substring(time.indexOf(":") + 1));
-        Timber.d("hour: " +hour + " minute: " + minute);
+        Timber.d("hour: " + hour + " minute: " + minute);
 
         MaterialTimePicker materialTimePicker = new MaterialTimePicker.Builder()
                 .setTimeFormat(TimeFormat.CLOCK_12H)
@@ -282,7 +291,7 @@ public class AddTransactionFragment extends Fragment {
     }
 
     private void syncOfflineDataToServer() {
-        if(firebaseAuth.getCurrentUser() != null) {
+        if (firebaseAuth.getCurrentUser() != null) {
             Constraints constraints = new Constraints.Builder()
                     .setRequiredNetworkType(NetworkType.CONNECTED)
                     .build();
@@ -292,6 +301,13 @@ public class AddTransactionFragment extends Fragment {
                     .build();
             WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UNIQUE_WORK,
                     ExistingWorkPolicy.KEEP, request);
+
+            OneTimeWorkRequest updateRequest = new OneTimeWorkRequest.Builder(UpdateDataSyncWorker.class)
+                    .setConstraints(constraints)
+                    .addTag(KEY_UPDATE_UNIQUE_WORK)
+                    .build();
+            WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UPDATE_UNIQUE_WORK,
+                    ExistingWorkPolicy.KEEP, updateRequest);
         }
     }
 
@@ -305,10 +321,10 @@ public class AddTransactionFragment extends Fragment {
     private void showOrHideKeyBoard(Boolean b) {
         InputMethodManager imm =
                 (InputMethodManager) requireActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-        if(b) {
+        if (b) {
             //imm.showSoftInput(binding.etAmount, InputMethodManager.SHOW_IMPLICIT);
             imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
-        }else{
+        } else {
             imm.hideSoftInputFromWindow(binding.etAmount.getWindowToken(), 0);
             //imm.toggleSoftInput(InputMethodManager.HIDE_NOT_ALWAYS, 0)
         }

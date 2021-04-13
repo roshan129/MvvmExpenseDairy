@@ -132,7 +132,7 @@ public class AllTransactionsFragment extends Fragment implements
         }
 
         @Override
-        public void onLongItemClick(View view, int position) {
+        public void onItemLongClick(View view, int position) {
 
         }
     };

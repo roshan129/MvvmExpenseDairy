@@ -5,6 +5,7 @@
 
     <string name="hello_guest_user">Hello, Guest User</string>
     <string name="sign_in">Sign in</string>
+    <string name="sign_out">Sign Out</string>
     <string name="expense">Expense</string>
     <string name="income">Income</string>
     <string name="note">Note</string>
@@ -31,7 +32,6 @@
     <string name="time">Time</string>
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
-    <string name="sign_out">Sign Out</string>
 
     <integer name="enter_from_right_dur">150</integer>
 

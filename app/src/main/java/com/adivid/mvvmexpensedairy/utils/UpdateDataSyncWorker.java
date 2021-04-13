@@ -30,7 +30,7 @@ import io.reactivex.rxjava3.schedulers.Schedulers;
 import timber.log.Timber;
 
 @HiltWorker
-public class DataSyncWorker extends Worker {
+public class UpdateDataSyncWorker extends Worker {
 
     private final ExpenseDao expenseDao;
     private final CompositeDisposable compositeDisposable;
@@ -39,7 +39,7 @@ public class DataSyncWorker extends Worker {
     private String firebaseUId;
 
     @AssistedInject
-    public DataSyncWorker(@Assisted Context context,
+    public UpdateDataSyncWorker(@Assisted Context context,
                           @Assisted WorkerParameters workerParams,
                           ExpenseDao expenseDao,
                           FirebaseAuth firebaseAuth) {
@@ -66,13 +66,10 @@ public class DataSyncWorker extends Worker {
 
     private void getDataToSyncFromDb() {
         compositeDisposable.add(
-                expenseDao.getDataToSync()
+                expenseDao.getUpdatedDataToSync()
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(expenseEntities -> {
-                                    Timber.d("inside  getDataToSyncFromDb: " + expenseEntities.size());
-                                    setUpDataToSend(expenseEntities);
-                                },
+                        .subscribe(expenseEntities -> setUpDataToSend(expenseEntities),
                                 throwable -> Timber.d("exception: %s", throwable.toString()))
         );
     }
@@ -88,22 +85,21 @@ public class DataSyncWorker extends Worker {
                         },
                         throwable -> Timber.d("exception: %s", throwable.toString()));
         compositeDisposable.add(d);
-
     }
 
     private void sendDataToServer(ExpenseEntity entity) {
         FirebaseExpenseDto fExpense =
                 new FirebaseExpenseMapper().mapToDomainModel(entity);
         fExpense.setFirebaseUId(firebaseUId);
+        String docId = entity.getDocId();
         DocumentReference documentReference =
                 firebaseFirestore.collection("user_data")
-                        .document(firebaseUId).collection("expense data").document();
-        String docId = documentReference.getId();
+                        .document(firebaseUId).collection("expense data")
+                        .document(docId);
         fExpense.setDocId(docId);
         documentReference.set(fExpense).addOnSuccessListener(aVoid -> {
             entity.setDataSent(true);
-            entity.setFirebaseUid(firebaseUId);
-            entity.setDocId(docId);
+            entity.setUpdated(false);
             expenseDao.updateTransaction(entity).subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe();
