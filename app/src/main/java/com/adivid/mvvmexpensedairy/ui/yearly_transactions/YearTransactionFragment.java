@@ -1,10 +1,12 @@
 package com.adivid.mvvmexpensedairy.ui.yearly_transactions;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -19,6 +21,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentYearTransactionBinding;
+import com.adivid.mvvmexpensedairy.ui.others.CommonViewModel;
 import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
@@ -40,12 +43,14 @@ public class YearTransactionFragment extends Fragment {
 
     private FragmentYearTransactionBinding binding;
     private YearTransactionViewModel viewModel;
+    private CommonViewModel commonViewModel;
     private MainListAdapter adapter;
     private NavController navController;
     private List<ExpenseEntity> expenseEntityList;
 
     private Calendar c;
     private SimpleDateFormat df;
+    private Date firstDay, lastDay;
 
     public YearTransactionFragment() {
         super(R.layout.fragment_year_transaction);
@@ -67,6 +72,7 @@ public class YearTransactionFragment extends Fragment {
         setUpRecyclerView();
         String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
         viewModel = new ViewModelProvider(this).get(YearTransactionViewModel.class);
+        commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         expenseEntityList = new ArrayList<>();
     }
 
@@ -94,16 +100,20 @@ public class YearTransactionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 resetTextViews();
-                Date firstDay = getFirstDayOfYear(s.toString());
-                Date lastDay = getLastDayOfYear(s.toString());
+                firstDay = getFirstDayOfYear(s.toString());
+                lastDay = getLastDayOfYear(s.toString());
                 viewModel.getYearlyRecords(firstDay, lastDay);
-                viewModel.getYearlyExpenseIncome(firstDay, lastDay);
+                getExpenseIncomeCount();
             }
         });
 
         binding.tvDate.setText(df.format(c.getTime()));
 
         binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
+    }
+
+    private void getExpenseIncomeCount() {
+        viewModel.getYearlyExpenseIncome(firstDay, lastDay);
     }
 
     private void observers() {
@@ -120,6 +130,26 @@ public class YearTransactionFragment extends Fragment {
         viewModel.yearlyIncome.observe(getViewLifecycleOwner(), s -> {
             String inc = getString(R.string.rupee) + s;
             binding.tvMoneyIncome.setText(inc);
+        });
+
+        commonViewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
+            switch (integerResource.status) {
+                case SUCCESS:
+                    showProgressBar(false);
+                    if (integerResource.data != null) {
+                        getExpenseIncomeCount();
+                        showToast("Deleted Successfully");
+                        commonViewModel.resetDeleteObserver();
+                    }
+                    break;
+                case LOADING:
+                    showProgressBar(true);
+                    break;
+                case ERROR:
+                    showProgressBar(false);
+                    showToast("Some Error Occurred");
+                    break;
+            }
         });
     }
 
@@ -196,13 +226,45 @@ public class YearTransactionFragment extends Fragment {
 
         @Override
         public void onItemLongClick(View view, int position) {
-
+            showAlertDialogToDelete(position);
         }
     };
+
+    private void showAlertDialogToDelete(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to delete this record?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    deleteRecordFromDb(position);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create().show();
+    }
+
+    private void deleteRecordFromDb(int position) {
+        commonViewModel.deleteRecordFromDb(expenseEntityList.get(position));
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(boolean b) {
+        if (b) binding.progressBar.setVisibility(View.VISIBLE);
+        else binding.progressBar.setVisibility(View.GONE);
+    }
 
     private void resetTextViews() {
         binding.tvMoneySpent.setText(getString(R.string._000_0));
         binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        super.onDestroyView();
     }
 
 }

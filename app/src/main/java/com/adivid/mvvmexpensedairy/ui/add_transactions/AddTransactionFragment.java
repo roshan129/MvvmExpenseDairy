@@ -57,7 +57,6 @@ public class AddTransactionFragment extends Fragment {
 
     private String stringDate, stringTime, stringAmount, stringTransactionType,
             stringCategoryType, stringNote, stringPaymentType;
-    private Date storingDate;
     private int mDay, mMonth, mYear;
     private List<String> listCategory;
     private AddTransactionViewModel viewModel;
@@ -65,10 +64,12 @@ public class AddTransactionFragment extends Fragment {
     private ArrayAdapter<String> arrayAdapterCategory;
     private int updateId;
 
-    private ExpenseEntity existingExpenseEntity;
+    public Date storingDate;
 
     @Inject
     public FirebaseAuth firebaseAuth;
+
+    private ExpenseEntity existingExpenseEntity;
 
     public AddTransactionFragment() {
         super(R.layout.fragment_add_transaction);

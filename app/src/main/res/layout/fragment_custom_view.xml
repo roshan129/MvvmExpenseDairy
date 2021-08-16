@@ -15,28 +15,28 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginStart="12dp"
-            android:background="@color/bg_color"
+
             android:padding="8dp"
             android:src="@drawable/ic_back"
-            android:tint="@color/black" />
+            app:tint="@color/text_color" />
 
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:fontFamily="@font/roboto_regular"
+            android:fontFamily="@font/quicksand_medium"
             android:text="@string/custom_view"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="22sp" />
 
-        <ImageButton
+        <ImageView
             android:id="@+id/iv_filter"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -44,10 +44,10 @@
             android:layout_centerVertical="true"
             android:layout_marginStart="12dp"
             android:layout_marginEnd="12dp"
-            android:background="@color/bg_color"
+
             android:padding="8dp"
             android:src="@drawable/ic_list_filter_icon"
-            android:tint="@color/black" />
+            app:tint="@color/text_color" />
 
     </RelativeLayout>
 
@@ -56,7 +56,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:background="@color/blue_smoke"
+        android:background="@color/filter_list_bg_color"
 
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:backgroundTint="@color/chip_bg_color"
-                android:fontFamily="@font/roboto_regular"
+                android:fontFamily="@font/quicksand_medium"
                 android:text="Month/Year"
                 android:textColor="@color/chip_text_color" />
 
@@ -82,6 +82,7 @@
                 android:id="@+id/chipCategoryType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_medium"
                 android:backgroundTint="@color/chip_bg_color"
                 android:text="All Categories"
                 android:textColor="@color/chip_text_color" />
@@ -90,6 +91,7 @@
                 android:id="@+id/chipPaymentMode"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_medium"
                 android:backgroundTint="@color/chip_bg_color"
                 android:text="All Payment Modes"
                 android:textColor="@color/chip_text_color" />
@@ -123,7 +125,7 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@drawable/layout_border"
+                android:background="@drawable/layout_border_expense"
                 android:padding="12dp">
 
                 <ImageView
@@ -141,9 +143,9 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="12dp"
 
-                    android:fontFamily="@font/roboto_medium"
+                    android:fontFamily="@font/quicksand_medium"
                     android:text="@string/expense"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -156,8 +158,8 @@
                     android:layout_marginStart="12dp"
                     android:layout_toEndOf="@+id/iv_spending_icon"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="₹ 120.00"
-                    android:textColor="@color/black"
+                    android:text="₹ 0"
+                    android:textColor="@color/text_color"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -198,9 +200,9 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="12dp"
-                    android:fontFamily="@font/roboto_medium"
+                    android:fontFamily="@font/quicksand_medium"
                     android:text="@string/income"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
@@ -213,8 +215,8 @@
                     android:layout_marginStart="12dp"
                     android:layout_toEndOf="@+id/iv_income_icon"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="₹ 100.0"
-                    android:textColor="@color/black"
+                    android:text="₹ 0"
+                    android:textColor="@color/text_color"
                     android:textSize="12sp"
                     android:textStyle="bold" />
 
@@ -234,5 +236,16 @@
         app:layout_constraintTop_toBottomOf="@+id/rl_date"
 
         />
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@+id/recyclerView"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:visibility="gone"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

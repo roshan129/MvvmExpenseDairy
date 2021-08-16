@@ -34,10 +34,10 @@
                     android:layout_centerInParent="true"
                     android:fontFamily="@font/roboto_regular"
                     android:text="@string/add_filter"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="22sp" />
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/iv_close"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -45,10 +45,9 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="12dp"
                     android:layout_marginEnd="12dp"
-                    android:background="@color/bg_color"
                     android:padding="8dp"
                     android:src="@drawable/ic_close"
-                    android:tint="@color/black" />
+                    app:tint="@color/text_color" />
 
             </RelativeLayout>
 
@@ -132,7 +131,7 @@
                 android:fontFamily="@font/roboto_regular"
 
                 android:text="@string/categories"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spinnerDateRange" />
 
@@ -165,7 +164,7 @@
                 android:layout_marginTop="24dp"
                 android:fontFamily="@font/roboto_regular"
                 android:text="@string/payment_type"
-                android:textColor="@color/black"
+                android:textColor="@color/text_color"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/chip_group_categories" />
 

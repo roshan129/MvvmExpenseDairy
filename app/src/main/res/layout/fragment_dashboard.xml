@@ -25,17 +25,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/iv_menu"
-                    android:layout_width="24dp"
-                    android:layout_height="24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="18dp"
                     android:layout_marginTop="24dp"
-                    android:background="@color/bg_color"
+                    android:contentDescription="@string/menu"
                     android:padding="8dp"
                     android:src="@drawable/ic_menu"
-                    android:tint="@color/text_color" />
+                    app:tint="@color/text_color" />
 
                 <TextView
                     android:id="@+id/tv_username"
@@ -44,6 +44,7 @@
                     android:layout_centerVertical="true"
                     android:layout_marginStart="18dp"
                     android:layout_toEndOf="@id/iv_menu"
+                    android:fontFamily="@font/quicksand_semibold"
                     android:text="Hello, Guest User"
                     android:textColor="@color/text_color"
                     android:textSize="16sp" />
@@ -66,7 +67,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
-                android:layout_marginTop="12dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/quicksand_semibold"
                 android:text="Overview Report"
                 android:textColor="@color/text_color"
                 android:textStyle="bold"
@@ -95,6 +97,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
                     android:padding="12dp"
                     android:text="Weekly"
                     android:textColor="@color/text_color"
@@ -124,6 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
                     android:padding="12dp"
                     android:text="@string/monthly"
                     android:textColor="@color/text_color"
@@ -153,6 +157,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
+                    android:fontFamily="@font/roboto_regular"
                     android:padding="12dp"
                     android:text="@string/yearly"
                     android:textColor="@color/text_color"
@@ -166,6 +171,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="22dp"
+                android:fontFamily="@font/quicksand_semibold"
                 android:text="This Month"
                 android:textColor="@color/text_color"
                 android:textStyle="bold"
@@ -176,121 +182,195 @@
                 android:id="@+id/linear_this_month"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
                 android:layout_marginTop="12dp"
-                android:layout_marginEnd="12dp"
-                android:clipChildren="false"
-                android:clipToPadding="false"
-                android:paddingTop="12dp"
-                android:paddingBottom="12dp"
-                android:weightSum="2"
+                android:orientation="vertical"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/tv_this_month">
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_expense"
+                <com.google.android.material.card.MaterialCardView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="4dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="08dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ripple_effect"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="6dp"
-
-
-                    >
+                    android:layout_gravity="center"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginEnd="24dp"
+                    android:layout_marginBottom="8dp"
+                    app:cardCornerRadius="16dp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/main_layout_border_exp"
-                        android:padding="8dp">
+                        android:background="@color/light_blue_primary"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp">
+
+                        <ImageView
+                            android:id="@+id/iv_balance"
+                            android:layout_width="28dp"
+                            android:layout_height="28dp"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="18dp"
+                            android:src="@drawable/rupee"
+
+                            />
 
                         <TextView
-                            android:id="@+id/tv_expense"
+                            android:id="@+id/tv_balance"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:paddingStart="12dp"
-                            android:paddingTop="8dp"
-                            android:paddingEnd="12dp"
-                            android:text="Expense"
-                            android:textColor="@color/text_color"
-                            android:textSize="22sp" />
+                            android:layout_centerInParent="true"
+                            android:layout_marginStart="18dp"
+                            android:layout_marginEnd="24dp"
+                            android:layout_toEndOf="@+id/iv_balance"
+                            android:fontFamily="@font/quicksand_regular"
+                            android:paddingBottom="2dp"
+                            android:text="Balance"
+                            android:textColor="@color/white"
+                            android:textSize="22sp"
+                            android:textStyle="bold" />
 
                         <TextView
-                            android:id="@+id/tv_exp_money"
+                            android:id="@+id/tv_balance_money"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_expense"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="8dp"
+                            android:layout_alignParentEnd="true"
+                            android:layout_centerVertical="true"
+                            android:layout_marginEnd="24dp"
+                            android:fontFamily="@font/roboto_medium"
                             android:text="₹ 10,000"
-                            android:textColor="@color/text_expense_color"
+                            android:textColor="@color/white"
+                            android:textSize="18sp"
 
                             />
 
                     </RelativeLayout>
 
-                </androidx.cardview.widget.CardView>
 
-                <androidx.cardview.widget.CardView
-                    android:id="@+id/card_income"
+                </com.google.android.material.card.MaterialCardView>
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="0dp"
-                    android:layout_marginEnd="4dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/ripple_effect"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:foreground="?android:attr/selectableItemBackground"
-                    app:cardCornerRadius="25dp"
-                    app:cardElevation="4dp">
+                    android:layout_marginStart="12dp"
 
-                    <RelativeLayout
+                    android:layout_marginEnd="12dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:paddingTop="12dp"
+                    android:paddingBottom="12dp"
+                    android:weightSum="2">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_expense"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/main_layout_border_inc"
-                        android:padding="8dp"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="08dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ripple_effect"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="6dp"
+
 
                         >
 
-                        <TextView
-                            android:id="@+id/tv_income"
-                            android:layout_width="wrap_content"
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_centerHorizontal="true"
-                            android:paddingStart="12dp"
-                            android:paddingTop="8dp"
-                            android:paddingEnd="12dp"
-                            android:text="Income"
-                            android:textColor="@color/text_color"
-                            android:textSize="22sp" />
+                            android:background="@drawable/main_layout_border_exp"
+                            android:padding="8dp">
 
-                        <TextView
-                            android:id="@+id/tv_income_money"
-                            android:layout_width="wrap_content"
+                            <TextView
+                                android:id="@+id/tv_expense"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:fontFamily="@font/quicksand_semibold"
+                                android:paddingStart="12dp"
+                                android:paddingTop="8dp"
+                                android:paddingEnd="12dp"
+                                android:text="Expense"
+                                android:textColor="@color/text_color"
+                                android:textSize="22sp" />
+
+                            <TextView
+                                android:id="@+id/tv_exp_money"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tv_expense"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="8dp"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="₹ 0"
+                                android:textColor="@color/text_expense_color"
+
+                                />
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/card_income"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="0dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/ripple_effect"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        app:cardCornerRadius="25dp"
+                        app:cardElevation="4dp">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_below="@+id/tv_income"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginTop="4dp"
-                            android:layout_marginBottom="8dp"
-                            android:text="₹ 20,000"
-                            android:textColor="@color/text_income_color"
+                            android:background="@drawable/main_layout_border_inc"
+                            android:padding="8dp"
 
-                            />
+                            >
 
-                    </RelativeLayout>
+                            <TextView
+                                android:id="@+id/tv_income"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerHorizontal="true"
+                                android:fontFamily="@font/quicksand_semibold"
+                                android:paddingStart="12dp"
+                                android:paddingTop="8dp"
+                                android:paddingEnd="12dp"
+                                android:text="Income"
+                                android:textColor="@color/text_color"
+                                android:textSize="22sp" />
 
-                </androidx.cardview.widget.CardView>
+                            <TextView
+                                android:id="@+id/tv_income_money"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_below="@+id/tv_income"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginTop="4dp"
+                                android:layout_marginBottom="8dp"
+                                android:fontFamily="@font/roboto_medium"
+                                android:text="₹ 0"
+                                android:textColor="@color/text_income_color"
+
+                                />
+
+                        </RelativeLayout>
+
+                    </com.google.android.material.card.MaterialCardView>
+
+                </LinearLayout>
+
 
             </LinearLayout>
 
@@ -301,6 +381,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="16dp"
+                android:fontFamily="@font/quicksand_semibold"
                 android:text="Latest Transactions"
                 android:textColor="@color/text_color"
                 android:textStyle="bold"
@@ -325,6 +406,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="24dp"
+                android:fontFamily="@font/quicksand_semibold"
                 android:text="See all >"
                 android:textColor="@color/light_blue_primary"
 

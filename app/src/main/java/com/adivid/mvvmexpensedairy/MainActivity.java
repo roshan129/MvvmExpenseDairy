@@ -1,37 +1,25 @@
 package com.adivid.mvvmexpensedairy;
 
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
-import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-import androidx.navigation.NavDestination;
 import androidx.navigation.fragment.NavHostFragment;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseDao;
-import com.adivid.mvvmexpensedairy.data.db.ExpenseDiaryDatabase;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.ActivityMainBinding;
-import com.adivid.mvvmexpensedairy.model.Menu;
-import com.google.android.material.navigation.NavigationView;
-import com.google.android.material.snackbar.Snackbar;
+import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.Executors;
 
 import javax.inject.Inject;
@@ -46,13 +34,21 @@ public class MainActivity extends AppCompatActivity {
     private NavController navController;
     private AppBarConfiguration appBarConfiguration;
 
+    private View headerView;
+    private TextView textViewMenuHeaderText;
+    private Button buttonMenuHeaderButton;
+
     @Inject
     public ExpenseDao expenseDao;
+
+    @Inject
+    public SharedPrefManager sharedPrefManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTheme(R.style.Theme_MvvmExpenseDairy);
+        setUpUiMode();
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -80,6 +76,10 @@ public class MainActivity extends AppCompatActivity {
                 setOpenableLayout(binding.drawerlayout).build();
         NavigationUI.setupWithNavController(binding.navigationView, navController);
 
+        headerView = binding.navigationView.getHeaderView(0);
+        textViewMenuHeaderText = headerView.findViewById(R.id.textViewDrawerLayout);
+        buttonMenuHeaderButton = headerView.findViewById(R.id.buttonDrawerLayout);
+
         //setUpMenuList();
     }
 
@@ -89,14 +89,29 @@ public class MainActivity extends AppCompatActivity {
         });
         binding.navigationView.setNavigationItemSelectedListener(item -> {
             Timber.d("clicked");
-            if(item.getItemId() == R.id.item_about){
+            if (item.getItemId() == R.id.item_about) {
                 showAboutAlertDialog();
             }
-            NavigationUI.onNavDestinationSelected(item,navController);
+            NavigationUI.onNavDestinationSelected(item, navController);
             closeDrawer();
             return true;
         });
 
+        buttonMenuHeaderButton.setOnClickListener(v -> {
+            closeDrawer();
+            navController.navigate(R.id.action_dashboardFragment_to_signInFragment);
+        });
+    }
+
+    public void setUpDrawerLayoutHeaders() {
+        String email = sharedPrefManager.getEmail();
+        if (email != null && !email.isEmpty()) {
+                textViewMenuHeaderText.setText(email);
+                buttonMenuHeaderButton.setText("Sign Out");
+        }else{
+            textViewMenuHeaderText.setText("Hello, Guest User");
+            buttonMenuHeaderButton.setText("Sign In");
+        }
     }
 
     private void showAboutAlertDialog() {
@@ -104,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
         builder.setTitle("Xpense Dairy")
                 .setMessage("Version: 1.0\nVersion Code: 1")
                 .setPositiveButton("Ok", (dialog, which) -> {
-                   dialog.dismiss();
+                    dialog.dismiss();
                 });
         builder.show();
     }
@@ -119,6 +134,14 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void setUpUiMode() {
+        if (sharedPrefManager.isNightModeOn()) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
@@ -126,7 +149,11 @@ public class MainActivity extends AppCompatActivity {
             binding.drawerlayout.closeDrawer(GravityCompat.START);
         }
 
+    }
 
-
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setUpDrawerLayoutHeaders();
     }
 }

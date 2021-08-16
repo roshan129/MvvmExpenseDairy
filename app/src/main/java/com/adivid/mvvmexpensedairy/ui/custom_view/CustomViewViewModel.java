@@ -38,9 +38,10 @@ public class CustomViewViewModel extends ViewModel {
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(expenseEntities -> {
                             Timber.d("in subscribe");
-                            if (!expenseEntities.isEmpty()) {
+                            /*if (!expenseEntities.isEmpty()) {
                                 customTransactions.postValue(expenseEntities);
-                            }
+                            }*/
+                            customTransactions.postValue(expenseEntities);
                         }, throwable -> {
                             Timber.d("getCustomList exception: %s", throwable.toString());
                         })

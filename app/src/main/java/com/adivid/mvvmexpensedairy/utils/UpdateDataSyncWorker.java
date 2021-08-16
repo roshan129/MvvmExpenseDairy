@@ -92,19 +92,23 @@ public class UpdateDataSyncWorker extends Worker {
                 new FirebaseExpenseMapper().mapToDomainModel(entity);
         fExpense.setFirebaseUId(firebaseUId);
         String docId = entity.getDocId();
-        DocumentReference documentReference =
-                firebaseFirestore.collection("user_data")
-                        .document(firebaseUId).collection("expense data")
-                        .document(docId);
-        fExpense.setDocId(docId);
-        documentReference.set(fExpense).addOnSuccessListener(aVoid -> {
-            entity.setDataSent(true);
-            entity.setUpdated(false);
-            expenseDao.updateTransaction(entity).subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe();
-        }).addOnFailureListener(e ->
-                Timber.d("sendDataToServer exception: %s", e.toString()));
+
+        if(docId != null && !docId.isEmpty()){
+            DocumentReference documentReference =
+                    firebaseFirestore.collection("user_data")
+                            .document(firebaseUId).collection("expense_data")
+                            .document(docId);
+            fExpense.setDocId(docId);
+            documentReference.set(fExpense).addOnSuccessListener(aVoid -> {
+                entity.setDataSent(true);
+                entity.setUpdated(false);
+                expenseDao.updateTransaction(entity).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe();
+            }).addOnFailureListener(e ->
+                    Timber.d("sendDataToServer exception: %s", e.toString()));
+        }
+
     }
 
     @Override

@@ -19,7 +19,6 @@ import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.FilterCallback;
 import com.adivid.mvvmexpensedairy.databinding.FragmentFilterBottomSheetBinding;
 import com.adivid.mvvmexpensedairy.utils.Utils;
-import com.github.dewinjm.monthyearpicker.MonthYearPickerDialogFragment;
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment;
 import com.google.android.material.chip.Chip;
 
@@ -52,7 +51,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     private String selectedDateRange;
     private FilterCallback filterCallback;
 
-    private MonthYearPickerDialogFragment dialogFragment;
+    //private MonthYearPickerDialogFragment dialogFragment;
 
     public FilterBottomSheetFragment() {
     }
@@ -82,9 +81,9 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void init() {
         listFilterDate = Arrays.asList(getResources().getStringArray(R.array.filter_arr));
-        dialogFragment = MonthYearPickerDialogFragment
+ /*       dialogFragment = MonthYearPickerDialogFragment
                 .getInstance(Calendar.getInstance().get(Calendar.MONTH),
-                        Calendar.getInstance().get(Calendar.YEAR));
+                        Calendar.getInstance().get(Calendar.YEAR));*/
 
         Bundle bundle = getArguments();
         if (bundle != null) {
@@ -106,8 +105,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
                 List<String> arrMonth = Arrays.asList(getResources().getStringArray(R.array.month));
                 int monthIndex = arrMonth.indexOf(bundleMonth);
                 binding.etMonthYear.setText(selectedDateRange);
-                dialogFragment = MonthYearPickerDialogFragment
-                        .getInstance(monthIndex, Integer.parseInt(bundleYear));
+
             }
         }
     }
@@ -118,18 +116,19 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         String currentDate = df.format(c.getTime());
         Timber.d("filter current date: %s", currentDate);
 
+        String strFromDate = "", strToDate = "";
         if (selectedDateRange.contains(">")) {
             int separatorIndex = selectedDateRange.lastIndexOf(">");
-            String fromDate = selectedDateRange.substring(0, separatorIndex - 1);
-            String toDate = selectedDateRange.substring(separatorIndex + 2);
-            Timber.d("fromdte: /" + fromDate + "/");
-            Timber.d("toDate: /" + toDate + "/");
+            strFromDate = selectedDateRange.substring(0, separatorIndex - 1);
+            strToDate = selectedDateRange.substring(separatorIndex + 2);
+            Timber.d("fromdte: /" + strFromDate + "/");
+            Timber.d("toDate: /" + strToDate + "/");
         } else {
             Timber.d("doesnt contain");
         }
 
-        Date fromDate = Utils.getFirstDayOfMonth(currentDate);
-        Date toDate = Utils.getLastDayOfMonth(fromDate);
+        Date fromDate = Utils.convertToStoringDate(strFromDate, "23:59");
+        Date toDate = Utils.convertToStoringDate(strToDate, "23:59");
 
         binding.etFromDate.setText(Utils.convertToDisplayDate(fromDate));
         binding.etToDate.setText(Utils.convertToDisplayDate(toDate));
@@ -181,16 +180,16 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         binding.etToDate.setOnClickListener(v -> showDatePickerTo());
 
         binding.etMonthYear.setOnClickListener(v -> {
-            dialogFragment.show(requireActivity().getSupportFragmentManager(), null);
+            /*dialogFragment.show(requireActivity().getSupportFragmentManager(), null);*/
 
         });
 
-        dialogFragment.setOnDateSetListener((year, monthOfYear) -> {
+/*        dialogFragment.setOnDateSetListener((year, monthOfYear) -> {
             String[] monthArray = getResources().getStringArray(R.array.month);
             stringSelectedMonth = monthArray[monthOfYear];
             stringSelectedYear = String.valueOf(year);
             binding.etMonthYear.setText(stringSelectedMonth +", "+ stringSelectedYear);
-        });
+        });*/
     }
 
     private void addChipsToChipGroup() {

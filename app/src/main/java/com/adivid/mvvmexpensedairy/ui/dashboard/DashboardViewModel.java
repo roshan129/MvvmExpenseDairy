@@ -1,10 +1,19 @@
 package com.adivid.mvvmexpensedairy.ui.dashboard;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DELETE_UNIQUE_WORK;
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.utils.DataSyncWorker;
 import com.adivid.mvvmexpensedairy.utils.Resource;
 
 import java.util.List;
@@ -28,6 +37,7 @@ public class DashboardViewModel extends ViewModel {
     public LiveData<Double> expenseCount;
     public LiveData<Double> incomeCount;
     public MutableLiveData<Resource<Integer>> deleteRecord;
+    public MutableLiveData<Boolean> checkForOfflineData;
 
     public MutableLiveData<List<ExpenseEntity>> allTransactions;
 
@@ -83,6 +93,12 @@ public class DashboardViewModel extends ViewModel {
                             Timber.d("exception: %s", throwable.toString());
                         })
         );
+    }
+
+
+
+    public void resetDeleteObserver(){
+        deleteRecord = new MutableLiveData<>();
     }
 
     @Override

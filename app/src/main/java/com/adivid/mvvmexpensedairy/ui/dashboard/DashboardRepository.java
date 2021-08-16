@@ -10,11 +10,12 @@ import java.util.List;
 import javax.inject.Inject;
 
 import io.reactivex.rxjava3.core.Flowable;
+import io.reactivex.rxjava3.core.Maybe;
 import io.reactivex.rxjava3.core.Single;
 
 public class DashboardRepository {
 
-    private ExpenseDao expenseDao;
+    private final ExpenseDao expenseDao;
 
     @Inject
     public DashboardRepository(ExpenseDao expenseDao) {
@@ -37,8 +38,13 @@ public class DashboardRepository {
         return expenseDao.getIncomeCount();
     }
 
+    public Maybe<List<ExpenseEntity>> checkOfflineRecords() {
+        return expenseDao.getDataToSync();
+    }
+
     public Single<Integer> deleteRecordFromDb(ExpenseEntity expenseEntity) {
-        return expenseDao.deleteTransaction(expenseEntity);
+        int id = expenseEntity.getId();
+        return expenseDao.deleteTransaction(id);
     }
 
 

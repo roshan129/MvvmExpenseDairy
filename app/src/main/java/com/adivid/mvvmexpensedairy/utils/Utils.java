@@ -1,6 +1,16 @@
 package com.adivid.mvvmexpensedairy.utils;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DELETE_UNIQUE_WORK;
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
+
+import android.content.Context;
 import android.util.Log;
+
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import java.text.DecimalFormat;
 import java.text.ParseException;
@@ -82,6 +92,18 @@ public class Utils {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("MMMM, yyyy", Locale.getDefault());
         return df.format(c.getTime());
+    }
+
+    public static void syncDeletedRecords(Context context) {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(DeleteDataWorker.class)
+                .setConstraints(constraints)
+                .addTag(KEY_DELETE_UNIQUE_WORK)
+                .build();
+        WorkManager.getInstance(context).enqueueUniqueWork(KEY_UNIQUE_WORK,
+                ExistingWorkPolicy.KEEP, request);
     }
 
 }

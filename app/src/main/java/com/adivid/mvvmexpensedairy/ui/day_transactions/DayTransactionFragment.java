@@ -1,14 +1,17 @@
 package com.adivid.mvvmexpensedairy.ui.day_transactions;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -19,7 +22,9 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDayTransactionsBinding;
+import com.adivid.mvvmexpensedairy.ui.others.CommonViewModel;
 import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
+import com.adivid.mvvmexpensedairy.utils.Resource;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.text.SimpleDateFormat;
@@ -37,6 +42,7 @@ import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
 public class DayTransactionFragment extends Fragment {
 
     private FragmentDayTransactionsBinding binding;
+    private CommonViewModel commonViewModel;
     private DayTransactionViewModel viewModel;
     private MainListAdapter adapter;
     private List<ExpenseEntity> expenseEntityList;
@@ -44,6 +50,7 @@ public class DayTransactionFragment extends Fragment {
 
     private Calendar c;
     private SimpleDateFormat df;
+    private String selectedDate;
 
     public DayTransactionFragment() {
         super(R.layout.fragment_day_transactions);
@@ -64,6 +71,7 @@ public class DayTransactionFragment extends Fragment {
         setUpRecyclerView();
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(DayTransactionViewModel.class);
+        commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         expenseEntityList = new ArrayList<>();
         String today = Utils.getDisplayDate();
         binding.tvDate.setText(today);
@@ -96,9 +104,9 @@ public class DayTransactionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 resetTextViews();
-                viewModel.getDayWiseRecords(s.toString());
-                viewModel.getTotalDayExpenseIncome(s.toString());
-                Timber.d("afterTextChanged" + s.toString());
+                selectedDate = s.toString();
+                viewModel.getDayWiseRecords(selectedDate);
+                getExpenseIncomeCount();
             }
         });
 
@@ -106,6 +114,10 @@ public class DayTransactionFragment extends Fragment {
             requireActivity().onBackPressed();
         });
 
+    }
+
+    private void getExpenseIncomeCount() {
+        viewModel.getTotalDayExpenseIncome(selectedDate);
     }
 
     private void previousClicked() {
@@ -160,6 +172,25 @@ public class DayTransactionFragment extends Fragment {
             String inc = getString(R.string.rupee) + s;
             binding.tvMoneyIncome.setText(inc);
         });
+
+        commonViewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
+            switch (integerResource.status) {
+                case SUCCESS:
+                    showProgressBar(false);
+                    if (integerResource.data != null) {
+                        showToast("Deleted Successfully");
+                        commonViewModel.resetDeleteObserver();
+                    }
+                    break;
+                case LOADING:
+                    showProgressBar(true);
+                    break;
+                case ERROR:
+                    showProgressBar(false);
+                    showToast("Some Error Occurred");
+                    break;
+            }
+        });
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
@@ -169,18 +200,50 @@ public class DayTransactionFragment extends Fragment {
             Bundle bundle = new Bundle();
             bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
             navController.navigate(
-                    R.id.action_dashboardFragment_to_addTransactionFragment, bundle);
+                    R.id.action_dayTransactionsFragment_to_addTransactionFragment, bundle);
         }
 
         @Override
         public void onItemLongClick(View view, int position) {
-
+            showAlertDialogToDelete(position);
         }
     };
+
+    private void showAlertDialogToDelete(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to delete this record?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    deleteRecordFromDb(position);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create().show();
+    }
+
+    private void deleteRecordFromDb(int position) {
+        commonViewModel.deleteRecordFromDb(expenseEntityList.get(position));
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(boolean b) {
+        if (b) binding.progressBar.setVisibility(View.VISIBLE);
+        else binding.progressBar.setVisibility(View.GONE);
+    }
 
     private void resetTextViews() {
         binding.tvMoneySpent.setText(getString(R.string._000_0));
         binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        super.onDestroyView();
     }
 
 }

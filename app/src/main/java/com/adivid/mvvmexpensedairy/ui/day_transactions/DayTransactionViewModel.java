@@ -7,6 +7,7 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
+import com.adivid.mvvmexpensedairy.utils.Resource;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
 import java.util.Date;
@@ -83,9 +84,7 @@ public class DayTransactionViewModel extends ViewModel {
         );
     }
 
-    public void getTotalDayIncome(String today) {
 
-    }
 
     @Override
     protected void onCleared() {

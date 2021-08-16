@@ -33,4 +33,11 @@
         <item name="cornerSizeBottomLeft">0dp</item>
         <item name="android:layout_margin">16dp</item>
     </style>
+
+    //splash screen
+    <style name="splashScreenTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@drawable/splash_sceen</item>
+    </style>
+
+
 </resources>

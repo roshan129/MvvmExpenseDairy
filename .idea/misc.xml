@@ -1,6 +1,40 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_8" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/bg_chip_state_list.xml" value="0.14537037037037037" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ic_download.xml" value="0.21302083333333333" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ic_menu.xml" value="0.21302083333333333" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ic_menu_2.xml" value="0.21302083333333333" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ic_n_2.xml" value="0.19166666666666668" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ic_x.xml" value="0.19166666666666668" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ic_x_2.xml" value="0.1787037037037037" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/layout_border.xml" value="0.1" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/layout_border_income.xml" value="0.12777777777777777" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/main_layout_border_exp.xml" value="0.21302083333333333" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/main_layout_border_inc.xml" value="0.21302083333333333" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/ripple_effect.xml" value="0.21302083333333333" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/drawable/splash_sceen.xml" value="0.19166666666666668" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/activity_main.xml" value="0.1" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_add_transaction.xml" value="0.17" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_custom_view.xml" value="0.16" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_dashboard.xml" value="0.25" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_day_transactions.xml" value="0.21" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_filter_bottom_sheet.xml" value="0.1" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_month_transaction.xml" value="0.18" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_settings.xml" value="0.16757246376811594" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_sign_in.xml" value="0.18" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_week_transactions.xml" value="0.2" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/fragment_year_transaction.xml" value="0.18" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/main_item_list_one.xml" value="0.196875" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/main_item_list_two.xml" value="0.22" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/layout/nav_header_main.xml" value="0.16485507246376813" />
+        <entry key="..\:/Projects_Android/AndroidStudioProjects2/MvvmExpenseDairy/app/src/main/res/menu/app_menu.xml" value="0.1574074074074074" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
   <component name="ProjectType">

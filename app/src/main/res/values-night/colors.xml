@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="text_color">@color/white</color>
+    <color name="card_bg_color">@color/dark_gray</color>
+    <color name="small_card_bg_color">@color/color_on_dark_gray</color>
+    <color name="filter_list_bg_color">@color/dark_gray</color>
+    <color name="drawer_layout_header_bg">@color/color_on_dark_gray_2</color>
+    <color name="add_transac_chip_color">@color/color_on_dark_gray_2</color>
+
+    <color name="splash_screen_bg">@color/black</color>
+
+</resources>

@@ -1,11 +1,13 @@
 package com.adivid.mvvmexpensedairy.ui.month_transactions;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -23,6 +25,7 @@ import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentMonthTransactionBinding;
 import com.adivid.mvvmexpensedairy.domain.Expense;
 import com.adivid.mvvmexpensedairy.domain.mapper.ExpenseEntityMapper;
+import com.adivid.mvvmexpensedairy.ui.others.CommonViewModel;
 import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
@@ -46,12 +49,15 @@ public class MonthTransactionFragment extends Fragment {
 
     private FragmentMonthTransactionBinding binding;
     private MonthTransactionViewModel viewModel;
+    private CommonViewModel commonViewModel;
     private MainListAdapter adapter;
     private NavController navController;
     private List<ExpenseEntity> expenseEntityList;
 
     private Calendar c;
     private SimpleDateFormat df;
+    private Date firstDay, lastDay;
+
 
     public MonthTransactionFragment() {
         super(R.layout.fragment_month_transaction);
@@ -88,6 +94,7 @@ public class MonthTransactionFragment extends Fragment {
         setUpRecyclerView();
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(MonthTransactionViewModel.class);
+        commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         expenseEntityList = new ArrayList<>();
 
     }
@@ -107,19 +114,34 @@ public class MonthTransactionFragment extends Fragment {
             String inc = getString(R.string.rupee) + s;
             binding.tvMoneyIncome.setText(inc);
         });
+
+        commonViewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
+            switch (integerResource.status) {
+                case SUCCESS:
+                    showProgressBar(false);
+                    if (integerResource.data != null) {
+                        showToast("Deleted Successfully");
+                        commonViewModel.resetDeleteObserver();
+                    }
+                    break;
+                case LOADING:
+                    showProgressBar(true);
+                    break;
+                case ERROR:
+                    showProgressBar(false);
+                    showToast("Some Error Occurred");
+                    break;
+            }
+        });
     }
 
     private void setUpOnClickListeners() {
         c = Calendar.getInstance();
         df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
 
-        binding.buttonPrevious.setOnClickListener(v -> {
-            previousClicked();
-        });
+        binding.buttonPrevious.setOnClickListener(v -> previousClicked());
 
-        binding.buttonNext.setOnClickListener(v -> {
-            nextClicked();
-        });
+        binding.buttonNext.setOnClickListener(v -> nextClicked());
 
         binding.tvDate.addTextChangedListener(new TextWatcher() {
             @Override
@@ -133,16 +155,20 @@ public class MonthTransactionFragment extends Fragment {
             @Override
             public void afterTextChanged(Editable s) {
                 resetTextViews();
-                Date firstDay = getFirstDayOfMonth(s.toString());
-                Date lastDay = getLastDayOfMonth(firstDay);
+                firstDay = getFirstDayOfMonth(s.toString());
+                lastDay = getLastDayOfMonth(firstDay);
                 viewModel.getMonthlyRecords(firstDay, lastDay);
-                viewModel.getTotalMonthExpenseIncome(firstDay, lastDay);
+                getExpenseIncomeCount();
             }
         });
 
         binding.tvDate.setText(df.format(c.getTime()));
 
         binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
+    }
+
+    private void getExpenseIncomeCount() {
+        viewModel.getTotalMonthExpenseIncome(firstDay, lastDay);
     }
 
     private void previousClicked() {
@@ -199,13 +225,45 @@ public class MonthTransactionFragment extends Fragment {
 
         @Override
         public void onItemLongClick(View view, int position) {
-
+            showAlertDialogToDelete(position);
         }
     };
+
+    private void showAlertDialogToDelete(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to delete this record?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    deleteRecordFromDb(position);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create().show();
+    }
+
+    private void deleteRecordFromDb(int position) {
+        commonViewModel.deleteRecordFromDb(expenseEntityList.get(position));
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(boolean b) {
+        if (b) binding.progressBar.setVisibility(View.VISIBLE);
+        else binding.progressBar.setVisibility(View.GONE);
+    }
 
     private void resetTextViews() {
         binding.tvMoneySpent.setText(getString(R.string._000_0));
         binding.tvMoneyIncome.setText(getString(R.string._000_0));
+    }
+
+    @Override
+    public void onDestroyView() {
+        binding = null;
+        super.onDestroyView();
     }
 
 }

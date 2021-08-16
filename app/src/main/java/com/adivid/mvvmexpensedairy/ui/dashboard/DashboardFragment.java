@@ -11,6 +11,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
@@ -28,7 +29,10 @@ import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentDashboardBinding;
 import com.adivid.mvvmexpensedairy.utils.DataSyncWorker;
+import com.adivid.mvvmexpensedairy.utils.DeleteDataWorker;
+import com.adivid.mvvmexpensedairy.utils.Resource;
 import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
+import com.adivid.mvvmexpensedairy.utils.Utils;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
@@ -40,6 +44,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DELETE_UNIQUE_WORK;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
 
 @AndroidEntryPoint
@@ -68,7 +73,7 @@ public class DashboardFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
-        //syncOfflineDataToServer();
+        syncOfflineDataToServer();
     }
 
     private void init() {
@@ -98,21 +103,27 @@ public class DashboardFragment extends Fragment {
         });
 
         viewModel.expenseCount.observe(getViewLifecycleOwner(), aDouble -> {
+            String exp;
             if (aDouble == null) {
-                binding.tvExpMoney.setText("0");
+                exp = getString(R.string.rupee) + "0";
+                binding.tvExpMoney.setText(exp);
             } else {
-                String exp = getString(R.string.rupee) + aDouble;
+                exp = getString(R.string.rupee) + aDouble;
                 binding.tvExpMoney.setText(exp);
             }
+            calculateBalance();
         });
 
         viewModel.incomeCount.observe(getViewLifecycleOwner(), aDouble -> {
+            String inc;
             if (aDouble == null) {
-                binding.tvIncomeMoney.setText("0");
+                inc = getString(R.string.rupee) + "0";
+                binding.tvIncomeMoney.setText(inc);
             } else {
-                String inc = getString(R.string.rupee) + aDouble;
+                inc = getString(R.string.rupee) + aDouble;
                 binding.tvIncomeMoney.setText(inc);
             }
+            calculateBalance();
         });
 
         viewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
@@ -121,6 +132,8 @@ public class DashboardFragment extends Fragment {
                     showProgressBar(false);
                     if (integerResource.data != null) {
                         showToast("Deleted Successfully");
+                        viewModel.resetDeleteObserver();
+                        Utils.syncDeletedRecords(requireContext());
                     }
                     break;
                 case LOADING:
@@ -132,6 +145,19 @@ public class DashboardFragment extends Fragment {
                     break;
             }
         });
+
+    }
+
+    private void calculateBalance() {
+        String exp = binding.tvExpMoney.getText().toString();
+        String inc = binding.tvIncomeMoney.getText().toString();
+
+        String expSubStr = exp.substring(exp.indexOf(getString(R.string.rupee)) + 1);
+        String incSubStr = inc.substring(inc.indexOf(getString(R.string.rupee)) + 1);
+
+        double bal = Double.parseDouble(incSubStr) - Double.parseDouble(expSubStr);
+        String balance = getString(R.string.rupee) + bal;
+        binding.tvBalanceMoney.setText(balance);
 
     }
 
@@ -186,6 +212,7 @@ public class DashboardFragment extends Fragment {
                 ExistingWorkPolicy.KEEP, request);
     }
 
+
     private void showAlertDialogToDelete(int position) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Confirm")
@@ -226,11 +253,19 @@ public class DashboardFragment extends Fragment {
             }
             doubleBackToExitPressedOnce = true;
             Snackbar.make(requireActivity().getWindow().getDecorView().findViewById(android.R.id.content),
-                    "Press Back Again to Exit", Snackbar.LENGTH_SHORT).show();
+                    "Press Back Again to Exit", Snackbar.LENGTH_SHORT)
+                    .setBackgroundTint(getResources().getColor(R.color.color_on_dark_gray_2))
+                    .setTextColor(getResources().getColor(R.color.white))
+                    .show();
             long DOUBLE_BACK_PRESS_TO_EXIT = 2000;
             new Handler(Looper.getMainLooper()).postDelayed(() ->
                     doubleBackToExitPressedOnce = false, DOUBLE_BACK_PRESS_TO_EXIT);
         }
     };
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        ((MainActivity) requireActivity()).setUpDrawerLayoutHeaders();
+    }
 }

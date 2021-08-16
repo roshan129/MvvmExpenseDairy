@@ -29,10 +29,10 @@
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
             android:padding="12dp"
+            android:fontFamily="@font/quicksand_medium"
             android:text="@string/settings"
-            android:textColor="@color/black"
+            android:textColor="@color/text_color"
             android:textSize="21sp" />
-
 
     </LinearLayout>
 
@@ -43,11 +43,12 @@
         android:layout_below="@+id/linearLayoutToolbar"
         android:layout_marginStart="12dp"
         android:layout_marginTop="12dp"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
         android:layout_marginEnd="12dp"
+        android:paddingStart="12dp"
+        android:fontFamily="@font/quicksand_medium"
+        android:paddingEnd="12dp"
         android:text="Dark Mode"
-        android:textColor="@color/black"
+        android:textColor="@color/text_color"
         android:textSize="18sp"
 
         />

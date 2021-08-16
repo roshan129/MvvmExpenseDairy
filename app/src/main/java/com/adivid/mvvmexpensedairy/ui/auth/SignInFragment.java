@@ -1,6 +1,7 @@
 package com.adivid.mvvmexpensedairy.ui.auth;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.adivid.mvvmexpensedairy.MainActivity;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.databinding.FragmentSignInBinding;
 import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
@@ -79,7 +81,7 @@ public class SignInFragment extends Fragment {
                         sharedPrefManager.saveUserName(user.getDisplayName());
                         sharedPrefManager.saveEmail(user.getEmail());
                         showUserData(user);
-                    }else{
+                    } else {
                         showToast("Some Error Occurred");
                     }
                     break;
@@ -91,7 +93,6 @@ public class SignInFragment extends Fragment {
                     showToast("Some Error Occurred");
                     break;
             }
-
 
         });
     }
@@ -109,31 +110,41 @@ public class SignInFragment extends Fragment {
 
         binding.buttonSignIn.setOnClickListener(v -> {
 
-            if (binding.buttonSignIn.getText().equals(getString(R.string.sign_in))) {
+            if (binding.buttonSignIn.getText().toString().equalsIgnoreCase(getString(R.string.sign_in))) {
                 showProgressBar(true);
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startForResult.launch(signInIntent);
             } else {
-                GoogleSignInClient signInClient = GoogleSignIn.getClient(requireContext(),
-                        googleSignInOptions);
-                firebaseAuth.signOut();
-                sharedPrefManager.clearAllPrefs();
-                signInClient.signOut().addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        Timber.d("google sign out successful");
-                        showToast("Successfully Logged Out");
-                        binding.buttonSignIn.setText(getString(R.string.sign_in));
-                        binding.tvName.setVisibility(View.GONE);
-                        binding.tvEmail.setVisibility(View.GONE);
-                    } else {
-                        Timber.d("unsuccessfull");
-                    }
-                });
+
+                showAlertDialogForLogOut();
 
             }
 
         });
 
+    }
+
+    private void showAlertDialogForLogOut() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle("Confirm")
+                .setMessage("Are you sure want to log out?")
+                .setPositiveButton("Logout", (dialog, which) -> {
+                    GoogleSignInClient signInClient = GoogleSignIn.getClient(requireContext(),
+                            googleSignInOptions);
+                    firebaseAuth.signOut();
+                    sharedPrefManager.clearAllPrefs();
+                    signInClient.signOut().addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            Timber.d("google sign out successful");
+                            showToast("Successfully Logged Out");
+                            binding.buttonSignIn.setText(getString(R.string.sign_in));
+                            binding.tvName.setVisibility(View.GONE);
+                            binding.tvEmail.setVisibility(View.GONE);
+                        } else {
+                            Timber.d("unsuccessfull");
+                        }
+                    });
+                }).setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss()).create().show();
     }
 
     private void setUpGoogleSignInClient() {

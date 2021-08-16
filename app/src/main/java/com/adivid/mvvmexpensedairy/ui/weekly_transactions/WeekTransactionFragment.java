@@ -1,9 +1,12 @@
 package com.adivid.mvvmexpensedairy.ui.weekly_transactions;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -11,6 +14,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +23,7 @@ import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
 import com.adivid.mvvmexpensedairy.databinding.FragmentWeekTransactionsBinding;
+import com.adivid.mvvmexpensedairy.ui.others.CommonViewModel;
 import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
 
@@ -39,6 +44,7 @@ public class WeekTransactionFragment extends Fragment {
 
     private FragmentWeekTransactionsBinding binding;
     private WeekTransactionViewModel viewModel;
+    private CommonViewModel commonViewModel;
     private Calendar calendarFirst, calendarLast;
     private MainListAdapter adapter;
 
@@ -69,6 +75,7 @@ public class WeekTransactionFragment extends Fragment {
     private void init() {
         navController = NavHostFragment.findNavController(this);
         viewModel = new ViewModelProvider(this).get(WeekTransactionViewModel.class);
+        commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         expenseEntityList = new ArrayList<>();
 
         setUpRecyclerView();
@@ -84,13 +91,11 @@ public class WeekTransactionFragment extends Fragment {
 
     private void observers() {
         viewModel.weeklyTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            if(!expenseEntities.isEmpty()) {
-                expenseEntityList.addAll(expenseEntities);
-                adapter.submitList(expenseEntityList);
-                adapter.notifyDataSetChanged();
-            }else {
-                lockScrolling = true;
-            }
+            expenseEntityList.addAll(expenseEntities);
+            adapter.submitList(expenseEntityList);
+            adapter.notifyDataSetChanged();
+            if (expenseEntities.isEmpty()) lockScrolling = true;
+
         });
 
         viewModel.weeklyExpense.observe(getViewLifecycleOwner(), s -> {
@@ -101,6 +106,26 @@ public class WeekTransactionFragment extends Fragment {
         viewModel.weeklyIncome.observe(getViewLifecycleOwner(), s -> {
             String inc = getString(R.string.rupee) + s;
             binding.tvMoneyIncome.setText(inc);
+        });
+
+        commonViewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
+            switch (integerResource.status) {
+                case SUCCESS:
+                    showProgressBar(false);
+                    if (integerResource.data != null) {
+                        showToast("Deleted Successfully");
+                        commonViewModel.resetDeleteObserver();
+                        adapter.notifyDataSetChanged();
+                    }
+                    break;
+                case LOADING:
+                    showProgressBar(true);
+                    break;
+                case ERROR:
+                    showProgressBar(false);
+                    showToast("Some Error Occurred");
+                    break;
+            }
         });
     }
 
@@ -166,6 +191,8 @@ public class WeekTransactionFragment extends Fragment {
                 nextClicked();
             }
         });
+
+
     }
 
     private void previousClicked() {
@@ -232,9 +259,35 @@ public class WeekTransactionFragment extends Fragment {
 
         @Override
         public void onItemLongClick(View view, int position) {
-
+            showAlertDialogToDelete(position);
         }
     };
+
+    private void showAlertDialogToDelete(int position) {
+        new AlertDialog.Builder(requireContext())
+                .setTitle("Confirm")
+                .setMessage("Are you sure you want to delete this record?")
+                .setPositiveButton("Yes", (dialog, which) -> {
+                    deleteRecordFromDb(position);
+                })
+                .setNegativeButton("No", (dialog, which) -> {
+                    dialog.dismiss();
+                })
+                .create().show();
+    }
+
+    private void deleteRecordFromDb(int position) {
+        commonViewModel.deleteRecordFromDb(expenseEntityList.get(position));
+    }
+
+    private void showToast(String msg) {
+        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show();
+    }
+
+    private void showProgressBar(boolean b) {
+        if (b) binding.progressBar.setVisibility(View.VISIBLE);
+        else binding.progressBar.setVisibility(View.GONE);
+    }
 
     private void resetTextViews() {
         binding.tvMoneySpent.setText(getString(R.string._000_0));

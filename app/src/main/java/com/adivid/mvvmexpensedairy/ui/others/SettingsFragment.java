@@ -34,6 +34,7 @@ public class SettingsFragment extends Fragment {
         binding = FragmentSettingsBinding.bind(view);
 
         init();
+        setUpOnClickListners();
     }
 
     private void init() {
@@ -47,6 +48,12 @@ public class SettingsFragment extends Fragment {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
                 sharedPrefManager.saveNightMode(false);
             }
+        });
+    }
+
+    private void setUpOnClickListners() {
+        binding.ivBack.setOnClickListener(v -> {
+            requireActivity().onBackPressed();
         });
     }
 }

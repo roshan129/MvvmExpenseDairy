@@ -25,16 +25,15 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/iv_back"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="12dp"
-                    android:background="@color/bg_color"
                     android:padding="8dp"
                     android:src="@drawable/ic_back"
-                    android:tint="@color/black"
+                    app:tint="@color/text_color"
 
                     />
 
@@ -43,8 +42,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
+                    android:fontFamily="@font/quicksand_medium"
                     android:text="@string/add_transactions"
-                    android:textColor="@color/black"
+                    android:textColor="@color/text_color"
                     android:textSize="22sp" />
 
             </RelativeLayout>
@@ -72,6 +72,7 @@
                     android:clickable="false"
                     android:cursorVisible="false"
                     android:focusable="false"
+                    android:fontFamily="@font/quicksand_medium"
                     android:hint="@string/date"
                     android:inputType="none" />
 
@@ -100,6 +101,7 @@
                     android:layout_height="wrap_content"
                     android:clickable="false"
                     android:cursorVisible="false"
+                    android:fontFamily="@font/quicksand_medium"
                     android:focusable="false"
                     android:hint="@string/time"
                     android:inputType="none" />
@@ -129,6 +131,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="@string/amount"
+                    android:fontFamily="@font/quicksand_medium"
                     android:inputType="numberDecimal"
                     android:maxLength="8" />
 
@@ -140,6 +143,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
+                android:fontFamily="@font/quicksand_medium"
                 android:text="@string/type"
                 android:textColor="@color/text_color"
                 app:layout_constraintStart_toStartOf="parent"
@@ -162,9 +166,13 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:checkable="true"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="@string/expense"
-
-                    android:textColor="@color/text_color" />
+                    android:textColor="@color/text_color"
+                    app:chipBackgroundColor="@drawable/bg_chip_state_list" />
 
                 <com.google.android.material.chip.Chip
                     android:id="@+id/chip_income"
@@ -172,8 +180,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:fontFamily="@font/quicksand_medium"
+                    android:checkable="true"
+                    android:clickable="true"
+                    android:focusable="true"
                     android:text="@string/income"
-                    android:textColor="@color/text_color" />
+                    android:textColor="@color/text_color"
+                    app:chipBackgroundColor="@drawable/bg_chip_state_list" />
 
 
             </com.google.android.material.chip.ChipGroup>
@@ -182,6 +195,7 @@
                 android:id="@+id/tv_category"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/quicksand_medium"
                 android:layout_marginStart="32dp"
                 android:layout_marginTop="32dp"
                 android:text="@string/category"
@@ -194,6 +208,7 @@
                 android:layout_width="227dp"
                 android:layout_height="43dp"
                 android:layout_marginStart="24dp"
+                android:fontFamily="@font/quicksand_medium"
 
                 app:layout_constraintBottom_toBottomOf="@+id/tv_category"
                 app:layout_constraintStart_toEndOf="@+id/tv_category"
@@ -219,6 +234,7 @@
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/et_note"
                     android:layout_width="match_parent"
+                    android:fontFamily="@font/quicksand_medium"
                     android:layout_height="wrap_content"
                     android:hint="@string/note" />
 
@@ -242,8 +258,13 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
                     android:checked="true"
                     android:text="@string/cash"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@drawable/bg_chip_state_list"
                     android:textColor="@color/text_color" />
 
                 <com.google.android.material.chip.Chip
@@ -251,7 +272,12 @@
                     style="@style/Widget.MaterialComponents.Chip.Choice"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/quicksand_medium"
                     android:text="@string/card"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:checkable="true"
+                    app:chipBackgroundColor="@drawable/bg_chip_state_list"
                     android:textColor="@color/text_color" />
 
                 <com.google.android.material.chip.Chip
@@ -261,7 +287,8 @@
                     android:layout_height="wrap_content"
                     android:checkable="false"
                     android:text="..."
-                    android:textColor="@color/text_color" />
+                    android:textColor="@color/text_color"
+                    android:visibility="gone" />
 
             </com.google.android.material.chip.ChipGroup>
 
