@@ -16,6 +16,7 @@ public class Constants {
     public static String KEY_UNIQUE_WORK = "data_sync_work";
     public static String KEY_UPDATE_UNIQUE_WORK = "updated_data_sync_work";
     public static String KEY_DELETE_UNIQUE_WORK = "deleted_data_sync_work";
+    public static String KEY_DOWNLOAD_UNIQUE_WORK = "download_data_sync_work";
 
     public static final String OTHERS = "Others";
     public static final String FOOD_N_DINING = "Food and Dining";

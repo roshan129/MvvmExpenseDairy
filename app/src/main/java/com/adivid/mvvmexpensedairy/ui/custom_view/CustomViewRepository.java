@@ -12,7 +12,6 @@ import io.reactivex.rxjava3.core.Flowable;
 
 public class CustomViewRepository {
 
-
     private final ExpenseDao expenseDao;
 
     @Inject

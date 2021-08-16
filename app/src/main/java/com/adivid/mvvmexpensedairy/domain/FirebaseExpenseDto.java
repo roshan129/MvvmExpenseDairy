@@ -30,6 +30,10 @@ public class FirebaseExpenseDto {
 
     private String timestamp;
 
+    private FirebaseExpenseDto(){
+        //empty constructor needed
+    }
+
     public FirebaseExpenseDto(Date date, String time, String amount,
                               String transaction_type, String transaction_category,
                               String note, String payment_type, String timestamp) {

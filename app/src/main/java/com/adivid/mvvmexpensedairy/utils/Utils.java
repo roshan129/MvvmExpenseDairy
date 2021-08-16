@@ -102,7 +102,7 @@ public class Utils {
                 .setConstraints(constraints)
                 .addTag(KEY_DELETE_UNIQUE_WORK)
                 .build();
-        WorkManager.getInstance(context).enqueueUniqueWork(KEY_UNIQUE_WORK,
+        WorkManager.getInstance(context).enqueueUniqueWork(KEY_DELETE_UNIQUE_WORK,
                 ExistingWorkPolicy.KEEP, request);
     }
 

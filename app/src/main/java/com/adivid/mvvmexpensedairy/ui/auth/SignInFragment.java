@@ -1,5 +1,7 @@
 package com.adivid.mvvmexpensedairy.ui.auth;
 
+import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DOWNLOAD_UNIQUE_WORK;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -13,10 +15,16 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.work.Constraints;
+import androidx.work.ExistingWorkPolicy;
+import androidx.work.NetworkType;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
 
 import com.adivid.mvvmexpensedairy.MainActivity;
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.databinding.FragmentSignInBinding;
+import com.adivid.mvvmexpensedairy.utils.DownloadDataWorker;
 import com.adivid.mvvmexpensedairy.utils.SharedPrefManager;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -81,6 +89,7 @@ public class SignInFragment extends Fragment {
                         sharedPrefManager.saveUserName(user.getDisplayName());
                         sharedPrefManager.saveEmail(user.getEmail());
                         showUserData(user);
+                        fetchDataFromFirebase();
                     } else {
                         showToast("Some Error Occurred");
                     }
@@ -95,6 +104,18 @@ public class SignInFragment extends Fragment {
             }
 
         });
+    }
+
+    private void fetchDataFromFirebase() {
+        Constraints constraints = new Constraints.Builder()
+                .setRequiredNetworkType(NetworkType.CONNECTED)
+                .build();
+        OneTimeWorkRequest request = new OneTimeWorkRequest.Builder(DownloadDataWorker.class)
+                .setConstraints(constraints)
+                .addTag(KEY_DOWNLOAD_UNIQUE_WORK)
+                .build();
+        WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_DOWNLOAD_UNIQUE_WORK,
+                ExistingWorkPolicy.KEEP, request);
     }
 
     private void showUserData(FirebaseUser user) {

@@ -22,6 +22,9 @@ public interface ExpenseDao {
     @Insert
     Maybe<Long> insertTransaction(ExpenseEntity expense);
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    Maybe<List<Long>> insertExpenseList(List<ExpenseEntity> expense);
+
     @Update
     Maybe<Integer> updateTransaction(ExpenseEntity expenseEntity);
 
