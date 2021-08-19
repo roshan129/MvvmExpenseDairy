@@ -91,10 +91,12 @@ public class WeekTransactionFragment extends Fragment {
 
     private void observers() {
         viewModel.weeklyTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
-            expenseEntityList.addAll(expenseEntities);
+            expenseEntityList = expenseEntities;
+            adapter.submitList(expenseEntities);
+
+        /*    expenseEntityList.addAll(expenseEntities);
             adapter.submitList(expenseEntityList);
-            adapter.notifyDataSetChanged();
-            if (expenseEntities.isEmpty()) lockScrolling = true;
+            if (expenseEntities.isEmpty()) lockScrolling = true;*/
 
         });
 
@@ -115,7 +117,7 @@ public class WeekTransactionFragment extends Fragment {
                     if (integerResource.data != null) {
                         showToast("Deleted Successfully");
                         commonViewModel.resetDeleteObserver();
-                        adapter.notifyDataSetChanged();
+                        Utils.syncDeletedRecords(requireContext());
                     }
                     break;
                 case LOADING:
@@ -135,7 +137,7 @@ public class WeekTransactionFragment extends Fragment {
         binding.recyclerView.setLayoutManager(linearLayoutManager);
         binding.recyclerView.setAdapter(adapter);
 
-        binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+      /*  binding.recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(@NonNull RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -157,11 +159,10 @@ public class WeekTransactionFragment extends Fragment {
                     isScrolling = false;
                     counter++;
                     String offset = counter + "0";
-                    viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate,
-                            Integer.parseInt(offset));
+                    viewModel.getWeeklyReports(weekFirstDate, weekLastDate);
                 }
             }
-        });
+        });*/
     }
 
     private void setUpOnClickListeners() {
@@ -197,9 +198,9 @@ public class WeekTransactionFragment extends Fragment {
 
     private void previousClicked() {
         resetTextViews();
-        counter = 0;
-        expenseEntityList.clear();
-        adapter.submitList(expenseEntityList);
+        //counter = 0;
+        //expenseEntityList.clear();
+        //adapter.submitList(expenseEntityList);
         calendarFirst.add(Calendar.DATE, -7);
         binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
 
@@ -207,15 +208,15 @@ public class WeekTransactionFragment extends Fragment {
         binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
         weekFirstDate = calendarFirst.getTime();
         weekLastDate = calendarLast.getTime();
-        viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+        viewModel.getWeeklyReports(weekFirstDate, weekLastDate);
         viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
     }
 
     private void nextClicked() {
         resetTextViews();
-        counter = 0;
-        expenseEntityList.clear();
-        adapter.submitList(expenseEntityList);
+        //counter = 0;
+        //expenseEntityList.clear();
+        //adapter.submitList(expenseEntityList);
         calendarFirst.add(Calendar.DATE, +7);
         binding.tvWeekFirstDate.setText(Utils.convertToDisplayDate(calendarFirst.getTime()));
 
@@ -223,7 +224,7 @@ public class WeekTransactionFragment extends Fragment {
         binding.tvWeekLastDate.setText(Utils.convertToDisplayDate(calendarLast.getTime()));
         weekFirstDate = calendarFirst.getTime();
         weekLastDate = calendarLast.getTime();
-        viewModel.getWeeklyReportsOffset(weekFirstDate, weekLastDate, counter);
+        viewModel.getWeeklyReports(weekFirstDate, weekLastDate);
         viewModel.getWeekExpenseIncome(weekFirstDate, weekLastDate);
     }
 
@@ -290,8 +291,8 @@ public class WeekTransactionFragment extends Fragment {
     }
 
     private void resetTextViews() {
-        binding.tvMoneySpent.setText(getString(R.string._000_0));
-        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+        binding.tvMoneySpent.setText(getString(R.string._0_0));
+        binding.tvMoneyIncome.setText(getString(R.string._0_0));
         lockScrolling = false;
     }
 }

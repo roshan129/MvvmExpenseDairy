@@ -14,7 +14,7 @@
         android:id="@+id/dashboardFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
-        tools:layout="@layout/fragment_dashboard" >
+        tools:layout="@layout/fragment_dashboard">
         <action
             android:id="@+id/action_dashboardFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment"
@@ -22,42 +22,48 @@
         <action
             android:id="@+id/action_dashboardFragment_to_allTransactionsFragment"
             app:destination="@id/allTransactionsFragment2"
-            app:enterAnim="@anim/enter_from_right"/>
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_dayTransactionsFragment"
             app:destination="@id/dayTransactionsFragment"
-            app:enterAnim="@anim/enter_from_right"/>
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_monthTransactionFragment"
             app:destination="@id/monthTransactionFragment"
-            app:enterAnim="@anim/enter_from_right"/>
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_yearTransactionFragment"
             app:destination="@id/yearTransactionFragment"
-            app:enterAnim="@anim/enter_from_right"/>
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_weekTransactionFragment"
             app:destination="@id/weekTransactionFragment"
-            app:enterAnim="@anim/enter_from_right"/>
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_customViewFragment2"
             app:destination="@id/customViewFragment" />
         <action
             android:id="@+id/action_dashboardFragment_to_signInFragment"
-            app:destination="@id/signInFragment" />
+            app:destination="@id/signInFragment"
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_settingsFragment2"
-            app:destination="@id/settingsFragment" />
+            app:destination="@id/settingsFragment"
+            app:enterAnim="@anim/enter_from_right" />
         <action
             android:id="@+id/action_dashboardFragment_to_categoriesFragment"
             app:destination="@id/categoriesFragment" />
+        <action
+            android:id="@+id/action_dashboardFragment_to_expenseIncomeListFragment"
+            app:destination="@id/expenseIncomeListFragment"
+            app:enterAnim="@anim/enter_from_right" />
 
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
         android:name="com.adivid.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment"
         android:label="fragment_all_transactions"
-        tools:layout="@layout/fragment_all_transactions" >
+        tools:layout="@layout/fragment_all_transactions">
         <action
             android:id="@+id/action_allTransactionsFragment2_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
@@ -70,7 +76,7 @@
         android:id="@+id/dayTransactionsFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.day_transactions.DayTransactionFragment"
         android:label="fragment_day_transactions"
-        tools:layout="@layout/fragment_day_transactions" >
+        tools:layout="@layout/fragment_day_transactions">
         <action
             android:id="@+id/action_dayTransactionsFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
@@ -82,7 +88,7 @@
         android:id="@+id/monthTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.month_transactions.MonthTransactionFragment"
         android:label="fragment_month_transaction"
-        tools:layout="@layout/fragment_month_transaction" >
+        tools:layout="@layout/fragment_month_transaction">
         <action
             android:id="@+id/action_monthTransactionFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
@@ -91,7 +97,7 @@
         android:id="@+id/yearTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.yearly_transactions.YearTransactionFragment"
         android:label="fragment_year_transaction"
-        tools:layout="@layout/fragment_year_transaction" >
+        tools:layout="@layout/fragment_year_transaction">
         <action
             android:id="@+id/action_yearTransactionFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
@@ -100,7 +106,7 @@
         android:id="@+id/weekTransactionFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.weekly_transactions.WeekTransactionFragment"
         android:label="fragment_week_transactions"
-        tools:layout="@layout/fragment_week_transactions" >
+        tools:layout="@layout/fragment_week_transactions">
         <action
             android:id="@+id/action_weekTransactionFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
@@ -109,7 +115,7 @@
         android:id="@+id/customViewFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.custom_view.CustomViewFragment"
         android:label="fragment_custom_view"
-        tools:layout="@layout/fragment_custom_view" >
+        tools:layout="@layout/fragment_custom_view">
         <action
             android:id="@+id/action_customViewFragment_to_addTransactionFragment"
             app:destination="@id/addTransactionFragment" />
@@ -118,7 +124,7 @@
         android:id="@+id/signInFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.auth.SignInFragment"
         android:label="fragment_sign_in"
-        tools:layout="@layout/fragment_sign_in" >
+        tools:layout="@layout/fragment_sign_in">
         <action
             android:id="@+id/action_signInFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
@@ -127,7 +133,7 @@
         android:id="@+id/settingsFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.others.SettingsFragment"
         android:label="fragment_settings"
-        tools:layout="@layout/fragment_settings" >
+        tools:layout="@layout/fragment_settings">
         <action
             android:id="@+id/action_settingsFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
@@ -136,9 +142,21 @@
         android:id="@+id/categoriesFragment"
         android:name="com.adivid.mvvmexpensedairy.ui.categories.CategoriesFragment"
         android:label="fragment_categories"
-        tools:layout="@layout/fragment_categories" >
+        tools:layout="@layout/fragment_categories">
         <action
             android:id="@+id/action_categoriesFragment_to_dashboardFragment"
             app:destination="@id/dashboardFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/expenseIncomeListFragment"
+        android:name="com.adivid.mvvmexpensedairy.ui.expense_income.ExpenseIncomeListFragment"
+        android:label="ExpenseIncomeListFragment"
+        tools:layout="@layout/fragment_expense_income_list">
+        <action
+            android:id="@+id/action_expenseIncomeListFragment_to_addTransactionFragment"
+            app:destination="@id/addTransactionFragment" />
+
+    </fragment>
+
+
 </navigation>

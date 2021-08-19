@@ -65,6 +65,7 @@ public class UpdateDataSyncWorker extends Worker {
     }
 
     private void getDataToSyncFromDb() {
+        Timber.d("inside update data getDataToSyncFromDb");
         compositeDisposable.add(
                 expenseDao.getUpdatedDataToSync()
                         .subscribeOn(Schedulers.io())
@@ -100,6 +101,7 @@ public class UpdateDataSyncWorker extends Worker {
                             .document(docId);
             fExpense.setDocId(docId);
             documentReference.set(fExpense).addOnSuccessListener(aVoid -> {
+                Timber.d("updated record");
                 entity.setDataSent(true);
                 entity.setUpdated(false);
                 expenseDao.updateTransaction(entity).subscribeOn(Schedulers.io())

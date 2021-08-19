@@ -1,17 +1,13 @@
 package com.adivid.mvvmexpensedairy.data.db;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
-import androidx.annotation.Keep;
 import androidx.room.Entity;
+import androidx.room.Index;
 import androidx.room.PrimaryKey;
-import androidx.room.TypeConverters;
 
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity
+@Entity(tableName = "ExpenseEntity", indices = @Index(value= {"docId"}, unique = true))
 public class ExpenseEntity implements Serializable{
 
     @PrimaryKey(autoGenerate = true)

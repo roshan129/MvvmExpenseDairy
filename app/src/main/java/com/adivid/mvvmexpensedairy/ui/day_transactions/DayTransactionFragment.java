@@ -180,6 +180,7 @@ public class DayTransactionFragment extends Fragment {
                     if (integerResource.data != null) {
                         showToast("Deleted Successfully");
                         commonViewModel.resetDeleteObserver();
+                        Utils.syncDeletedRecords(requireContext());
                     }
                     break;
                 case LOADING:
@@ -236,8 +237,8 @@ public class DayTransactionFragment extends Fragment {
     }
 
     private void resetTextViews() {
-        binding.tvMoneySpent.setText(getString(R.string._000_0));
-        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+        binding.tvMoneySpent.setText(getString(R.string._0_0));
+        binding.tvMoneyIncome.setText(getString(R.string._0_0));
     }
 
     @Override

@@ -28,7 +28,8 @@ public class SharedPrefManager {
     }
 
     public void clearAllPrefs() {
-        editor.clear().apply();
+        editor.putString(KEY_USER_NAME, "");
+        editor.putString(KEY_USER_EMAIL, "");
     }
 
     public void saveUserName(String name) {
@@ -47,8 +48,5 @@ public class SharedPrefManager {
         return sharedPreferences.getString(KEY_USER_EMAIL, "");
     }
 
-    public void clearPrefs() {
-        editor.clear();
-    }
 
 }

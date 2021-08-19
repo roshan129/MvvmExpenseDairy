@@ -228,11 +228,12 @@ public class AddTransactionFragment extends Fragment {
             expenseEntity.setDocId(existingExpenseEntity.getDocId());
             expenseEntity.setFirebaseUid(existingExpenseEntity.getFirebaseUid());
             viewModel.updateTransaction(expenseEntity);
+            syncUpdatedDataToServer();
         } else {
             viewModel.insertTransaction(expenseEntity);
+            syncOfflineDataToServer();
         }
         showOrHideKeyBoard(false);
-        syncOfflineDataToServer();
         requireActivity().onBackPressed();
 
     }
@@ -302,6 +303,21 @@ public class AddTransactionFragment extends Fragment {
                     .build();
             WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UNIQUE_WORK,
                     ExistingWorkPolicy.KEEP, request);
+/*
+            OneTimeWorkRequest updateRequest = new OneTimeWorkRequest.Builder(UpdateDataSyncWorker.class)
+                    .setConstraints(constraints)
+                    .addTag(KEY_UPDATE_UNIQUE_WORK)
+                    .build();
+            WorkManager.getInstance(requireContext()).enqueueUniqueWork(KEY_UPDATE_UNIQUE_WORK,
+                    ExistingWorkPolicy.KEEP, updateRequest);*/
+        }
+    }
+
+    private void syncUpdatedDataToServer(){
+        if(firebaseAuth.getCurrentUser()!=null){
+            Constraints constraints = new Constraints.Builder()
+                    .setRequiredNetworkType(NetworkType.CONNECTED)
+                    .build();
 
             OneTimeWorkRequest updateRequest = new OneTimeWorkRequest.Builder(UpdateDataSyncWorker.class)
                     .setConstraints(constraints)

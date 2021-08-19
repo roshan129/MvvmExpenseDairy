@@ -72,16 +72,21 @@
         app:layout_constraintTop_toBottomOf="@+id/rl_date">
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
+            android:layout_marginEnd="10dp"
             android:layout_weight="1"
             app:cardCornerRadius="10dp"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             app:cardElevation="4dp">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:clipChildren="false"
+                android:clipToPadding="false"
                 android:background="@drawable/layout_border_expense"
                 android:padding="12dp">
 
@@ -99,6 +104,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
                     android:layout_marginStart="12dp"
+
                     android:fontFamily="@font/quicksand_medium"
                     android:text="@string/expense"
                     android:textColor="@color/text_color"
@@ -114,7 +120,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_toEndOf="@+id/iv_spending_icon"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/_000_0"
+                    android:text="@string/_0_0"
                     android:textColor="@color/text_color"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -124,9 +130,9 @@
         </com.google.android.material.card.MaterialCardView>
 
         <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="20dp"
             android:layout_weight="1"
             app:cardCornerRadius="10dp"
@@ -171,7 +177,7 @@
                     android:layout_marginStart="12dp"
                     android:layout_toEndOf="@+id/iv_income_icon"
                     android:fontFamily="@font/roboto_regular"
-                    android:text="@string/_000_0"
+                    android:text="@string/_0_0"
                     android:textColor="@color/text_color"
                     android:textSize="12sp"
                     android:textStyle="bold" />
@@ -181,7 +187,6 @@
         </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"

@@ -51,7 +51,19 @@
 
             </RelativeLayout>
 
-            <Spinner
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/date_range"
+                android:textSize="16sp"
+                android:textColor="@color/text_color"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="24dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/rlToolbar"
+                />
+
+         <!--   <Spinner
                 android:id="@+id/spinnerDateRange"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -59,7 +71,7 @@
                 android:layout_marginTop="24dp"
                 android:entries="@array/filter_arr"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/rlToolbar" />
+                app:layout_constraintTop_toBottomOf="@+id/rlToolbar" />-->
 
             <LinearLayout
                 android:id="@+id/linearLayoutDateRange"
@@ -67,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:orientation="horizontal"
-                android:visibility="gone"
+                android:visibility="visible"
                 android:weightSum="2"
                 tools:visibility="visible">
 

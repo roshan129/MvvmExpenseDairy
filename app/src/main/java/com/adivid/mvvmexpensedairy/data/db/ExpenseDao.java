@@ -54,7 +54,7 @@ public interface ExpenseDao {
     Flowable<Double> getTotalDayIncome(Date dayStart, Date dayEnd);
 
     //week
-    @Query("Select * from expenseentity WHERE isDeleted = 0 AND date BETWEEN :firstWeekDay AND :lastWeekDay")
+    @Query("Select * from expenseentity WHERE isDeleted = 0 AND date BETWEEN :firstWeekDay AND :lastWeekDay ORDER BY current_time_millis desc")
     Flowable<List<ExpenseEntity>> getWeeklyWiseRecords(Date firstWeekDay, Date lastWeekDay);
 
     @Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transaction_type = 'Expense' AND isDeleted = 0 AND date BETWEEN :firstWeekDay AND :lastWeekDay")
@@ -72,6 +72,16 @@ public interface ExpenseDao {
 
     @Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transaction_type = 'Income' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND isDeleted = 0")
     Flowable<Double> getTotalMonthIncome(Date firstMonthDay, Date lastMonthDay);
+
+    //month expense income list
+    @Query("Select * from expenseentity WHERE date BETWEEN :firstDay AND :lastDay AND isDeleted = 0 AND transaction_type = :expenseIncome ORDER BY id desc")
+    Flowable<List<ExpenseEntity>> getMonthWiseRecordsExpenseIncome(Date firstDay, Date lastDay, String expenseIncome);
+
+    @Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transaction_type = 'Expense' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND isDeleted = 0")
+    Flowable<Double> getTotalMonthExpenseExpenseIncome(Date firstMonthDay, Date lastMonthDay);
+
+    @Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transaction_type = 'Income' AND date BETWEEN :firstMonthDay AND :lastMonthDay AND isDeleted = 0")
+    Flowable<Double> getTotalMonthIncomeExpenseIncome(Date firstMonthDay, Date lastMonthDay);
 
     //year
     @Query("Select * from expenseentity WHERE isDeleted = 0 AND date BETWEEN :firstDay AND :lastDay ORDER BY id desc")

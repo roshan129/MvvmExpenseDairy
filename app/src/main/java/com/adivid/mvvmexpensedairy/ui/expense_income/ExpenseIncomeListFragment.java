@@ -1,4 +1,7 @@
-package com.adivid.mvvmexpensedairy.ui.yearly_transactions;
+package com.adivid.mvvmexpensedairy.ui.expense_income;
+
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_OR_INCOME;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
@@ -20,7 +23,8 @@ import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
 import com.adivid.mvvmexpensedairy.adapter.interfaces.OnItemClickListener;
 import com.adivid.mvvmexpensedairy.data.db.ExpenseEntity;
-import com.adivid.mvvmexpensedairy.databinding.FragmentYearTransactionBinding;
+import com.adivid.mvvmexpensedairy.databinding.FragmentExpenseIncomeListBinding;
+import com.adivid.mvvmexpensedairy.ui.month_transactions.MonthTransactionViewModel;
 import com.adivid.mvvmexpensedairy.ui.others.CommonViewModel;
 import com.adivid.mvvmexpensedairy.utils.OnSwipeTouchListener;
 import com.adivid.mvvmexpensedairy.utils.Utils;
@@ -36,13 +40,11 @@ import java.util.Locale;
 import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
-import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
-
 @AndroidEntryPoint
-public class YearTransactionFragment extends Fragment {
+public class ExpenseIncomeListFragment extends Fragment {
 
-    private FragmentYearTransactionBinding binding;
-    private YearTransactionViewModel viewModel;
+    private FragmentExpenseIncomeListBinding binding;
+    private ExpenseIncomeViewModel viewModel;
     private CommonViewModel commonViewModel;
     private MainListAdapter adapter;
     private NavController navController;
@@ -51,85 +53,60 @@ public class YearTransactionFragment extends Fragment {
     private Calendar c;
     private SimpleDateFormat df;
     private Date firstDay, lastDay;
+    private String expense_income = "Expense";
 
-    public YearTransactionFragment() {
-        super(R.layout.fragment_year_transaction);
+    public ExpenseIncomeListFragment() {
+        super(R.layout.fragment_expense_income_list);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        binding = FragmentYearTransactionBinding.bind(view);
+        binding = FragmentExpenseIncomeListBinding.bind(view);
 
         init();
         observers();
         setUpOnClickListeners();
-        swipeForRecyclerView();
+        swipeOnRecyclerView(view);
     }
 
     private void init() {
-        navController = NavHostFragment.findNavController(this);
+        if (getArguments() != null) {
+            Bundle bundle = getArguments();
+            expense_income =  bundle.getString(EXPENSE_OR_INCOME);
+            binding.toolbar.setTitle(expense_income + " Report");
+        }
+
         setUpRecyclerView();
-        String currentYear = String.valueOf(Calendar.getInstance().get(Calendar.YEAR));
-        viewModel = new ViewModelProvider(this).get(YearTransactionViewModel.class);
+        navController = NavHostFragment.findNavController(this);
+        viewModel = new ViewModelProvider(this).get(ExpenseIncomeViewModel.class);
         commonViewModel = new ViewModelProvider(this).get(CommonViewModel.class);
         expenseEntityList = new ArrayList<>();
-    }
 
-    private void setUpOnClickListeners() {
-        c = Calendar.getInstance();
-        df = new SimpleDateFormat("yyyy", Locale.getDefault());
-
-        binding.buttonPrevious.setOnClickListener(v -> {
-            previousClicked();
-        });
-
-        binding.buttonNext.setOnClickListener(v -> {
-            nextClicked();
-        });
-
-        binding.tvDate.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                resetTextViews();
-                firstDay = getFirstDayOfYear(s.toString());
-                lastDay = getLastDayOfYear(s.toString());
-                viewModel.getYearlyRecords(firstDay, lastDay);
-                getExpenseIncomeCount();
-            }
-        });
-
-        binding.tvDate.setText(df.format(c.getTime()));
-
-        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
-    }
-
-    private void getExpenseIncomeCount() {
-        viewModel.getYearlyExpenseIncome(firstDay, lastDay);
     }
 
     private void observers() {
-        viewModel.yearlyExpenseTransactions.observe(getViewLifecycleOwner(), expenseEntities -> {
+        viewModel.monthlyExpenseEntities.observe(getViewLifecycleOwner(), expenseEntities -> {
             expenseEntityList = expenseEntities;
             adapter.submitList(expenseEntities);
         });
 
-        viewModel.yearlyExpense.observe(getViewLifecycleOwner(), s -> {
-            String exp = getString(R.string.rupee) + s;
-            binding.tvMoneySpent.setText(exp);
+        viewModel.monthlyExpense.observe(getViewLifecycleOwner(), s -> {
+            if(expense_income.equalsIgnoreCase("Expense")){
+                String exp = getString(R.string.rupee) + s;
+                binding.tvMoneySpent.setText(exp);
+            }else{
+                binding.tvMoneySpent.setText(R.string._0_0);
+            }
         });
 
-        viewModel.yearlyIncome.observe(getViewLifecycleOwner(), s -> {
-            String inc = getString(R.string.rupee) + s;
-            binding.tvMoneyIncome.setText(inc);
+        viewModel.monthlyIncome.observe(getViewLifecycleOwner(), s -> {
+            if(expense_income.equalsIgnoreCase("Income")){
+                String inc = getString(R.string.rupee) + s;
+                binding.tvMoneyIncome.setText(inc);
+            }else{
+                binding.tvMoneyIncome.setText(R.string._0_0);
+            }
         });
 
         commonViewModel.deleteRecord.observe(getViewLifecycleOwner(), integerResource -> {
@@ -137,7 +114,6 @@ public class YearTransactionFragment extends Fragment {
                 case SUCCESS:
                     showProgressBar(false);
                     if (integerResource.data != null) {
-                        getExpenseIncomeCount();
                         showToast("Deleted Successfully");
                         commonViewModel.resetDeleteObserver();
                         Utils.syncDeletedRecords(requireContext());
@@ -152,17 +128,69 @@ public class YearTransactionFragment extends Fragment {
                     break;
             }
         });
+
+    }
+
+    private void setUpOnClickListeners() {
+        c = Calendar.getInstance();
+        df = new SimpleDateFormat("MMMM yyyy", Locale.getDefault());
+
+        binding.buttonPrevious.setOnClickListener(v -> previousClicked());
+
+        binding.buttonNext.setOnClickListener(v -> nextClicked());
+
+        binding.tvDate.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                resetTextViews();
+                firstDay = getFirstDayOfMonth(s.toString());
+                lastDay = getLastDayOfMonth(firstDay);
+                viewModel.getMonthlyRecords(firstDay, lastDay, expense_income);
+                getExpenseIncomeCount();
+            }
+        });
+
+        binding.tvDate.setText(df.format(c.getTime()));
+
+        binding.ivBack.setOnClickListener(v -> requireActivity().onBackPressed());
+    }
+
+    private void getExpenseIncomeCount() {
+        viewModel.getTotalMonthExpenseIncome(firstDay, lastDay, expense_income);
+    }
+
+    private void previousClicked() {
+        c.add(Calendar.MONTH, -1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
+    }
+
+    private void nextClicked() {
+        c.add(Calendar.MONTH, 1);
+        String formattedDate1 = df.format(c.getTime());
+        Timber.d(formattedDate1);
+        binding.tvDate.setText(formattedDate1);
     }
 
     private void setUpRecyclerView() {
-        adapter = new MainListAdapter(recyclerItemClickListener);
+        adapter = new MainListAdapter(recyclerViewClickListener);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         binding.recyclerView.setAdapter(adapter);
+
     }
 
     @SuppressLint("ClickableViewAccessibility")
-    private void swipeForRecyclerView() {
-        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(requireContext()) {
+    private void swipeOnRecyclerView(View view) {
+        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
@@ -177,52 +205,35 @@ public class YearTransactionFragment extends Fragment {
         });
     }
 
-    private void previousClicked() {
-        c.add(Calendar.YEAR, -1);
-        String formattedDate1 = df.format(c.getTime());
-        Timber.d(formattedDate1);
-        binding.tvDate.setText(formattedDate1);
-    }
-
-    private void nextClicked() {
-        c.add(Calendar.YEAR, 1);
-        String formattedDate1 = df.format(c.getTime());
-        Timber.d(formattedDate1);
-        binding.tvDate.setText(formattedDate1);
-    }
-
-    private Date getFirstDayOfYear(String year) {
-        String firstDay = "01 " + "Jan, " + year + " 00:00:00";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss", Locale.getDefault());
+    private Date getFirstDayOfMonth(String stringMonthYear) {
+        stringMonthYear = "01 " + stringMonthYear + " 00:00";
+        SimpleDateFormat sdf = new SimpleDateFormat("dd MMMM yyyy HH:mm", Locale.getDefault());
         Date newDate = null;
         try {
-            newDate = sdf.parse(firstDay);
+            newDate = sdf.parse(stringMonthYear);
         } catch (ParseException e) {
             e.printStackTrace();
         }
         return newDate;
     }
 
-    private Date getLastDayOfYear(String year) {
-        String lastDay = "31 " + "Dec, " + year + " 23:59:59";
-        SimpleDateFormat sdf = new SimpleDateFormat("dd MMM, yyyy HH:mm:ss", Locale.getDefault());
-        Date newDate = null;
-        try {
-            newDate = sdf.parse(lastDay);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return newDate;
+    private Date getLastDayOfMonth(Date date) {
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.set(Calendar.DAY_OF_MONTH, c.getActualMaximum(Calendar.DAY_OF_MONTH));
+        c.set(Calendar.HOUR, 23);
+        c.set(Calendar.MINUTE, 59);
+        return c.getTime();
     }
 
-    private final OnItemClickListener recyclerItemClickListener = new OnItemClickListener() {
+    private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {
         @Override
         public void onItemClick(View view, int position) {
             ExpenseEntity expenseEntity = expenseEntityList.get(position);
             Bundle bundle = new Bundle();
             bundle.putSerializable(EXPENSE_BUNDLE_KEY, expenseEntity);
             navController.navigate(
-                    R.id.action_yearTransactionFragment_to_addTransactionFragment, bundle);
+                    R.id.action_expenseIncomeListFragment_to_addTransactionFragment, bundle);
         }
 
         @Override
@@ -263,9 +274,8 @@ public class YearTransactionFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
+    public void onDestroy() {
         binding = null;
-        super.onDestroyView();
+        super.onDestroy();
     }
-
 }

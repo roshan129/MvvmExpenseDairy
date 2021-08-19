@@ -117,6 +117,7 @@ public class CustomViewFragment extends Fragment {
                         getExpenseIncomeCount();
                         showToast("Deleted Successfully");
                         commonViewModel.resetDeleteObserver();
+                        Utils.syncDeletedRecords(requireContext());
                     }
                     break;
                 case LOADING:

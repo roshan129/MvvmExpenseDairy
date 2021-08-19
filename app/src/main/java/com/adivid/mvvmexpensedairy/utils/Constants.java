@@ -41,6 +41,7 @@ public class Constants {
     public static final int TIME_INTERVAL = 2000;
 
     public static final String EXPENSE_BUNDLE_KEY = "expense_key";
+    public static final String EXPENSE_OR_INCOME = "expense_or_income_key";
 
     public static final String BUNDLE_DATE_RANGE = "bundle_date_range";
     public static final String BUNDLE_CATEGORY = "bundle_category";

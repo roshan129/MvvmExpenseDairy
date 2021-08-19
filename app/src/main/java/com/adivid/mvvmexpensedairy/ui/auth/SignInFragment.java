@@ -136,9 +136,7 @@ public class SignInFragment extends Fragment {
                 Intent signInIntent = googleSignInClient.getSignInIntent();
                 startForResult.launch(signInIntent);
             } else {
-
                 showAlertDialogForLogOut();
-
             }
 
         });

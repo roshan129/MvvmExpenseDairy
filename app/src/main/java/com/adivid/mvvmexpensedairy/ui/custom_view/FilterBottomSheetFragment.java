@@ -42,7 +42,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     private FragmentFilterBottomSheetBinding binding;
 
     private List<String> listFilterDate;
-    private String stringSpinnerDateFilter, stringFromDate, stringToDate,
+    private String stringSpinnerDateFilter = "Select Date Range", stringFromDate, stringToDate,
             stringChipCategory = "All Categories", stringChipPayment = "All Payment Modes",
             stringSelectedMonth, stringSelectedYear;
     private int mYearFrom, mMonthFrom, mDayFrom, mYearTo, mMonthTo, mDayTo;
@@ -93,7 +93,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
         }
         setUpFirstAndLastDayMonth();
 
-        if (!selectedDateRange.isEmpty()) {
+        /*if (!selectedDateRange.isEmpty()) {
             if (selectedDateRange.contains(">")) {
                 binding.spinnerDateRange.setSelection(0);
             } else {
@@ -107,10 +107,11 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
                 binding.etMonthYear.setText(selectedDateRange);
 
             }
-        }
+        }*/
     }
 
     private void setUpFirstAndLastDayMonth() {
+        Timber.d("selectedDateRange: " + selectedDateRange);
         Calendar c = Calendar.getInstance();
         SimpleDateFormat df = new SimpleDateFormat("dd MMM, yyyy", Locale.getDefault());
         String currentDate = df.format(c.getTime());
@@ -157,7 +158,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
     private void setUpOnClickListeners() {
         binding.ivClose.setOnClickListener(v -> dismiss());
 
-        binding.spinnerDateRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        /*binding.spinnerDateRange.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 stringSpinnerDateFilter = listFilterDate.get(position);
@@ -173,7 +174,7 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
             }
-        });
+        });*/
 
         binding.etFromDate.setOnClickListener(v -> showDatePickerFrom());
 
@@ -277,11 +278,12 @@ public class FilterBottomSheetFragment extends BottomSheetDialogFragment {
 
     private void setUpResultCallBackData() {
         String dateRange;
-        if (stringSpinnerDateFilter.equals("Date Range")) {
+     /*   if (stringSpinnerDateFilter.equals("Select Date Range")) {
             dateRange = stringFromDate + " > " + stringToDate;
         } else {
             dateRange = stringSelectedMonth + ", " + stringSelectedYear;
-        }
+        }*/
+        dateRange = stringFromDate + " > " + stringToDate;
         filterCallback.filterResult(dateRange, stringChipCategory, stringChipPayment);
 
     }

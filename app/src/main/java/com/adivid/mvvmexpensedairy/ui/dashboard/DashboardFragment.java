@@ -44,6 +44,7 @@ import dagger.hilt.android.AndroidEntryPoint;
 import timber.log.Timber;
 
 import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_BUNDLE_KEY;
+import static com.adivid.mvvmexpensedairy.utils.Constants.EXPENSE_OR_INCOME;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_DELETE_UNIQUE_WORK;
 import static com.adivid.mvvmexpensedairy.utils.Constants.KEY_UNIQUE_WORK;
 
@@ -182,6 +183,20 @@ public class DashboardFragment extends Fragment {
 
         binding.profileImage.setOnClickListener(v ->
                 navController.navigate(R.id.action_dashboardFragment_to_signInFragment));
+
+        binding.cardExpense.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(EXPENSE_OR_INCOME, "Expense");
+            navController.navigate(R.id.action_dashboardFragment_to_expenseIncomeListFragment,
+                    bundle);
+        });
+
+        binding.cardIncome.setOnClickListener(v -> {
+            Bundle bundle = new Bundle();
+            bundle.putString(EXPENSE_OR_INCOME, "Income");
+            navController.navigate(R.id.action_dashboardFragment_to_expenseIncomeListFragment,
+                    bundle);
+        });
     }
 
     private final OnItemClickListener recyclerViewClickListener = new OnItemClickListener() {

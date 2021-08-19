@@ -16,7 +16,9 @@ import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
+import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.adivid.mvvmexpensedairy.R;
 import com.adivid.mvvmexpensedairy.adapter.MainListAdapter;
@@ -63,8 +65,6 @@ public class MonthTransactionFragment extends Fragment {
         super(R.layout.fragment_month_transaction);
     }
 
-
-    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -73,8 +73,13 @@ public class MonthTransactionFragment extends Fragment {
         init();
         observers();
         setUpOnClickListeners();
+        swipeOnRecyclerView(view);
 
-        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(view.getContext()) {
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    private void swipeOnRecyclerView(View view) {
+        binding.recyclerView.setOnTouchListener(new OnSwipeTouchListener(getActivity()) {
             @Override
             public void onSwipeRight() {
                 super.onSwipeRight();
@@ -87,7 +92,6 @@ public class MonthTransactionFragment extends Fragment {
                 nextClicked();
             }
         });
-
     }
 
     private void init() {
@@ -122,6 +126,7 @@ public class MonthTransactionFragment extends Fragment {
                     if (integerResource.data != null) {
                         showToast("Deleted Successfully");
                         commonViewModel.resetDeleteObserver();
+                        Utils.syncDeletedRecords(requireContext());
                     }
                     break;
                 case LOADING:
@@ -256,8 +261,8 @@ public class MonthTransactionFragment extends Fragment {
     }
 
     private void resetTextViews() {
-        binding.tvMoneySpent.setText(getString(R.string._000_0));
-        binding.tvMoneyIncome.setText(getString(R.string._000_0));
+        binding.tvMoneySpent.setText(getString(R.string._0_0));
+        binding.tvMoneyIncome.setText(getString(R.string._0_0));
     }
 
     @Override

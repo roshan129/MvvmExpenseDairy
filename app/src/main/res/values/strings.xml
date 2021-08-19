@@ -31,9 +31,12 @@
     <string name="payment_type">Payment Type</string>
     <string name="menu">Menu</string>
     <string name="_000_0">₹ 000.0</string>
+    <string name="_0_0">₹0.0</string>
     <string name="time">Time</string>
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
+
+    <string name="date_range">Select Date Range</string>
 
     <integer name="enter_from_right_dur">150</integer>
 
