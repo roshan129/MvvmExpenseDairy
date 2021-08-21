@@ -7,12 +7,12 @@
 
     <fragment
         android:id="@+id/addTransactionFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.add_transactions.AddTransactionFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.add_transactions.AddTransactionFragment"
         android:label="fragment_add_transaction"
         tools:layout="@layout/fragment_add_transaction" />
     <fragment
         android:id="@+id/dashboardFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.dashboard.DashboardFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.dashboard.DashboardFragment"
         android:label="fragment_dashboard"
         tools:layout="@layout/fragment_dashboard">
         <action
@@ -61,7 +61,7 @@
     </fragment>
     <fragment
         android:id="@+id/allTransactionsFragment2"
-        android:name="com.adivid.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.all_transactions.AllTransactionsFragment"
         android:label="fragment_all_transactions"
         tools:layout="@layout/fragment_all_transactions">
         <action
@@ -74,7 +74,7 @@
     </fragment>
     <fragment
         android:id="@+id/dayTransactionsFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.day_transactions.DayTransactionFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.day_transactions.DayTransactionFragment"
         android:label="fragment_day_transactions"
         tools:layout="@layout/fragment_day_transactions">
         <action
@@ -86,7 +86,7 @@
     </fragment>
     <fragment
         android:id="@+id/monthTransactionFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.month_transactions.MonthTransactionFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.month_transactions.MonthTransactionFragment"
         android:label="fragment_month_transaction"
         tools:layout="@layout/fragment_month_transaction">
         <action
@@ -95,7 +95,7 @@
     </fragment>
     <fragment
         android:id="@+id/yearTransactionFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.yearly_transactions.YearTransactionFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.yearly_transactions.YearTransactionFragment"
         android:label="fragment_year_transaction"
         tools:layout="@layout/fragment_year_transaction">
         <action
@@ -104,7 +104,7 @@
     </fragment>
     <fragment
         android:id="@+id/weekTransactionFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.weekly_transactions.WeekTransactionFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.weekly_transactions.WeekTransactionFragment"
         android:label="fragment_week_transactions"
         tools:layout="@layout/fragment_week_transactions">
         <action
@@ -113,7 +113,7 @@
     </fragment>
     <fragment
         android:id="@+id/customViewFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.custom_view.CustomViewFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.custom_view.CustomViewFragment"
         android:label="fragment_custom_view"
         tools:layout="@layout/fragment_custom_view">
         <action
@@ -122,7 +122,7 @@
     </fragment>
     <fragment
         android:id="@+id/signInFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.auth.SignInFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.auth.SignInFragment"
         android:label="fragment_sign_in"
         tools:layout="@layout/fragment_sign_in">
         <action
@@ -131,7 +131,7 @@
     </fragment>
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.others.SettingsFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.others.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings">
         <action
@@ -140,7 +140,7 @@
     </fragment>
     <fragment
         android:id="@+id/categoriesFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.categories.CategoriesFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.categories.CategoriesFragment"
         android:label="fragment_categories"
         tools:layout="@layout/fragment_categories">
         <action
@@ -149,7 +149,7 @@
     </fragment>
     <fragment
         android:id="@+id/expenseIncomeListFragment"
-        android:name="com.adivid.mvvmexpensedairy.ui.expense_income.ExpenseIncomeListFragment"
+        android:name="com.roshanadke.mvvmexpensedairy.ui.expense_income.ExpenseIncomeListFragment"
         android:label="ExpenseIncomeListFragment"
         tools:layout="@layout/fragment_expense_income_list">
         <action

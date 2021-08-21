@@ -11,7 +11,7 @@ android {
     buildToolsVersion "30.0.3"
 
     defaultConfig {
-        applicationId "com.adivid.mvvmexpensedairy"
+        applicationId "com.roshanadke.mvvmexpensedairy"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -22,13 +22,14 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
     buildFeatures {
         viewBinding true
@@ -39,7 +40,7 @@ dependencies {
 
     implementation 'androidx.appcompat:appcompat:1.3.1'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.0'
 
 
     //navigation
@@ -95,7 +96,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:19.2.0'
 
     //work manager
-    implementation "androidx.work:work-runtime:2.6.0-beta02"
+    implementation "androidx.work:work-runtime:2.6.0-rc01"
 
     //workmanager with hilt
     implementation 'androidx.hilt:hilt-work:1.0.0'

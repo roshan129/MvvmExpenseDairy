@@ -7,26 +7,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:786240409527:android:8fbb3e352fee4d2952e232",
+        "mobilesdk_app_id": "1:786240409527:android:ae655705123dbf9b52e232",
         "android_client_info": {
-          "package_name": "com.adivid.mvvmexpensedairy"
+          "package_name": "com.roshanadke.mvvmexpensedairy"
         }
       },
       "oauth_client": [
         {
-          "client_id": "786240409527-01a6o5r1t9qeu1g9jfv82p9e2cvu020g.apps.googleusercontent.com",
+          "client_id": "786240409527-h8runtvdhvu14eeajnsjqa8ounjcea5m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "com.adivid.mvvmexpensedairy",
+            "package_name": "com.roshanadke.mvvmexpensedairy",
             "certificate_hash": "3408fc36a3271f8b564e375427ff434a9e7ee2b0"
-          }
-        },
-        {
-          "client_id": "786240409527-1ud0l75se0avsu63tljvg626snr7mhgk.apps.googleusercontent.com",
-          "client_type": 1,
-          "android_info": {
-            "package_name": "com.adivid.mvvmexpensedairy",
-            "certificate_hash": "068b96228b15c74bb46c3aa2177706ca5feaf807"
           }
         },
         {

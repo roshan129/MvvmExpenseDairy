@@ -27,6 +27,6 @@
     public <init>(android.content.Context,androidx.work.WorkerParameters);
 }
 
--keep class com.adivid.mvvmexpensedairy.domain** {
+-keep class com.roshanadke.mvvmexpensedairy.domain** {
     *;
 }
