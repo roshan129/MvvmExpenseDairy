@@ -7,11 +7,13 @@ import androidx.room.PrimaryKey;
 import java.io.Serializable;
 import java.util.Date;
 
-@Entity(tableName = "ExpenseEntity", indices = @Index(value= {"docId"}, unique = true))
+@Entity(tableName = "ExpenseEntity", indices = @Index(value= {"unique_id"},unique = true))
 public class ExpenseEntity implements Serializable{
 
     @PrimaryKey(autoGenerate = true)
     private int id;
+
+    private String unique_id;
 
     private Date date;
 
@@ -50,6 +52,14 @@ public class ExpenseEntity implements Serializable{
         this.note = note;
         this.payment_type = payment_type;
         this.current_time_millis = current_time_millis;
+    }
+
+    public String getUnique_id() {
+        return unique_id;
+    }
+
+    public void setUnique_id(String unique_id) {
+        this.unique_id = unique_id;
     }
 
     public boolean isUpdated() {

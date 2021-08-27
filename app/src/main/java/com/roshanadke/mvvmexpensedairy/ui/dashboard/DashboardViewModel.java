@@ -85,8 +85,6 @@ public class DashboardViewModel extends ViewModel {
         );
     }
 
-
-
     public void resetDeleteObserver(){
         deleteRecord = new MutableLiveData<>();
     }

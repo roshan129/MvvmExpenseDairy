@@ -28,8 +28,8 @@ public class SharedPrefManager {
     }
 
     public void clearAllPrefs() {
-        editor.putString(KEY_USER_NAME, "");
-        editor.putString(KEY_USER_EMAIL, "");
+        saveUserName("");
+        saveEmail("");
     }
 
     public void saveUserName(String name) {

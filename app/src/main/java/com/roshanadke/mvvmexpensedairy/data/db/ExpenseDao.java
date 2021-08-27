@@ -33,7 +33,7 @@ public interface ExpenseDao {
     @Query("Delete FROM expenseentity WHERE id =:id")
     Single<Integer> deleteRecordUsingId(int id);
 
-    @Query("Select * from expenseentity WHERE isDeleted = 0 ORDER BY id DESC")
+    @Query("Select * from expenseentity WHERE isDeleted = 0 ORDER BY date DESC")
     LiveData<List<ExpenseEntity>> getAllTransactions();
 
     @Query("Select * from expenseentity WHERE isDeleted = 0 ORDER BY id DESC")
@@ -43,7 +43,7 @@ public interface ExpenseDao {
     LiveData<List<ExpenseEntity>> getAllRecentTransactions();
 
     //Day
-    @Query("Select * from expenseentity WHERE isDeleted = 0 AND date BETWEEN :dayStart AND :dayEnd")
+    @Query("Select * from expenseentity WHERE isDeleted = 0 AND date BETWEEN :dayStart AND :dayEnd ORDER BY date DESC")
     Flowable<List<ExpenseEntity>> getDayWiseRecords(Date dayStart, Date dayEnd);
 
     @Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transaction_type = 'Expense' AND isDeleted = 0 AND date BETWEEN :dayStart AND :dayEnd")

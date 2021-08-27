@@ -14,6 +14,8 @@ public class FirebaseExpenseDto {
 
     private String docId;
 
+    private String uniqueId;
+
     private Date date;
 
     private String time;
@@ -34,9 +36,10 @@ public class FirebaseExpenseDto {
         //empty constructor needed
     }
 
-    public FirebaseExpenseDto(Date date, String time, String amount,
+    public FirebaseExpenseDto(String uniqueId, Date date, String time, String amount,
                               String transaction_type, String transaction_category,
                               String note, String payment_type, String timestamp) {
+        this.uniqueId = uniqueId;
         this.date = date;
         this.time = time;
         this.amount = amount;
@@ -45,6 +48,14 @@ public class FirebaseExpenseDto {
         this.note = note;
         this.payment_type = payment_type;
         this.timestamp = timestamp;
+    }
+
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
     }
 
     public String getFirebaseUId() {

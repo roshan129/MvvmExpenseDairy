@@ -119,6 +119,7 @@ public class AddTransactionFragment extends Fragment {
         }
         binding.etAmount.setText(expenseEntity.getAmount());
         binding.etDate.setText(Utils.convertToDisplayDate(expenseEntity.getDate()));
+        binding.etTime.setText(expenseEntity.getTime());
         if (expenseEntity.getTransaction_type().equals("Income")) {
             binding.chipIncome.setChecked(true);
             listCategory.addAll(new ArrayList<>(Arrays.asList(
@@ -226,6 +227,7 @@ public class AddTransactionFragment extends Fragment {
             viewModel.updateTransaction(expenseEntity);
             syncUpdatedDataToServer();
         } else {
+            expenseEntity.setUnique_id(Utils.createUniqueId());
             viewModel.insertTransaction(expenseEntity);
             syncOfflineDataToServer();
         }

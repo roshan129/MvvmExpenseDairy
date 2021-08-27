@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+import java.util.UUID;
 
 public class Utils {
 
@@ -100,6 +101,10 @@ public class Utils {
                 .build();
         WorkManager.getInstance(context).enqueueUniqueWork(KEY_DELETE_UNIQUE_WORK,
                 ExistingWorkPolicy.KEEP, request);
+    }
+
+    public static String createUniqueId(){
+        return UUID.randomUUID().toString();
     }
 
 }

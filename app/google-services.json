@@ -14,6 +14,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "786240409527-disq67t0q08217rj84cd5mu7battt2n1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.roshanadke.mvvmexpensedairy",
+            "certificate_hash": "8255348858f0abdbbbf27464c26f27603cb2392e"
+          }
+        },
+        {
           "client_id": "786240409527-h8runtvdhvu14eeajnsjqa8ounjcea5m.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

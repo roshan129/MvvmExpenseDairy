@@ -7,6 +7,7 @@ public class FirebaseExpenseMapper implements DomainMapper<ExpenseEntity, Fireba
     @Override
     public FirebaseExpenseDto mapToDomainModel(ExpenseEntity expenseEntity) {
         return new FirebaseExpenseDto(
+                expenseEntity.getUnique_id(),
                 expenseEntity.getDate(),
                 expenseEntity.getTime(),
                 expenseEntity.getAmount(),
@@ -32,6 +33,7 @@ public class FirebaseExpenseMapper implements DomainMapper<ExpenseEntity, Fireba
         );
         expenseEntity.setDocId(firebaseExpenseDto.getDocId());
         expenseEntity.setFirebaseUid(firebaseExpenseDto.getFirebaseUId());
+        expenseEntity.setUnique_id(firebaseExpenseDto.getUniqueId());
         return expenseEntity;
     }
 }

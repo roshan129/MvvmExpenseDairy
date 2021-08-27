@@ -71,6 +71,8 @@ public class DashboardFragment extends Fragment {
         observers();
         setUpOnClickListeners();
         syncOfflineDataToServer();
+
+
     }
 
     private void init() {
@@ -165,8 +167,8 @@ public class DashboardFragment extends Fragment {
 
         binding.ivMenu.setOnClickListener(v -> ((MainActivity) requireActivity()).openDrawer());
 
-        binding.cardWeekly.setOnClickListener(v ->
-                navController.navigate(R.id.action_dashboardFragment_to_weekTransactionFragment));
+        binding.cardDaily.setOnClickListener(v ->
+                navController.navigate(R.id.action_dashboardFragment_to_dayTransactionsFragment));
 
         binding.cardMonthly.setOnClickListener(v ->
                 navController.navigate(R.id.action_dashboardFragment_to_monthTransactionFragment));

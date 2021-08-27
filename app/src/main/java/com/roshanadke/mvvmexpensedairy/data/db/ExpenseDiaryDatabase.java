@@ -18,7 +18,7 @@ import timber.log.Timber;
 
 import static com.roshanadke.mvvmexpensedairy.utils.Constants.KEY_DB_NAME;
 
-@Database(entities = {ExpenseEntity.class}, version = 8, exportSchema = false)
+@Database(entities = {ExpenseEntity.class}, version = 10, exportSchema = false)
 @TypeConverters({Converters.class})
 public abstract class ExpenseDiaryDatabase extends RoomDatabase {
 

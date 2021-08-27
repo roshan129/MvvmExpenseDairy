@@ -35,6 +35,7 @@
     <string name="time">Time</string>
     <string name="monthly">Monthly</string>
     <string name="yearly">Yearly</string>
+    <string name="yearly_report">Yearly Report</string>
 
     <string name="date_range">Select Date Range</string>
 
