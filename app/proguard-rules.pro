@@ -20,13 +20,13 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepattributes Signature
--keepattributes *Annotation*
-
--keepclassmembers class * extends androidx.work.Worker {
-    public <init>(android.content.Context,androidx.work.WorkerParameters);
-}
-
--keep class com.roshanadke.mvvmexpensedairy.domain** {
-    *;
-}
+#-keepattributes Signature
+#-keepattributes *Annotation*
+#
+#-keepclassmembers class * extends androidx.work.Worker {
+#    public <init>(android.content.Context,androidx.work.WorkerParameters);
+#}
+#
+#-keep class com.roshanadke.mvvmexpensedairy.domain** {
+#    *;
+#}

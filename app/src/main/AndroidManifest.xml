@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    package="com.roshanadke.mvvmexpensedairy">
+    xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
-        android:name="com.roshanadke.mvvmexpensedairy.BaseApplication"
         android:allowBackup="true"
         android:icon="@drawable/ic_x"
         android:label="@string/app_name"
         android:roundIcon="@drawable/ic_x"
         android:supportsRtl="true"
-        android:theme="@style/splashScreenTheme">
+        android:theme="@style/Theme.ExpenseDairy">
         <activity android:name="com.roshanadke.mvvmexpensedairy.MainActivity"
+            android:exported="true"
+
             >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,11 +23,11 @@
             </intent-filter>
         </activity>
 
-           <provider
+          <!-- <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
             android:exported="false"
-            tools:node="remove" />
+            tools:node="remove" />-->
 
     </application>
 
