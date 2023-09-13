@@ -1,12 +1,12 @@
 package com.roshanadke.mvvmexpensedairy.domain.model
 
 data class Expense(
-    private var id: Int,
-    private var date: String,
-    private var time: String,
-    private var amount: String,
-    private var transactionType: String,
-    private var transactionCategory: String,
-    private var note: String,
-    private var paymentType: String,
+    var id: Int,
+    var date: String,
+    var time: String,
+    var amount: String,
+    var transactionType: String,
+    var transactionCategory: String,
+    var note: String,
+    var paymentType: String,
 )
