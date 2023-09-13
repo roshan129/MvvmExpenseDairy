@@ -1,4 +1,4 @@
-package com.roshanadke.mvvmexpensedairy
+package com.roshanadke.mvvmexpensedairy.presentation
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

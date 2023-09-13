@@ -12,7 +12,7 @@
         android:roundIcon="@drawable/ic_x"
         android:supportsRtl="true"
         android:theme="@style/Theme.ExpenseDairy">
-        <activity android:name="com.roshanadke.mvvmexpensedairy.MainActivity"
+        <activity android:name="com.roshanadke.mvvmexpensedairy.presentation.MainActivity"
             android:exported="true"
 
             >
