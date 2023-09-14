@@ -1,4 +1,4 @@
-package com.roshanadke.mvvmexpensedairy.presentation
+package com.roshanadke.mvvmexpensedairy.presentation.screen
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,6 +9,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -17,30 +18,35 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.roshanadke.mvvmexpensedairy.domain.model.Expense
+import com.roshanadke.mvvmexpensedairy.presentation.DashboardViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DashboardScreen(
     navController: NavController,
-    dashboardViewModel: DashboardViewModel = hiltViewModel()
+    dashboardViewModel: DashboardViewModel = hiltViewModel(),
+    onFloatingActionButtonClicked: () -> Unit
 ) {
 
     val list = dashboardViewModel.expenselist.toList()
 
     Scaffold(
         floatingActionButton = {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = "Add"
-            )
+            FloatingActionButton(onClick = {
+                onFloatingActionButtonClicked()
+            }) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Add"
+                )
+            }
         },
         content = {
 
             LazyColumn(Modifier.fillMaxSize()) {
                 item {
-                    Text(text = "One two three")
+                    Text(text = "One tfdfwo three")
                 }
                 items(list) { expenseEntity ->
 
