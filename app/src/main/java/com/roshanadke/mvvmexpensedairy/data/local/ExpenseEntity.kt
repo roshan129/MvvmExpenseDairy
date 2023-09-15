@@ -25,7 +25,7 @@ data class ExpenseEntity(
     fun toExpense(): Expense {
         return Expense(
             id = id ?: 0,
-            date = date.toString(),
+            date = date,
             time = time,
             amount = amount,
             transactionType = transactionType,

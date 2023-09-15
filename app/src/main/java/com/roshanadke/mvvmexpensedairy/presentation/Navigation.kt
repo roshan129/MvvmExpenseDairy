@@ -15,7 +15,7 @@ fun Navigation() {
 
     NavHost(
         navController = navController,
-        startDestination = Screen.AddExpenseScreen.route
+        startDestination = Screen.DashboardScreen.route
     ) {
 
         composable(Screen.DashboardScreen.route) {

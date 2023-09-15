@@ -1,6 +1,7 @@
 package com.roshanadke.mvvmexpensedairy.presentation.screen
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,6 +21,7 @@ import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -28,10 +30,12 @@ import androidx.compose.material3.FilterChip
 import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,13 +67,25 @@ import kotlinx.coroutines.launch
 fun AddExpenseScreen(
     navController: NavController
 ) {
-
-
-
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = {
+                    Text(text = "Add Expense")
+                },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        Log.d("TAG", "AddExpenseScreen: clicked")
+                        navController.popBackStack()
+                    }) {
+                        Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "Back")
+                    }
+                }
+            )
+
+        },
         floatingActionButton = {
             FloatingActionButton(
-                modifier = Modifier.bringIntoViewRequester(bringIntoViewRequester),
                 onClick = {
 
                 },
@@ -78,6 +94,7 @@ fun AddExpenseScreen(
                 Icon(imageVector = Icons.Default.Save, contentDescription = "Save")
             }
         }
+
     ) {
 
         Column(
@@ -169,13 +186,7 @@ fun AddExpenseScreen(
                     Text(text = "Note")
                 },
                 shape = RoundedCornerShape(roundedCornerShapeSize),
-                modifier = Modifier.fillMaxWidth().onFocusEvent {event ->
-                    if(event.isFocused) {
-                        coroutineScope.launch {
-                            bringIntoViewRequester.bringIntoView()
-                        }
-                    }
-                }
+                modifier = Modifier.fillMaxWidth()
 
             )
 
