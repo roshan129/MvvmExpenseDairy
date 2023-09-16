@@ -10,4 +10,11 @@ interface ExpenseRepository {
 
     fun getAllExpenseList(): Flow<List<Expense>>
 
+    fun getAllExpenseCount(): Flow<Double>
+
+    fun getAllIncomeCount(): Flow<Double>
+
+
+
+
 }

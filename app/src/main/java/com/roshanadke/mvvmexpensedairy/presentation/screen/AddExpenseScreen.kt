@@ -3,9 +3,7 @@ package com.roshanadke.mvvmexpensedairy.presentation.screen
 import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -14,59 +12,61 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.relocation.BringIntoViewRequester
-import androidx.compose.foundation.relocation.bringIntoViewRequester
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusEvent
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
-import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.presentation.components.CashCardChipItems
 import com.roshanadke.mvvmexpensedairy.presentation.components.CategoryDropDownItem
 import com.roshanadke.mvvmexpensedairy.presentation.components.ExpenseChipType
-import kotlinx.coroutines.launch
+import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.AddExpenseViewModel
+import com.roshanadke.mvvmexpensedairy.utils.convertDateStringToMillis
+import com.roshanadke.mvvmexpensedairy.utils.convertMillisToDate
+import java.text.SimpleDateFormat
+import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun AddExpenseScreen(
-    navController: NavController
+    navController: NavController,
+    addExpenseViewModel: AddExpenseViewModel = hiltViewModel()
 ) {
+
+    val selectedDate = addExpenseViewModel.selectedDate.value
+    val selectedTime = addExpenseViewModel.selectedTime.value
+    val selectedAmount = addExpenseViewModel.selectedDate.value
+
     Scaffold(
         topBar = {
             TopAppBar(
@@ -87,7 +87,8 @@ fun AddExpenseScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-
+                    addExpenseViewModel.insertTransaction()
+                    navController.popBackStack()
                 },
                 shape = RoundedCornerShape(50)
             ) {
@@ -95,38 +96,50 @@ fun AddExpenseScreen(
             }
         }
 
-    ) {
+    ) { paddingValues ->
+
+        var isDatePickerVisible by remember { mutableStateOf(false) }
+        var isTimePickerVisible by remember { mutableStateOf(false) }
+
+
 
         Column(
             Modifier
                 .fillMaxSize()
-                .padding(start = 12.dp, end = 12.dp),
+                .padding(start = 12.dp, end = 12.dp, top = paddingValues.calculateTopPadding()),
         ) {
 
-            Text(
-                text = "Add Expense",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(24.dp),
-                textAlign = TextAlign.Center,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.SemiBold
-            )
 
             val roundedCornerShapeSize = 12.dp
+
+            //val selectedDate = addExpenseViewModel.selectedDate.value
 
             Row(
                 Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceAround
             ) {
+
+                val focusManager = LocalFocusManager.current
+
                 OutlinedTextField(
-                    value = "14 Sept", onValueChange = {},
+                    value = selectedDate ?: "", onValueChange = {},
                     label = {
                         Text(text = "Date")
                     },
+
                     shape = RoundedCornerShape(roundedCornerShapeSize),
-                    modifier = Modifier.weight(1f)
-                )
+                    modifier = Modifier
+                        .weight(1f)
+                        .onFocusChanged {
+                            if (it.isFocused) {
+                                isDatePickerVisible = true
+                                focusManager.clearFocus()
+                            }
+
+                        },
+                    readOnly = true,
+
+                    )
                 Spacer(modifier = Modifier.width(12.dp))
                 OutlinedTextField(
                     value = "16:16", onValueChange = {},
@@ -134,15 +147,29 @@ fun AddExpenseScreen(
                         Text(text = "Time")
                     },
                     shape = RoundedCornerShape(roundedCornerShapeSize),
-                    modifier = Modifier.weight(1f),
-                    readOnly = true
+                    readOnly = true,
+                    modifier = Modifier
+                        .weight(1f)
+                        .onFocusChanged {
+                            if (it.isFocused) {
+                                isTimePickerVisible = true
+                                focusManager.clearFocus()
+                            }
+                        },
                 )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
 
+            var amount = remember {
+                mutableStateOf("")
+            }
+
             OutlinedTextField(
-                value = "", onValueChange = {},
+                value = amount.value, onValueChange = {
+                    amount.value = it
+                    addExpenseViewModel.setSelectedAmount(it)
+                },
                 label = {
                     Text(text = "Amount")
                 },
@@ -161,6 +188,7 @@ fun AddExpenseScreen(
 
             ExpenseChipType(chipItemList = chipItemList, onChipItemSelected = {
                 selectedExpenseChipItem = it
+                addExpenseViewModel.setSelectedTransactionType(TransactionType.getTransactionType(it))
             })
 
             val items = listOf(
@@ -173,20 +201,27 @@ fun AddExpenseScreen(
                 dropDownList = items,
                 onDropDownItemSelected = {
                     selectedCategoryItem = it
+                    addExpenseViewModel.setSelectedCategory(it)
                 }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            OutlinedTextField(
-                value = "", onValueChange = {
+            var transactionNote by remember {
+                mutableStateOf("")
+            }
 
+            OutlinedTextField(
+                value = transactionNote, onValueChange = {
+                    transactionNote = it
+                    addExpenseViewModel.setTransactionNote(it)
                 },
                 label = {
                     Text(text = "Note")
                 },
                 shape = RoundedCornerShape(roundedCornerShapeSize),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done)
 
             )
 
@@ -201,14 +236,76 @@ fun AddExpenseScreen(
                 chipItemList = paymentItemList,
                 onChipItemSelected = {
                     selectedPaymentTypeChip = it
+                    addExpenseViewModel.setPaymentType(it)
                 }
             )
 
 
         }
+
+
+        if (isDatePickerVisible) {
+            MyDatePickerDialog(
+                selectedDate = selectedDate ?: "",
+                onDateSelected = {
+                    Log.d("TAG", "AddExpenseScreen: date: $it ")
+                    addExpenseViewModel.setSelectedDate(it)
+                }, onDismiss = {
+                    isDatePickerVisible = false
+                })
+        }
+
     }
 
 
 }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun MyDatePickerDialog(
+    selectedDate: String,
+    onDateSelected: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+
+    val datePickerState = rememberDatePickerState(
+        selectableDates = object : SelectableDates {
+            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
+                return utcTimeMillis <= System.currentTimeMillis()
+            }
+        },
+        initialSelectedDateMillis = convertDateStringToMillis(selectedDate)
+            ?: System.currentTimeMillis()
+    )
+
+    val selectedDate = datePickerState.selectedDateMillis?.let {
+        convertMillisToDate(it)
+    } ?: ""
+
+    DatePickerDialog(
+        onDismissRequest = { onDismiss() },
+        confirmButton = {
+            Button(onClick = {
+                onDateSelected(selectedDate)
+                onDismiss()
+            }
+
+            ) {
+                Text(text = "OK")
+            }
+        },
+        dismissButton = {
+            Button(onClick = {
+                onDismiss()
+            }) {
+                Text(text = "Cancel")
+            }
+        }
+    ) {
+        DatePicker(
+            state = datePickerState
+
+        )
+    }
+}

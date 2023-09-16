@@ -29,7 +29,7 @@ import com.roshanadke.mvvmexpensedairy.utils.convertToDisplayDate
 
 @Composable
 fun ExpenseCardItem(
-    expense: Expense
+    expense: Expense,
 ) {
 
     Card(
@@ -67,8 +67,8 @@ fun ExpenseCardItem(
                 //Spacer(modifier = Modifier.width(2.dp))
 
                 Column {
-                    Text(text = expense.transactionCategory, modifier = Modifier.padding(8.dp))
-                    Text(text = convertToDisplayDate(expense.date) ?: "" , modifier = Modifier.padding(8.dp, top = 2.dp))
+                    Text(text = expense.note, modifier = Modifier.padding(8.dp))
+                    Text(text = expense.date ?: "" , modifier = Modifier.padding(8.dp, top = 2.dp))
                 }
 
                 Column {

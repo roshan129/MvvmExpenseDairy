@@ -20,4 +20,12 @@ class ExpenseRepositoryImpl(
             expenseEntityList.map { it.toExpense() }
         }
     }
+
+    override fun getAllExpenseCount(): Flow<Double> {
+        return expenseDao.getExpenseCount()
+    }
+
+    override fun getAllIncomeCount(): Flow<Double> {
+        return expenseDao.getIncomeCount()
+    }
 }
