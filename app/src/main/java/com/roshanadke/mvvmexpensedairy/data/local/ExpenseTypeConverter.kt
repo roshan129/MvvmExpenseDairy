@@ -1,6 +1,7 @@
 package com.roshanadke.mvvmexpensedairy.data.local
 
 import androidx.room.TypeConverter
+import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import java.util.Date
 
@@ -14,8 +15,9 @@ class ExpenseTypeConverter {
     fun dateToTimestamp(date: Date?): Long? = date?.time
 
 
+    @TypeConverter
     fun fromTransactionType(value: TransactionType): String {
-        return value.name
+        return value.type
     }
 
     @TypeConverter
@@ -23,5 +25,14 @@ class ExpenseTypeConverter {
         return enumValueOf(value)
     }
 
+    @TypeConverter
+    fun fromCategoryType(value: CategoryType): String {
+        return value.displayName
+    }
+
+    @TypeConverter
+    fun toCategoryType(value: String): CategoryType {
+        return CategoryType.values().find { it.displayName == value } ?: throw IllegalArgumentException("Invalid CategoryType: $value")
+    }
 
 }

@@ -45,6 +45,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.presentation.components.CashCardChipItems
 import com.roshanadke.mvvmexpensedairy.presentation.components.CategoryDropDownItem
@@ -189,6 +190,7 @@ fun AddExpenseScreen(
             ExpenseChipType(chipItemList = chipItemList, onChipItemSelected = {
                 selectedExpenseChipItem = it
                 addExpenseViewModel.setSelectedTransactionType(TransactionType.getTransactionType(it))
+
             })
 
             val items = listOf(

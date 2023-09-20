@@ -24,6 +24,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roshanadke.mvvmexpensedairy.R
+import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
 import com.roshanadke.mvvmexpensedairy.domain.model.Expense
 import com.roshanadke.mvvmexpensedairy.utils.convertToDisplayDate
 
@@ -85,5 +86,9 @@ fun ExpenseCardItem(
 
 
     }
+
+}
+
+fun getCategoryIcon(categoryType: CategoryType) {
 
 }

@@ -1,6 +1,6 @@
 package com.roshanadke.mvvmexpensedairy.domain.model
 
-enum class TransactionType(type: String) {
+enum class TransactionType(val type: String) {
     Expense("Expense"),
     Income("Income");
 
