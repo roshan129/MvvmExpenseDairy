@@ -14,7 +14,11 @@ enum class CategoryType(val displayName: String) {
     RENT("Rent"),
     TAXES("Taxes"),
     INSURANCE("Insurance"),
-    GIFTS_AND_DONATIONS("Gifts and Donations");
+    GIFTS_AND_DONATIONS("Gifts and Donations"),
+    SALARY("Salary"),
+    BONUS("Bonus"),       // Unique name for Bonus
+    SAVINGS("Savings"),
+    DEPOSITS("Deposits");
 
     fun getAllDisplayNames(): List<String> {
         return values().map { it.displayName }

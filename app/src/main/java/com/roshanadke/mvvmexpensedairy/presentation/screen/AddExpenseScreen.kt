@@ -31,21 +31,21 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
+import com.roshanadke.mvvmexpensedairy.R
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.presentation.components.CashCardChipItems
 import com.roshanadke.mvvmexpensedairy.presentation.components.CategoryDropDownItem
@@ -53,8 +53,6 @@ import com.roshanadke.mvvmexpensedairy.presentation.components.ExpenseChipType
 import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.AddExpenseViewModel
 import com.roshanadke.mvvmexpensedairy.utils.convertDateStringToMillis
 import com.roshanadke.mvvmexpensedairy.utils.convertMillisToDate
-import java.text.SimpleDateFormat
-import java.util.Date
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -193,14 +191,20 @@ fun AddExpenseScreen(
 
             })
 
-            val items = listOf(
-                "Others", "Food and Dining", "Shopping", "Travelling",
-                "Entertainment", "Medical"
-            )
-            var selectedCategoryItem by remember { mutableStateOf(items[0]) }
+            val expenseList = stringArrayResource(id = R.array.category_arr_exp).toList()
+            val incomeList = stringArrayResource(id = R.array.category_arr_inc).toList()
+
+            val categoryItems by remember(selectedExpenseChipItem) {
+                derivedStateOf {
+                    if (selectedExpenseChipItem == TransactionType.Expense.type) expenseList
+                    else incomeList
+                }
+            }
+
+            var selectedCategoryItem by remember { mutableStateOf(categoryItems[0]) }
 
             CategoryDropDownItem(
-                dropDownList = items,
+                dropDownList = categoryItems,
                 onDropDownItemSelected = {
                     selectedCategoryItem = it
                     addExpenseViewModel.setSelectedCategory(it)

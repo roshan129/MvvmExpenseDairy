@@ -21,11 +21,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.roshanadke.mvvmexpensedairy.R
 import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
 import com.roshanadke.mvvmexpensedairy.domain.model.Expense
+import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.utils.convertToDisplayDate
 
 @Composable
@@ -56,7 +58,8 @@ fun ExpenseCardItem(
             ) {
 
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_others),
+                    painter = painterResource(id = getCategoryIcon(expense.transactionCategory)),
+                    //painter = painterResource(id = R.drawable.ic_others),
                     contentDescription = "Share",
                     tint = Color.White,
                     modifier = Modifier
@@ -89,6 +92,42 @@ fun ExpenseCardItem(
 
 }
 
-fun getCategoryIcon(categoryType: CategoryType) {
-
+fun getCategoryIcon(category: String): Int {
+    return when (category) {
+        CategoryType.OTHERS.displayName -> R.drawable.ic_others
+        CategoryType.FOOD_AND_DINING.displayName -> R.drawable.ic_food_and_dining
+        CategoryType.SHOPPING.displayName -> R.drawable.ic_shopping_cart
+        CategoryType.TRAVELLING.displayName -> R.drawable.ic_travel
+        CategoryType.ENTERTAINMENT.displayName -> R.drawable.ic_entertainment
+        CategoryType.MEDICAL.displayName -> R.drawable.ic_medical
+        CategoryType.PERSONAL_CARE.displayName -> R.drawable.ic_personal_care
+        CategoryType.EDUCATION.displayName -> R.drawable.ic_education
+        CategoryType.BILLS_AND_UTILITIES.displayName -> R.drawable.ic_bills
+        CategoryType.INVESTMENTS.displayName -> R.drawable.ic_investment
+        CategoryType.RENT.displayName -> R.drawable.ic_rent
+        CategoryType.TAXES.displayName -> R.drawable.ic_taxes
+        CategoryType.INSURANCE.displayName -> R.drawable.ic_insurance
+        CategoryType.GIFTS_AND_DONATIONS.displayName -> R.drawable.ic_gifts
+        CategoryType.SALARY.displayName -> R.drawable.ic_salary
+        CategoryType.BONUS.displayName -> R.drawable.ic_bonus
+        CategoryType.SAVINGS.displayName -> R.drawable.ic_savings
+        CategoryType.DEPOSITS.displayName -> R.drawable.ic_deposits
+        else -> R.drawable.ic_others
+    }
 }
+
+
+/*@Preview
+@Composable
+fun ExpenseCardItemPreview() {
+    ExpenseCardItem(expense = Expense(
+        id = 6804,
+        date = "massa",
+        time = "nulla",
+        amount = "15000",
+        transactionType = TransactionType.Expense,
+        transactionCategory = "mentitum",
+        note = "tale",
+        paymentType = "suspendisse"
+    ))
+}*/
