@@ -20,6 +20,9 @@ interface ExpenseDao {
     @Query("SELECT * FROM ExpenseEntity")
     fun getAllList(): Flow<List<ExpenseEntity>>
 
+    @Query("SELECT * FROM ExpenseEntity  ORDER BY date DESC")
+    fun getAllTransactions(): Flow<List<ExpenseEntity>>
+
     //@Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transactionType = 'Expense' AND isDeleted = 0")
     @Query("Select COALESCE(SUM(amount), 0) from expenseentity WHERE transactionType = 'Expense'")
     fun getExpenseCount(): Flow<Double>

@@ -38,6 +38,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringArrayResource
 import androidx.compose.ui.text.input.ImeAction
@@ -86,8 +87,9 @@ fun AddExpenseScreen(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = {
-                    addExpenseViewModel.insertTransaction()
-                    navController.popBackStack()
+                    addExpenseViewModel.insertTransaction {
+                        navController.popBackStack()
+                    }
                 },
                 shape = RoundedCornerShape(50)
             ) {
@@ -99,8 +101,6 @@ fun AddExpenseScreen(
 
         var isDatePickerVisible by remember { mutableStateOf(false) }
         var isTimePickerVisible by remember { mutableStateOf(false) }
-
-
 
         Column(
             Modifier
@@ -155,7 +155,8 @@ fun AddExpenseScreen(
                                 focusManager.clearFocus()
                             }
                         },
-                )
+
+                    )
             }
 
             Spacer(modifier = Modifier.height(12.dp))
@@ -177,7 +178,11 @@ fun AddExpenseScreen(
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Number,
                     imeAction = ImeAction.Next
-                )
+                ),
+                isError = addExpenseViewModel.amountError.value.isNotEmpty(),
+                supportingText = {
+                    Text(text = addExpenseViewModel.amountError.value, color = Color.Red)
+                }
             )
 
             val chipItemList = listOf("Expense", "Income")

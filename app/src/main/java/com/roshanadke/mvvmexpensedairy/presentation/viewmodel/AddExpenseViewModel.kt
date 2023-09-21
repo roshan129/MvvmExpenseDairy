@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import com.roshanadke.mvvmexpensedairy.data.local.ExpenseDao
 import com.roshanadke.mvvmexpensedairy.data.local.ExpenseEntity
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
+import com.roshanadke.mvvmexpensedairy.domain.model.TransactionValidator
 import com.roshanadke.mvvmexpensedairy.domain.repository.ExpenseRepository
 import com.roshanadke.mvvmexpensedairy.utils.getCurrentDisplayDate
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -40,11 +41,27 @@ class AddExpenseViewModel  @Inject constructor(
     private var _paymentType = mutableStateOf("Cash")
     val paymentType: State<String> = _paymentType
 
+    private var _amountError = mutableStateOf("")
+    val amountError: State<String> = _amountError
 
-    fun insertTransaction() {
-        viewModelScope.launch {
-            repository.insertTransaction(getExpenseEntity())
+
+    fun insertTransaction(onTransactionInserted: () -> Unit) {
+        val expenseEntity = getExpenseEntity()
+
+        val result = TransactionValidator.validateTransaction(expenseEntity)
+        val error = listOfNotNull(result.amountError)
+
+        if(error.isEmpty()) {
+            _amountError.value = ""
+            viewModelScope.launch {
+                repository.insertTransaction(expenseEntity)
+            }
+            onTransactionInserted()
+        } else {
+            _amountError.value = result.amountError ?: ""
         }
+
+
     }
 
     private fun getExpenseEntity(): ExpenseEntity {
@@ -54,7 +71,7 @@ class AddExpenseViewModel  @Inject constructor(
         val amount = selectedAmount.value ?: ""
         val transactionType = selectedTransactionType.value ?: TransactionType.Expense
         val transactionCategory = selectedCategory.value
-        val note = note.value
+        val note = note.value.ifEmpty { "Not Specified" }
         val paymentType = paymentType.value
 
         return ExpenseEntity(
@@ -74,6 +91,7 @@ class AddExpenseViewModel  @Inject constructor(
     }
 
     fun setSelectedAmount(amount: String) {
+        _amountError.value = ""
         _amount.value = amount
     }
 

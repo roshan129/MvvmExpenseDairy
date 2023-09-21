@@ -74,7 +74,7 @@ fun DashboardScreen(
 
             LazyColumn(Modifier.fillMaxSize()) {
                 item {
-                    Spacer(modifier = Modifier.height(100.dp))
+                    Spacer(modifier = Modifier.height(50.dp))
 
                     OverViewReportTab(
                         onDailyTabClicked = {

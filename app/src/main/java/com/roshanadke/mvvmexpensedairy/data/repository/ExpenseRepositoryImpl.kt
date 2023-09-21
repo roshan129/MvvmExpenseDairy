@@ -16,7 +16,7 @@ class ExpenseRepositoryImpl(
     }
 
     override fun getAllExpenseList(): Flow<List<Expense>> {
-        return expenseDao.getAllList().map { expenseEntityList ->
+        return expenseDao.getAllTransactions().map { expenseEntityList ->
             expenseEntityList.map { it.toExpense() }
         }
     }
