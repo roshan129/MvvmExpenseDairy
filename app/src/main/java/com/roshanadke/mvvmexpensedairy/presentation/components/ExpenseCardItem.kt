@@ -3,24 +3,21 @@ package com.roshanadke.mvvmexpensedairy.presentation.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -28,60 +25,80 @@ import com.roshanadke.mvvmexpensedairy.R
 import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
 import com.roshanadke.mvvmexpensedairy.domain.model.Expense
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
-import com.roshanadke.mvvmexpensedairy.utils.convertToDisplayDate
 
 @Composable
 fun ExpenseCardItem(
     expense: Expense,
 ) {
 
+    val cardPadding = 16.dp
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp, bottom = 24.dp),
+            .padding(start = cardPadding, end = cardPadding, bottom = cardPadding),
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-
+        colors = CardDefaults.cardColors(containerColor = Color.White),
     ) {
 
-
         Column(
-            Modifier.padding(8.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(8.dp),
             verticalArrangement = Arrangement.Center
         ) {
 
             Row(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
             ) {
 
-                Icon(
-                    painter = painterResource(id = getCategoryIcon(expense.transactionCategory)),
-                    //painter = painterResource(id = R.drawable.ic_others),
-                    contentDescription = "Share",
-                    tint = Color.White,
-                    modifier = Modifier
-                        .padding(12.dp)
-                        .size(36.dp)
 
-                )
+                Card(
+                    modifier = Modifier.padding(6.dp),
+                    shape = RoundedCornerShape(16.dp),
+                    elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White),
+                ) {
 
-                //Spacer(modifier = Modifier.width(2.dp))
+                    Icon(
+                        painter = painterResource(id = getCategoryIcon(expense.transactionCategory)),
+                        contentDescription = "Share",
+                        tint = colorResource(id = R.color.list_icon_color),
+                        modifier = Modifier
+                            .padding(12.dp)
+                            .size(24.dp)
+                    )
+                }
 
-                Column {
-                    Text(text = expense.note, modifier = Modifier.padding(8.dp))
-                    Text(text = expense.date ?: "" , modifier = Modifier.padding(8.dp, top = 2.dp))
+                Column(
+                    Modifier
+                        .weight(1f)
+                        .padding(8.dp)
+                ) {
+                    Text(
+                        text = expense.note,
+                        fontStyle = FontStyle(R.font.quicksand_medium),
+                        fontSize = 14.sp
+                    )
+                    Text(
+                        text = expense.date ?: "",
+                        fontStyle = FontStyle(R.font.quicksand_regular),
+                        fontSize = 12.sp
+                    )
                 }
 
                 Column {
                     Text(
                         text = "₹ ${expense.amount}", modifier = Modifier.padding(8.dp),
-                        fontSize = 18.sp
+                        fontSize = 18.sp,
+                        color = if (expense.transactionType == TransactionType.Expense) {
+                            colorResource(id = R.color.text_expense_color)
+                        } else {
+                            colorResource(id = R.color.text_income_color)
+                        }
                     )
                 }
-
 
             }
 
@@ -117,17 +134,19 @@ fun getCategoryIcon(category: String): Int {
 }
 
 
-/*@Preview
+@Preview
 @Composable
 fun ExpenseCardItemPreview() {
-    ExpenseCardItem(expense = Expense(
-        id = 6804,
-        date = "massa",
-        time = "nulla",
-        amount = "15000",
-        transactionType = TransactionType.Expense,
-        transactionCategory = "mentitum",
-        note = "tale",
-        paymentType = "suspendisse"
-    ))
-}*/
+    ExpenseCardItem(
+        expense = Expense(
+            id = 6804,
+            date = "21 Sep, 2023",
+            time = "nulla",
+            amount = "15000",
+            transactionType = TransactionType.Expense,
+            transactionCategory = "mentitum",
+            note = "dinner and clothes",
+            paymentType = "suspendisse"
+        )
+    )
+}

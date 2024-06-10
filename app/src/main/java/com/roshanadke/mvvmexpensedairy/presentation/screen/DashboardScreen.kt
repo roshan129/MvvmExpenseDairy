@@ -26,17 +26,16 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -44,11 +43,10 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.roshanadke.mvvmexpensedairy.R
-import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.DashboardViewModel
 import com.roshanadke.mvvmexpensedairy.presentation.components.ExpenseCardItem
 import com.roshanadke.mvvmexpensedairy.presentation.ui.light_blue
+import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.DashboardViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun DashboardScreen(
@@ -71,7 +69,6 @@ fun DashboardScreen(
             }
         },
         content = {
-
             LazyColumn(Modifier.fillMaxSize()) {
                 item {
                     Spacer(modifier = Modifier.height(50.dp))
@@ -279,7 +276,7 @@ fun BalanceTab(expense: Double, income: Double) {
                     Spacer(modifier = Modifier.width(24.dp))
                     Text(
                         text = "Balance", color = Color.White,
-                        fontWeight = FontWeight.Bold,
+                        fontStyle = FontStyle(R.font.quicksand_semibold),
                         fontSize = 24.sp
                     )
 
@@ -337,9 +334,10 @@ fun TotalExpenseIncomeLayout(
 
                 Text(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "Expsense", fontSize = 24.sp,
+                    text = "Expense", fontSize = 24.sp,
                     color = Color.Black,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontStyle = FontStyle(R.font.quicksand_medium)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
 
@@ -352,7 +350,6 @@ fun TotalExpenseIncomeLayout(
                 )
 
             }
-
         }
 
         Card(
@@ -378,7 +375,8 @@ fun TotalExpenseIncomeLayout(
                     modifier = Modifier.fillMaxWidth(),
                     text = "Income", fontSize = 24.sp,
                     color = Color.Black,
-                    textAlign = TextAlign.Center
+                    textAlign = TextAlign.Center,
+                    fontStyle = FontStyle(R.font.quicksand_medium)
                 )
                 Spacer(modifier = Modifier.height(8.dp))
                 Text(
