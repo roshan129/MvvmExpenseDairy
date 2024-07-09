@@ -1,5 +1,6 @@
 package com.roshanadke.mvvmexpensedairy.presentation.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,7 +10,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -52,8 +52,6 @@ fun ExpenseCardItem(
                 Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-
-
                 Card(
                     modifier = Modifier.padding(6.dp),
                     shape = RoundedCornerShape(16.dp),
@@ -61,10 +59,9 @@ fun ExpenseCardItem(
                     colors = CardDefaults.cardColors(containerColor = Color.White),
                 ) {
 
-                    Icon(
+                    Image(
                         painter = painterResource(id = getCategoryIcon(expense.transactionCategory)),
                         contentDescription = "Share",
-                        tint = colorResource(id = R.color.list_icon_color),
                         modifier = Modifier
                             .padding(12.dp)
                             .size(24.dp)
@@ -88,15 +85,21 @@ fun ExpenseCardItem(
                     )
                 }
 
-                Column {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
                     Text(
-                        text = "₹ ${expense.amount}", modifier = Modifier.padding(8.dp),
-                        fontSize = 18.sp,
+                        text = "₹ ${expense.amount}", modifier = Modifier.padding(end = 8.dp),
+                        fontSize = 16.sp,
                         color = if (expense.transactionType == TransactionType.Expense) {
                             colorResource(id = R.color.text_expense_color)
                         } else {
                             colorResource(id = R.color.text_income_color)
                         }
+                    )
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_cash),
+                        contentDescription = "cash_icon",
                     )
                 }
 
