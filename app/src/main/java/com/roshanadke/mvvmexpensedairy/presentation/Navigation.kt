@@ -5,6 +5,7 @@ import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.roshanadke.mvvmexpensedairy.domain.model.Expense
 import com.roshanadke.mvvmexpensedairy.presentation.screen.AddExpenseScreen
 import com.roshanadke.mvvmexpensedairy.presentation.screen.DashboardScreen
 import com.roshanadke.mvvmexpensedairy.presentation.screen.Screen
@@ -22,6 +23,9 @@ fun Navigation() {
             DashboardScreen(
                 navController = navController,
                 onFloatingActionButtonClicked = {
+                    navController.navigate(Screen.AddExpenseScreen.route)
+                },
+                onExpenseListItemClicked = { expense: Expense ->
                     navController.navigate(Screen.AddExpenseScreen.route)
                 })
         }

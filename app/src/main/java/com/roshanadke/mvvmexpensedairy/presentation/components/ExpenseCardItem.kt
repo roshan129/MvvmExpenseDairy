@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -25,12 +26,14 @@ import com.roshanadke.mvvmexpensedairy.R
 import com.roshanadke.mvvmexpensedairy.domain.model.CategoryType
 import com.roshanadke.mvvmexpensedairy.domain.model.Expense
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
+import kotlin.math.exp
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseCardItem(
     expense: Expense,
+    onExpenseListItemClicked: () -> Unit
 ) {
-
     val cardPadding = 16.dp
     Card(
         modifier = Modifier
@@ -39,6 +42,9 @@ fun ExpenseCardItem(
         shape = RoundedCornerShape(16.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
+        onClick = {
+          onExpenseListItemClicked()
+        }
     ) {
 
         Column(
@@ -150,6 +156,7 @@ fun ExpenseCardItemPreview() {
             transactionCategory = "mentitum",
             note = "dinner and clothes",
             paymentType = "suspendisse"
-        )
+        ),
+        onExpenseListItemClicked = {}
     )
 }
