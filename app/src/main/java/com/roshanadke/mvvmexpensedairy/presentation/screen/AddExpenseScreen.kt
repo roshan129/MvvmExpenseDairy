@@ -51,6 +51,7 @@ import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.presentation.components.CashCardChipItems
 import com.roshanadke.mvvmexpensedairy.presentation.components.CategoryDropDownItem
 import com.roshanadke.mvvmexpensedairy.presentation.components.ExpenseChipType
+import com.roshanadke.mvvmexpensedairy.presentation.components.MyDatePickerDialog
 import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.AddExpenseViewModel
 import com.roshanadke.mvvmexpensedairy.utils.convertDateStringToMillis
 import com.roshanadke.mvvmexpensedairy.utils.convertMillisToDate
@@ -66,6 +67,7 @@ fun AddExpenseScreen(
     val selectedDate = addExpenseViewModel.selectedDate.value
     val selectedTime = addExpenseViewModel.selectedTime.value
     val selectedAmount = addExpenseViewModel.selectedDate.value
+
 
     Scaffold(
         topBar = {
@@ -251,9 +253,7 @@ fun AddExpenseScreen(
                 }
             )
 
-
         }
-
 
         if (isDatePickerVisible) {
             MyDatePickerDialog(
@@ -271,52 +271,3 @@ fun AddExpenseScreen(
 
 }
 
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun MyDatePickerDialog(
-    selectedDate: String,
-    onDateSelected: (String) -> Unit,
-    onDismiss: () -> Unit
-) {
-
-    val datePickerState = rememberDatePickerState(
-        selectableDates = object : SelectableDates {
-            override fun isSelectableDate(utcTimeMillis: Long): Boolean {
-                return utcTimeMillis <= System.currentTimeMillis()
-            }
-        },
-        initialSelectedDateMillis = convertDateStringToMillis(selectedDate)
-            ?: System.currentTimeMillis()
-    )
-
-    val selectedDate = datePickerState.selectedDateMillis?.let {
-        convertMillisToDate(it)
-    } ?: ""
-
-    DatePickerDialog(
-        onDismissRequest = { onDismiss() },
-        confirmButton = {
-            Button(onClick = {
-                onDateSelected(selectedDate)
-                onDismiss()
-            }
-
-            ) {
-                Text(text = "OK")
-            }
-        },
-        dismissButton = {
-            Button(onClick = {
-                onDismiss()
-            }) {
-                Text(text = "Cancel")
-            }
-        }
-    ) {
-        DatePicker(
-            state = datePickerState
-
-        )
-    }
-}

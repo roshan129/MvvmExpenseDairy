@@ -2,23 +2,32 @@ package com.roshanadke.mvvmexpensedairy.presentation.viewmodel
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roshanadke.mvvmexpensedairy.data.local.ExpenseDao
 import com.roshanadke.mvvmexpensedairy.data.local.ExpenseEntity
+import com.roshanadke.mvvmexpensedairy.domain.model.Expense
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionValidator
+import com.roshanadke.mvvmexpensedairy.domain.model.getDefaultExpense
 import com.roshanadke.mvvmexpensedairy.domain.repository.ExpenseRepository
 import com.roshanadke.mvvmexpensedairy.utils.getCurrentDisplayDate
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class AddExpenseViewModel  @Inject constructor(
-    private val repository: ExpenseRepository
+    private val repository: ExpenseRepository,
+    savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
+    val expense: Flow<Expense?> = savedStateHandle.getStateFlow("expense", getDefaultExpense())
 
     private var _selectedDate = mutableStateOf(getCurrentDisplayDate())
     val selectedDate: State<String?> = _selectedDate
@@ -44,6 +53,13 @@ class AddExpenseViewModel  @Inject constructor(
     private var _amountError = mutableStateOf("")
     val amountError: State<String> = _amountError
 
+    init {
+        expense.onEach {
+            println("expense: ${it?.id}")
+            println("expense: ${it?.note}")
+            println("expense: ${it?.amount}")
+        }.launchIn(viewModelScope)
+    }
 
     fun insertTransaction(onTransactionInserted: () -> Unit) {
         val expenseEntity = getExpenseEntity()

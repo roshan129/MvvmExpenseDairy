@@ -26,6 +26,7 @@ fun Navigation() {
                     navController.navigate(Screen.AddExpenseScreen.route)
                 },
                 onExpenseListItemClicked = { expense: Expense ->
+                    navController.previousBackStackEntry?.savedStateHandle?.set("expense", expense)
                     navController.navigate(Screen.AddExpenseScreen.route)
                 })
         }
