@@ -31,10 +31,10 @@ class AddExpenseViewModel  @Inject constructor(
     val selectedDate: State<String?> = _selectedDate
 
     private var _selectedTime = mutableStateOf("16:16")
-    val selectedTime: State<String?> = _selectedTime
+    val selectedTime: State<String> = _selectedTime
 
     private var _amount = mutableStateOf("")
-    private val selectedAmount: State<String?> = _amount
+    val selectedAmount: State<String> = _amount
 
     private var _selectedTransactionType = mutableStateOf(TransactionType.Expense)
     private val selectedTransactionType: State<TransactionType?> = _selectedTransactionType
@@ -43,7 +43,7 @@ class AddExpenseViewModel  @Inject constructor(
     private val selectedCategory: State<String> = _selectedCategory
 
     private var _note = mutableStateOf("")
-    private val note: State<String> = _note
+    val note: State<String> = _note
 
     private var _paymentType = mutableStateOf("Cash")
     private val paymentType: State<String> = _paymentType
@@ -97,6 +97,10 @@ class AddExpenseViewModel  @Inject constructor(
         _selectedDate.value = date
     }
 
+    fun setSelectedTime(time: String) {
+        _selectedTime.value = time
+    }
+
     fun setSelectedAmount(amount: String) {
         _amountError.value = ""
         _amount.value = amount
@@ -115,7 +119,7 @@ class AddExpenseViewModel  @Inject constructor(
     }
 
     fun setPaymentType(note: String) {
-        _note.value = note
+        _paymentType.value = note
     }
 
 }

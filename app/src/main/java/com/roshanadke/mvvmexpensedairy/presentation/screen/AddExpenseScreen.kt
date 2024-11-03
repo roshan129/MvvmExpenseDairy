@@ -26,6 +26,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -63,6 +64,21 @@ fun AddExpenseScreen(
     val selectedDate = addExpenseViewModel.selectedDate.value
     val selectedTime = addExpenseViewModel.selectedTime.value
     val selectedAmount = addExpenseViewModel.selectedDate.value
+    val amount = addExpenseViewModel.selectedAmount.value
+    val transactionNote = addExpenseViewModel.note.value
+
+
+    LaunchedEffect(expense) {
+        expense?.let {
+            addExpenseViewModel.setSelectedDate(it.date)
+            addExpenseViewModel.setSelectedTime(it.time)
+            addExpenseViewModel.setSelectedAmount(it.amount)
+            addExpenseViewModel.setTransactionNote(it.note)
+            println("note exp: ${it.note}")
+            addExpenseViewModel.setSelectedCategory(it.transactionCategory)
+            addExpenseViewModel.setPaymentType(it.paymentType)
+        }
+    }
 
     Scaffold(
         topBar = {
@@ -152,14 +168,10 @@ fun AddExpenseScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            println("expense amout: ${expense?.amount}")
-            var amount by remember {
-                mutableStateOf(expense?.amount ?: "")
-            }
 
             OutlinedTextField(
-                value = amount, onValueChange = {
-                    amount = it
+                value = amount,
+                onValueChange = {
                     addExpenseViewModel.setSelectedAmount(it)
                 },
                 label = {
@@ -210,13 +222,11 @@ fun AddExpenseScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            var transactionNote by remember {
-                mutableStateOf("")
-            }
+
+            println("tree note: $transactionNote")
 
             OutlinedTextField(
                 value = transactionNote, onValueChange = {
-                    transactionNote = it
                     addExpenseViewModel.setTransactionNote(it)
                 },
                 label = {
