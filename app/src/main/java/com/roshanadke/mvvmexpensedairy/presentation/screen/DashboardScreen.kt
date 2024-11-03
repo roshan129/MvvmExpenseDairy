@@ -25,6 +25,7 @@ import com.roshanadke.mvvmexpensedairy.presentation.components.ExpenseCardItem
 import com.roshanadke.mvvmexpensedairy.presentation.components.OverViewReportTab
 import com.roshanadke.mvvmexpensedairy.presentation.components.TotalExpenseIncomeLayout
 import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.DashboardViewModel
+import kotlin.math.exp
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -81,7 +82,9 @@ fun DashboardScreen(
                 items(list) { expense ->
                     ExpenseCardItem(
                         expense,
-                        onExpenseListItemClicked = { onExpenseListItemClicked(expense) }
+                        onExpenseListItemClicked = {
+                            onExpenseListItemClicked(expense)
+                        }
                     )
                 }
             }

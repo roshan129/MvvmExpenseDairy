@@ -17,19 +17,14 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Save
-import androidx.compose.material3.Button
-import androidx.compose.material3.DatePicker
-import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.SelectableDates
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -47,27 +42,27 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.roshanadke.mvvmexpensedairy.R
+import com.roshanadke.mvvmexpensedairy.domain.model.Expense
 import com.roshanadke.mvvmexpensedairy.domain.model.TransactionType
 import com.roshanadke.mvvmexpensedairy.presentation.components.CashCardChipItems
 import com.roshanadke.mvvmexpensedairy.presentation.components.CategoryDropDownItem
+import com.roshanadke.mvvmexpensedairy.presentation.components.DateField
 import com.roshanadke.mvvmexpensedairy.presentation.components.ExpenseChipType
 import com.roshanadke.mvvmexpensedairy.presentation.components.MyDatePickerDialog
 import com.roshanadke.mvvmexpensedairy.presentation.viewmodel.AddExpenseViewModel
-import com.roshanadke.mvvmexpensedairy.utils.convertDateStringToMillis
-import com.roshanadke.mvvmexpensedairy.utils.convertMillisToDate
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun AddExpenseScreen(
     navController: NavController,
-    addExpenseViewModel: AddExpenseViewModel = hiltViewModel()
+    addExpenseViewModel: AddExpenseViewModel = hiltViewModel(),
+    expense: Expense?
 ) {
 
     val selectedDate = addExpenseViewModel.selectedDate.value
     val selectedTime = addExpenseViewModel.selectedTime.value
     val selectedAmount = addExpenseViewModel.selectedDate.value
-
 
     Scaffold(
         topBar = {
@@ -122,25 +117,19 @@ fun AddExpenseScreen(
 
                 val focusManager = LocalFocusManager.current
 
-                OutlinedTextField(
-                    value = selectedDate ?: "", onValueChange = {},
-                    label = {
-                        Text(text = "Date")
-                    },
-
-                    shape = RoundedCornerShape(roundedCornerShapeSize),
+                DateField(
                     modifier = Modifier
-                        .weight(1f)
-                        .onFocusChanged {
-                            if (it.isFocused) {
-                                isDatePickerVisible = true
-                                focusManager.clearFocus()
-                            }
-
-                        },
+                        .weight(1f),
+                    selectedDate = selectedDate ?: "",
+                    onValueChange = {},
+                    label = "Date",
+                    shape = RoundedCornerShape(roundedCornerShapeSize),
                     readOnly = true,
+                    isDatePickerVisible = {
+                        isDatePickerVisible = it
+                    }
+                )
 
-                    )
                 Spacer(modifier = Modifier.width(12.dp))
                 OutlinedTextField(
                     value = "16:16", onValueChange = {},
@@ -163,13 +152,14 @@ fun AddExpenseScreen(
 
             Spacer(modifier = Modifier.height(12.dp))
 
-            var amount = remember {
-                mutableStateOf("")
+            println("expense amout: ${expense?.amount}")
+            var amount by remember {
+                mutableStateOf(expense?.amount ?: "")
             }
 
             OutlinedTextField(
-                value = amount.value, onValueChange = {
-                    amount.value = it
+                value = amount, onValueChange = {
+                    amount = it
                     addExpenseViewModel.setSelectedAmount(it)
                 },
                 label = {

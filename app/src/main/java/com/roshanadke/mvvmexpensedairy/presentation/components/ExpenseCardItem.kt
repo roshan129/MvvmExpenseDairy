@@ -32,7 +32,7 @@ import kotlin.math.exp
 @Composable
 fun ExpenseCardItem(
     expense: Expense,
-    onExpenseListItemClicked: () -> Unit
+    onExpenseListItemClicked: (expense: Expense) -> Unit
 ) {
     val cardPadding = 16.dp
     Card(
@@ -43,7 +43,7 @@ fun ExpenseCardItem(
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
         onClick = {
-          onExpenseListItemClicked()
+          onExpenseListItemClicked(expense)
         }
     ) {
 

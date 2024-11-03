@@ -24,10 +24,8 @@ import javax.inject.Inject
 @HiltViewModel
 class AddExpenseViewModel  @Inject constructor(
     private val repository: ExpenseRepository,
-    savedStateHandle: SavedStateHandle
 ): ViewModel() {
 
-    val expense: Flow<Expense?> = savedStateHandle.getStateFlow("expense", getDefaultExpense())
 
     private var _selectedDate = mutableStateOf(getCurrentDisplayDate())
     val selectedDate: State<String?> = _selectedDate
@@ -36,30 +34,23 @@ class AddExpenseViewModel  @Inject constructor(
     val selectedTime: State<String?> = _selectedTime
 
     private var _amount = mutableStateOf("")
-    val selectedAmount: State<String?> = _amount
+    private val selectedAmount: State<String?> = _amount
 
     private var _selectedTransactionType = mutableStateOf(TransactionType.Expense)
-    val selectedTransactionType: State<TransactionType?> = _selectedTransactionType
+    private val selectedTransactionType: State<TransactionType?> = _selectedTransactionType
 
     private var _selectedCategory = mutableStateOf("Others")
-    val selectedCategory: State<String> = _selectedCategory
+    private val selectedCategory: State<String> = _selectedCategory
 
     private var _note = mutableStateOf("")
-    val note: State<String> = _note
+    private val note: State<String> = _note
 
     private var _paymentType = mutableStateOf("Cash")
-    val paymentType: State<String> = _paymentType
+    private val paymentType: State<String> = _paymentType
 
     private var _amountError = mutableStateOf("")
     val amountError: State<String> = _amountError
 
-    init {
-        expense.onEach {
-            println("expense: ${it?.id}")
-            println("expense: ${it?.note}")
-            println("expense: ${it?.amount}")
-        }.launchIn(viewModelScope)
-    }
 
     fun insertTransaction(onTransactionInserted: () -> Unit) {
         val expenseEntity = getExpenseEntity()

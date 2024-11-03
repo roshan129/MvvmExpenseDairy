@@ -1,7 +1,6 @@
 package com.roshanadke.mvvmexpensedairy.presentation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.Navigation
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -26,12 +25,16 @@ fun Navigation() {
                     navController.navigate(Screen.AddExpenseScreen.route)
                 },
                 onExpenseListItemClicked = { expense: Expense ->
-                    navController.previousBackStackEntry?.savedStateHandle?.set("expense", expense)
+                    navController.currentBackStackEntry?.savedStateHandle?.set("expense", expense)
                     navController.navigate(Screen.AddExpenseScreen.route)
                 })
         }
+
         composable(Screen.AddExpenseScreen.route) {
-            AddExpenseScreen(navController = navController)
+            val expense =
+                navController.previousBackStackEntry?.savedStateHandle?.get<Expense>("expense")
+            AddExpenseScreen(navController = navController, expense = expense)
         }
+
     }
 }
