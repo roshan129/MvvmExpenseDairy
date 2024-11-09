@@ -25,10 +25,10 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun CategoryDropDownItem(
     modifier: Modifier = Modifier,
+    selectedCategory: String,
     dropDownList: List<String>,
-    onDropDownItemSelected: (String) -> Unit
+    onDropDownItemSelected: (String) -> Unit,
 ) {
-
 
     Row(
         modifier
@@ -38,7 +38,6 @@ fun CategoryDropDownItem(
     ) {
 
         var expanded by remember { mutableStateOf(false) }
-        var selectedItem by remember { mutableStateOf("Others") }
 
         Text(text = "Category: ", modifier = Modifier.padding(start = 12.dp))
         Spacer(modifier = Modifier.width(24.dp))
@@ -53,7 +52,7 @@ fun CategoryDropDownItem(
                     DropdownMenuItem(text = {
                         Text(text = category)
                     }, onClick = {
-                        selectedItem = category
+                        //selectedItem = category
                         expanded = false
                         onDropDownItemSelected(category)
                     })
@@ -69,7 +68,7 @@ fun CategoryDropDownItem(
                     }
             ) {
                 Text(
-                    text = selectedItem,
+                    text = selectedCategory,
                     modifier = Modifier.padding(16.dp),
                     fontSize = 18.sp
                 )

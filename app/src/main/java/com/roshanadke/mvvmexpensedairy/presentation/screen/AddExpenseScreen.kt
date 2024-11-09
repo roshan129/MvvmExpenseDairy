@@ -64,6 +64,7 @@ fun AddExpenseScreen(
     val selectedDate = addExpenseViewModel.selectedDate.value
     val selectedTime = addExpenseViewModel.selectedTime.value
     val selectedAmount = addExpenseViewModel.selectedDate.value
+    val category = addExpenseViewModel.selectedCategory.value
     val amount = addExpenseViewModel.selectedAmount.value
     val transactionNote = addExpenseViewModel.note.value
 
@@ -74,7 +75,6 @@ fun AddExpenseScreen(
             addExpenseViewModel.setSelectedTime(it.time)
             addExpenseViewModel.setSelectedAmount(it.amount)
             addExpenseViewModel.setTransactionNote(it.note)
-            println("note exp: ${it.note}")
             addExpenseViewModel.setSelectedCategory(it.transactionCategory)
             addExpenseViewModel.setPaymentType(it.paymentType)
         }
@@ -210,20 +210,16 @@ fun AddExpenseScreen(
                 }
             }
 
-            var selectedCategoryItem by remember { mutableStateOf(categoryItems[0]) }
-
             CategoryDropDownItem(
                 dropDownList = categoryItems,
+                selectedCategory = category,
                 onDropDownItemSelected = {
-                    selectedCategoryItem = it
                     addExpenseViewModel.setSelectedCategory(it)
                 }
             )
 
             Spacer(modifier = Modifier.height(12.dp))
 
-
-            println("tree note: $transactionNote")
 
             OutlinedTextField(
                 value = transactionNote, onValueChange = {

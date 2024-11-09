@@ -37,16 +37,16 @@ class AddExpenseViewModel  @Inject constructor(
     val selectedAmount: State<String> = _amount
 
     private var _selectedTransactionType = mutableStateOf(TransactionType.Expense)
-    private val selectedTransactionType: State<TransactionType?> = _selectedTransactionType
+    val selectedTransactionType: State<TransactionType?> = _selectedTransactionType
 
     private var _selectedCategory = mutableStateOf("Others")
-    private val selectedCategory: State<String> = _selectedCategory
+    val selectedCategory: State<String> = _selectedCategory
 
     private var _note = mutableStateOf("")
     val note: State<String> = _note
 
     private var _paymentType = mutableStateOf("Cash")
-    private val paymentType: State<String> = _paymentType
+    val paymentType: State<String> = _paymentType
 
     private var _amountError = mutableStateOf("")
     val amountError: State<String> = _amountError
